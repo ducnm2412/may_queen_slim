@@ -8,6 +8,7 @@ import { Icon } from "./icons";
 
 const NAV = [
   { href: "/#ve-chung-toi", vi: "Về chúng tôi", en: "About us" },
+  { href: "/#danh-cho-ai", vi: "Dành cho ai", en: "Who it's for" },
   { href: "/#san-pham", vi: "Sản phẩm", en: "Products" },
   { href: "/#lieu-trinh", vi: "Liệu trình", en: "30-day plan" },
   { href: "/#song-dep", vi: "Sống đẹp", en: "Live well" },

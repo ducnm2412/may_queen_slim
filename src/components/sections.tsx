@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState } from "react";
-import { PRODUCTS, CONTACT, normalize, type Category } from "@/lib/products";
+import { PRODUCTS, PRODUCT_BY_ID, CONTACT, normalize, formatVnd, type Category } from "@/lib/products";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { ProductCard } from "./product-card";
@@ -183,6 +184,108 @@ export function AllProducts({
             <button className="btn btn-line" type="button" onClick={onShowAll}>{t("Xem tất cả sản phẩm", "View all products")}</button>
           </div>
         )}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Khách hàng mục tiêu: Mayqueen dành cho ai? ---------- */
+type Persona = {
+  id: string;
+  img: string;
+  who: [string, string];
+  title: [string, string];
+  signs: [string, string][];
+  pick: string;
+  why: [string, string];
+};
+
+const PERSONAS: Persona[] = [
+  {
+    id: "gen-z",
+    img: "/img/life-tui-xach.jpg",
+    who: ["Học sinh, sinh viên, dân văn phòng", "Students and office workers"],
+    title: ["Bạn trẻ bận rộn muốn giữ dáng tự nhiên", "Busy young people who want to stay in shape naturally"],
+    signs: [
+      ["Ngồi học, ngồi làm cả ngày, ít thời gian tập", "Sitting all day, little time to work out"],
+      ["Hay ăn vặt, trà sữa, ăn ngoài", "Snacks, bubble tea and eating out"],
+      ["Muốn làm đẹp tự nhiên, không nhịn ăn", "Want natural beauty without starving"],
+    ],
+    pick: "mq",
+    why: ["Lọ nhỏ gọn bỏ túi, 2 viên sau bữa sáng là xong.", "A pocket-sized bottle: 2 capsules after breakfast."],
+  },
+  {
+    id: "healthy",
+    img: "/img/smoothie-bowl.jpg",
+    who: ["Eat clean, gym, yoga", "Eat clean, gym, yoga"],
+    title: ["Tín đồ lối sống healthy", "Healthy-lifestyle lovers"],
+    signs: [
+      ["Đã ăn sạch, tập đều nhưng muốn thêm bước thanh lọc", "Already eating clean and training, want a cleanse step"],
+      ["Cần sản phẩm tiện mang theo, thành phần rõ ràng", "Need something convenient with clear ingredients"],
+      ["Ưu tiên an toàn, có hồ sơ công bố", "Safety first, properly declared"],
+    ],
+    pick: "yd",
+    why: ["Một cốc thảo mộc ấm buổi tối, nhẹ bụng mà không làm gián đoạn lịch tập.", "A warm herbal cup at night, lighter belly without breaking your routine."],
+  },
+  {
+    id: "shape",
+    img: "/img/giam-ki-giam-mo.jpg",
+    who: ["Cơ địa khó giảm", "Hard to slim down"],
+    title: ["Người cần cải thiện vóc dáng", "People who want to reshape their body"],
+    signs: [
+      ["Mỡ thừa, bụng dưới to dù đã ăn ít", "Stubborn fat and lower-belly bulge despite eating less"],
+      ["Hay nóng trong, đầy bụng, khó tiêu", "Often bloated, overheated or sluggish digestion"],
+      ["Cần giải pháp dịu nhẹ, không xả cấp tốc", "Need a gentle solution, no harsh flush"],
+    ],
+    pick: "cb30",
+    why: ["Sáng hỗ trợ chuyển hoá mỡ, tối thanh lọc. Tác động kép trong 30 ngày.", "Burn by day, cleanse by night. Two-way action over 30 days."],
+  },
+];
+
+export function Personas() {
+  const { t, lang, add, openCart } = useStore();
+  return (
+    <section className="sec" id="danh-cho-ai">
+      <div className="wrap">
+        <div className="center" style={{ marginBottom: 36 }}>
+          <h2 className="h2 rv">{t("Mayqueen dành cho ai?", "Who is Mayqueen for?")}</h2>
+          <p className="sub rv">{t("Tìm nhóm giống bạn nhất để chọn đúng sản phẩm ngay từ đầu.", "Find the group that sounds most like you and start with the right product.")}</p>
+        </div>
+        <div className="personas">
+          {PERSONAS.map((ps) => {
+            const p = PRODUCT_BY_ID[ps.pick];
+            const pname = lang === "en" && p.nameEn ? p.nameEn : p.name;
+            return (
+              <article className="persona rv" key={ps.id}>
+                <div className="ph"><Image src={ps.img} alt="" width={900} height={900} quality={90} sizes="(max-width: 760px) 100vw, 33vw" /></div>
+                <div className="persona-body">
+                  <span className="k">{t(...ps.who)}</span>
+                  <h3>{t(...ps.title)}</h3>
+                  <p className="persona-lead">{t("Bạn thấy mình ở đây nếu:", "This is you if:")}</p>
+                  <ul>
+                    {ps.signs.map((sg) => <li key={sg[0]}><Icon name="check" size={16} />{t(...sg)}</li>)}
+                  </ul>
+                  <div className="persona-pick">
+                    <span className="sub">{t("Gợi ý cho bạn", "Our pick for you")}</span>
+                    <Link href={`/san-pham/${p.id}`} className="persona-prod">
+                      <b>{pname}</b>
+                      <span>{formatVnd(p.price)}</span>
+                    </Link>
+                    <p>{t(...ps.why)}</p>
+                  </div>
+                  <div className="persona-cta">
+                    <button type="button" className="btn btn-dark" onClick={() => { add(p.id); openCart(); }}>{t("Thêm vào giỏ", "Add to cart")}</button>
+                    <Link className="btn btn-line" href={`/san-pham/${p.id}`}>{t("Xem chi tiết", "View details")}</Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <p className="persona-note sub center rv">
+          {t("Chưa chắc mình thuộc nhóm nào?", "Not sure which one fits?")}{" "}
+          <a href="#lien-he">{t("Nhận tư vấn liệu trình 1:1 miễn phí", "Get a free 1:1 consultation")}</a>
+        </p>
       </div>
     </section>
   );

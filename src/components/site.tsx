@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Hero } from "./hero";
-import { AllProducts, BannerCombo, BannerFeature, BannerFreeship, Community, Gallery, Journey, LiveWell, QuickAccess, TopProducts, Why, type Filter } from "./sections";
+import { AllProducts, BannerCombo, BannerFeature, BannerFreeship, Community, Gallery, Journey, Personas, LiveWell, QuickAccess, TopProducts, Why, type Filter } from "./sections";
 import { Contact } from "./contact";
 import { useStore } from "./providers";
 
@@ -18,6 +18,7 @@ export function Site() {
       <TopProducts />
       <BannerCombo />
       <Why />
+      <Personas />
       <Journey />
       <BannerFreeship />
       <AllProducts cat={cat} onCat={setCat} query={query} showAll={showAll} onShowAll={() => { setShowAll(true); setCat("all"); }} />
