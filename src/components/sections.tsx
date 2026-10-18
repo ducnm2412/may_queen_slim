@@ -71,30 +71,112 @@ export function TopProducts() {
 }
 
 /* ---------- All products ---------- */
-export function AllProducts({ cat, query, showAll, onShowAll }: { cat: Filter; query: string; showAll: boolean; onShowAll: () => void }) {
-  const { t } = useStore();
-  const q = normalize(query);
+type Sort = "featured" | "price-asc" | "price-desc" | "discount";
+
+const FILTER_CATS: { key: Filter; vi: string; en: string }[] = [
+  { key: "all", vi: "Tất cả", en: "All" },
+  { key: "combo", vi: "Combo", en: "Combos" },
+  { key: "mq", vi: "Mayqueen Slim", en: "Mayqueen Slim" },
+  { key: "yd", vi: "Yodetox Extra", en: "Yodetox Extra" },
+];
+
+const discountOf = (p: (typeof PRODUCTS)[number]) => (p.old ? 1 - p.price / p.old : 0);
+
+export function AllProducts({
+  cat,
+  onCat,
+  query,
+  showAll,
+  onShowAll,
+}: {
+  cat: Filter;
+  onCat: (c: Filter) => void;
+  query: string;
+  showAll: boolean;
+  onShowAll: () => void;
+}) {
+  const { t, setQuery } = useStore();
+  const [sort, setSort] = useState<Sort>("featured");
+  const [saleOnly, setSaleOnly] = useState(false);
+
   // Mọi từ khoá đều phải có mặt (không phân biệt dấu, thứ tự)
-  const words = q ? q.split(" ") : [];
-  let list = PRODUCTS.filter((p) => {
-    if (cat !== "all" && p.cat !== cat) return false;
-    if (!words.length) return true;
-    const hay = normalize(`${p.name} ${p.nameEn ?? ""} ${p.spec} ${p.specEn} ${p.tag} ${p.tagEn}`);
-    return words.every((w) => hay.includes(w));
-  });
-  const truncated = !showAll && !q && cat === "all" && list.length > 8;
+  const words = normalize(query) ? normalize(query).split(" ") : [];
+  const matchQuery = (p: (typeof PRODUCTS)[number]) =>
+    !words.length || words.every((w) => normalize(`${p.name} ${p.nameEn ?? ""} ${p.spec} ${p.specEn} ${p.tag} ${p.tagEn}`).includes(w));
+  const matchSale = (p: (typeof PRODUCTS)[number]) => !saleOnly || !!p.old;
+
+  // Số lượng mỗi danh mục theo từ khoá + giảm giá hiện tại
+  const base = PRODUCTS.filter((p) => matchQuery(p) && matchSale(p));
+  const countOf = (c: Filter) => (c === "all" ? base.length : base.filter((p) => p.cat === c).length);
+
+  let list = base.filter((p) => cat === "all" || p.cat === cat);
+  if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
+  if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
+  if (sort === "discount") list = [...list].sort((a, b) => discountOf(b) - discountOf(a));
+
+  const filtered = cat !== "all" || !!words.length || saleOnly || sort !== "featured";
+  const total = list.length;
+  const truncated = !showAll && !filtered && list.length > 8;
   if (truncated) list = list.slice(0, 8);
+
+  const reset = () => {
+    onCat("all");
+    setQuery("");
+    setSaleOnly(false);
+    setSort("featured");
+  };
+
   return (
     <section className="sec" id="san-pham">
       <div className="wrap">
-        <div className="center" style={{ marginBottom: 36 }}>
+        <div className="center" style={{ marginBottom: 28 }}>
           <h2 className="h2 rv">{t("Tất cả sản phẩm", "Our products")}</h2>
           <p className="sub rv">{t("Thảo mộc lành tính, đủ hồ sơ công bố, bảo chứng bởi B.O.T Việt Nam.", "Herbal, declared safe, guaranteed by B.O.T Vietnam.")}</p>
         </div>
+
+        <div className="filters" role="region" aria-label={t("Lọc sản phẩm", "Filter products")}>
+          <div className="filter-cats" role="group" aria-label={t("Danh mục", "Category")}>
+            {FILTER_CATS.map((c) => (
+              <button key={c.key} type="button" className="fchip" aria-pressed={cat === c.key} onClick={() => onCat(c.key)}>
+                {t(c.vi, c.en)}
+                <span className="fcount">{countOf(c.key)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="filter-tools">
+            <label className="fsale">
+              <input type="checkbox" checked={saleOnly} onChange={(e) => setSaleOnly(e.target.checked)} />
+              <span>{t("Đang giảm giá", "On sale")}</span>
+            </label>
+            <label className="fsort">
+              <span className="sr-only">{t("Sắp xếp", "Sort")}</span>
+              <select value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
+                <option value="featured">{t("Nổi bật", "Featured")}</option>
+                <option value="price-asc">{t("Giá thấp đến cao", "Price: low to high")}</option>
+                <option value="price-desc">{t("Giá cao đến thấp", "Price: high to low")}</option>
+                <option value="discount">{t("Giảm nhiều nhất", "Biggest discount")}</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div className="filter-status" aria-live="polite">
+          <span>
+            {t(`${total} sản phẩm`, `${total} product${total === 1 ? "" : "s"}`)}
+            {words.length > 0 && <> {t("cho", "for")} <b>“{query.trim()}”</b></>}
+          </span>
+          {filtered && (
+            <button type="button" className="freset" onClick={reset}>{t("Xoá bộ lọc", "Clear filters")}</button>
+          )}
+        </div>
+
         {list.length ? (
           <div className="grid">{list.map((p) => <ProductCard key={p.id} p={p} />)}</div>
         ) : (
-          <p className="sub center">{t("Không tìm thấy sản phẩm phù hợp. Thử từ khoá khác hoặc chọn danh mục.", "No matching product. Try another keyword or pick a category.")}</p>
+          <div className="fempty">
+            <p>{t("Không có sản phẩm khớp bộ lọc này.", "No product matches these filters.")}</p>
+            <button type="button" className="btn btn-dark" onClick={reset}>{t("Xoá bộ lọc", "Clear filters")}</button>
+          </div>
         )}
         {truncated && (
           <div className="more">

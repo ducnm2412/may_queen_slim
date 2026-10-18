@@ -20,7 +20,7 @@ export function Site() {
       <Why />
       <Journey />
       <BannerFreeship />
-      <AllProducts cat={cat} query={query} showAll={showAll} onShowAll={() => { setShowAll(true); setCat("all"); }} />
+      <AllProducts cat={cat} onCat={setCat} query={query} showAll={showAll} onShowAll={() => { setShowAll(true); setCat("all"); }} />
       <BannerFeature />
       <Community />
       <Gallery />
