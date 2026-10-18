@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
-import { PRODUCTS, CONTACT, type Category } from "@/lib/products";
+import { useRef, useState } from "react";
+import { PRODUCTS, CONTACT, normalize, type Category } from "@/lib/products";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { ProductCard } from "./product-card";
@@ -73,10 +73,15 @@ export function TopProducts() {
 /* ---------- All products ---------- */
 export function AllProducts({ cat, query, showAll, onShowAll }: { cat: Filter; query: string; showAll: boolean; onShowAll: () => void }) {
   const { t } = useStore();
-  const q = query.trim().toLowerCase();
-  let list = PRODUCTS.filter(
-    (p) => (cat === "all" || p.cat === cat) && (!q || `${p.name} ${p.nameEn ?? ""} ${p.spec} ${p.specEn}`.toLowerCase().includes(q)),
-  );
+  const q = normalize(query);
+  // Mọi từ khoá đều phải có mặt (không phân biệt dấu, thứ tự)
+  const words = q ? q.split(" ") : [];
+  let list = PRODUCTS.filter((p) => {
+    if (cat !== "all" && p.cat !== cat) return false;
+    if (!words.length) return true;
+    const hay = normalize(`${p.name} ${p.nameEn ?? ""} ${p.spec} ${p.specEn} ${p.tag} ${p.tagEn}`);
+    return words.every((w) => hay.includes(w));
+  });
   const truncated = !showAll && !q && cat === "all" && list.length > 8;
   if (truncated) list = list.slice(0, 8);
   return (
@@ -210,18 +215,21 @@ const POSTS = [
   { img: "/img/giam-ki-giam-mo.jpg", vi: ["Giảm “kí” ≠ giảm mỡ", "Vì sao cái cân hay “nói dối”."], en: ["Losing kilos ≠ losing fat", "Why the scale can lie."] },
 ];
 
+const COMM_MOBILE_LIMIT = 3;
+
 export function Community() {
   const { t, lang } = useStore();
+  const [open, setOpen] = useState(false);
   return (
     <section className="sec soft">
       <div className="wrap center">
         <h2 className="h2 rv">{t("Mới trên Facebook Mayqueen", "On our Facebook")}</h2>
         <p className="sub rv">{t("Mẹo hay và câu chuyện từ fanpage Mayqueen.", "Tips and stories from the Mayqueen page.")}</p>
-        <div className="comm">
-          {POSTS.map((p) => {
+        <div className={`comm${open ? " open" : ""}`} id="comm-list">
+          {POSTS.map((p, i) => {
             const [h, d] = lang === "en" ? p.en : p.vi;
             return (
-              <a className="post rv" key={p.img} href={CONTACT.facebook} target="_blank" rel="noopener">
+              <a className={`post rv${i >= COMM_MOBILE_LIMIT ? " more-item" : ""}`} key={p.img} href={CONTACT.facebook} target="_blank" rel="noopener">
                 <Image src={p.img} alt="" width={240} height={240} sizes="96px" />
                 <div>
                   <h3>{h}</h3>
@@ -232,6 +240,11 @@ export function Community() {
             );
           })}
         </div>
+        {/* Chỉ hiện trên mobile: rút gọn còn 3 bài */}
+        <button type="button" className="btn btn-line comm-more" aria-expanded={open} aria-controls="comm-list" onClick={() => setOpen((o) => !o)}>
+          {open ? t("Thu gọn", "Show less") : t(`Xem thêm ${POSTS.length - COMM_MOBILE_LIMIT} bài`, `Show ${POSTS.length - COMM_MOBILE_LIMIT} more`)}
+          <Icon name="down" size={16} className={`ic${open ? " flip" : ""}`} />
+        </button>
       </div>
     </section>
   );
@@ -246,7 +259,7 @@ export function LiveWell() {
         <div className="head">
           <div>
             <h2 className="h2 rv">{t("Sống đẹp cùng Mayqueen", "Live well with Mayqueen")}</h2>
-            <p className="sub rv">{t("Cẩm nang lifestyle, thực đơn eat clean và công thức detox.", "Lifestyle tips, eat-clean menus and detox recipes.")}</p>
+            <p className="sub rv">{t("Cẩm nang lifestyle, thực đơn eat clean và bí quyết giữ dáng.", "Lifestyle tips, eat-clean menus and ways to keep in shape.")}</p>
           </div>
           <a className="btn btn-dark rv" href={CONTACT.facebook} target="_blank" rel="noopener">{t("Tất cả bài viết", "All articles")}</a>
         </div>
@@ -276,52 +289,6 @@ export function LiveWell() {
             <span className="k">{t("Kiến thức", "Knowledge")}</span>
             <h3>{t("Vì sao sau tuổi 30 cân nặng khó kiểm soát?", "Why is weight harder to control after 30?")}</h3>
           </a>
-          <div className="recipe rv">
-            <div>
-              <span className="k">{t("Công thức detox", "Detox recipe")}</span>
-              <h3>{t("Nước dưa leo, chanh, bạc hà", "Cucumber, lemon & mint water")}</h3>
-              <div className="chips"><span>{t("5 phút", "5 min")}</span><span>{t("1 lít", "1 litre")}</span><span>{t("Trước 16h", "Before 4pm")}</span></div>
-            </div>
-            <ol>
-              <li>{t("Thái mỏng ½ quả dưa leo, ½ quả chanh.", "Slice ½ cucumber and ½ lemon.")}</li>
-              <li>{t("Thêm một nắm bạc hà vò nhẹ.", "Add a handful of bruised mint.")}</li>
-              <li>{t("1 lít nước nguội, để lạnh 2 tiếng.", "1 L cool water, chill 2 hours.")}</li>
-              <li>{t("Vớt chanh sau 4 tiếng để không đắng.", "Remove lemon after 4 hours.")}</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- FAQ ---------- */
-const FAQS = [
-  { vi: ["Sản phẩm đạt tiêu chuẩn gì?", "Mayqueen Slim và Yodetox Extra do B.O.T Việt Nam sản xuất, đầy đủ hồ sơ công bố an toàn theo quy chuẩn y tế."], en: ["What quality standards do you meet?", "Mayqueen Slim and Yodetox Extra are made by B.O.T Vietnam with full product safety declarations under health regulations."] },
-  { vi: ["Dùng combo thế nào?", "Sáng: 2 viên Mayqueen Slim sau bữa sáng. Tối: 1 gói Yodetox pha 150 ml nước ấm trước khi ngủ."], en: ["How do I use the combo?", "Morning: 2 Mayqueen Slim capsules after breakfast. Night: 1 Yodetox sachet in 150 ml warm water before bed."] },
-  { vi: ["Bao lâu thì thấy thay đổi?", "Thường bụng nhẹ sau 1–2 tuần, vóc dáng cần đủ 30 ngày. Hiệu quả tuỳ cơ địa."], en: ["When will I see results?", "Most feel a lighter belly in 1–2 weeks; shape changes need the full 30 days. Results vary."] },
-  { vi: ["Ai không nên dùng?", "Phụ nữ mang thai, cho con bú, người dưới 18 tuổi, người đang dùng thuốc nên hỏi bác sĩ trước."], en: ["Who shouldn't use it?", "Pregnant or breastfeeding women, under-18s and people on medication should ask a doctor first."] },
-  { vi: ["Thanh toán và giao hàng?", "COD hoặc chuyển khoản. Toàn quốc 1–4 ngày, nội thành Hà Nội trong ngày. Freeship đơn từ 700k."], en: ["Payment and shipping?", "COD or bank transfer. Nationwide in 1–4 days, inner Hanoi same day. Free shipping from 700k."] },
-  { vi: ["Chính sách đổi trả?", "Kiểm hàng trước khi thanh toán. Đổi trong 7 ngày nếu hàng lỗi hoặc giao sai."], en: ["What is your return policy?", "Inspect before paying. Exchange within 7 days for damaged or wrong items."] },
-];
-
-export function Faq() {
-  const { t, lang } = useStore();
-  return (
-    <section className="sec" id="hoi-dap" style={{ paddingTop: 0 }}>
-      <div className="wrap center">
-        <h2 className="h2 rv">{t("Câu hỏi thường gặp", "Frequently asked questions")}</h2>
-        <p className="sub rv">{t("Giải đáp nhanh về sản phẩm và dịch vụ.", "Quick answers about the products and service.")}</p>
-        <div className="faq">
-          {FAQS.map((f, i) => {
-            const [q, a] = lang === "en" ? f.en : f.vi;
-            return (
-              <details className="rv" key={f.vi[0]} open={i === 0}>
-                <summary>{q}<span className="ar"><Icon name="down" /></span></summary>
-                <p>{a}</p>
-              </details>
-            );
-          })}
         </div>
       </div>
     </section>

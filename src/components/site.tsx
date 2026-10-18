@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Hero } from "./hero";
-import { AllProducts, BannerCombo, BannerFeature, BannerFreeship, Community, Faq, Gallery, Journey, LiveWell, QuickAccess, TopProducts, Why, type Filter } from "./sections";
+import { AllProducts, BannerCombo, BannerFeature, BannerFreeship, Community, Gallery, Journey, LiveWell, QuickAccess, TopProducts, Why, type Filter } from "./sections";
 import { Contact } from "./contact";
 import { useStore } from "./providers";
 
@@ -25,7 +25,6 @@ export function Site() {
       <Community />
       <Gallery />
       <LiveWell />
-      <Faq />
       <Contact />
     </main>
   );

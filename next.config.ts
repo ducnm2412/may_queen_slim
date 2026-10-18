@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     qualities: [75, 90, 95],
+    minimumCacheTTL: 60,
+    localPatterns: [
+      { pathname: "/img/**", search: "" },
+      { pathname: "/img/hero/**", search: "?v=2" },
+    ],
     deviceSizes: [390, 430, 640, 768, 1024, 1280, 1536, 1920, 2560],
   },
   cacheComponents: true,

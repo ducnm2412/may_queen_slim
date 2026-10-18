@@ -139,4 +139,8 @@ export const CONTACT = {
   hours: "8:00–21:00",
 };
 
+/** Bỏ dấu tiếng Việt + chữ thường, để "combo sang" khớp "Combo Sáng". */
+export const normalize = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\u0111\u0110]/g, "d").toLowerCase().replace(/\s+/g, " ").trim();
+
 export const formatVnd = (n: number) => n.toLocaleString("vi-VN") + "đ";

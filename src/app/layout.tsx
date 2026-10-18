@@ -18,16 +18,6 @@ const beVietnam = localFont({
   ],
 });
 
-const bricolage = localFont({
-  variable: "--font-display",
-  display: "swap",
-  src: [
-    { path: "./fonts/bricolage-grotesque-vietnamese-600-normal.woff2", weight: "600" },
-    { path: "./fonts/bricolage-grotesque-latin-600-normal.woff2", weight: "600" },
-    { path: "./fonts/bricolage-grotesque-vietnamese-800-normal.woff2", weight: "800" },
-    { path: "./fonts/bricolage-grotesque-latin-800-normal.woff2", weight: "800" },
-  ],
-});
 
 export const metadata: Metadata = {
   title: { default: "Mayqueen Slim · Sáng đốt mỡ, tối thanh lọc", template: "%s · Mayqueen Slim" },
@@ -47,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="vi" className={`${beVietnam.variable} ${bricolage.variable}`}>
+    <html lang="vi" className={beVietnam.variable}>
       <body>
         <Icons />
         <Providers>

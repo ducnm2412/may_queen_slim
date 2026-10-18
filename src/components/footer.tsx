@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { CONTACT } from "@/lib/products";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
@@ -38,8 +39,7 @@ export function Footer() {
             <h4>{t("Công ty", "Company")}</h4>
             <ul>
               <li><a href="#ve-chung-toi">{t("Về chúng tôi", "About us")}</a></li>
-              <li><a href="#hoi-dap">{t("Hỏi đáp", "FAQ")}</a></li>
-              <li><a href="#hoi-dap">{t("Vận chuyển & đổi trả", "Shipping & returns")}</a></li>
+              <li><Link href="/#lien-he">{t("Vận chuyển & đổi trả", "Shipping & returns")}</Link></li>
               <li><a href="#lien-he">{t("Liên hệ", "Contact")}</a></li>
             </ul>
           </div>
@@ -58,8 +58,8 @@ export function Footer() {
             <strong>{t("Thực phẩm này không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.", "This product is not a medicine and does not replace medical treatment.")}</strong>
           </p>
           <nav>
-            <a href="#hoi-dap">{t("Chính sách bảo mật", "Privacy policy")}</a>
-            <a href="#hoi-dap">{t("Điều khoản", "Terms")}</a>
+            <Link href="/#lien-he">{t("Chính sách bảo mật", "Privacy policy")}</Link>
+            <Link href="/#lien-he">{t("Điều khoản", "Terms")}</Link>
           </nav>
         </div>
       </div>

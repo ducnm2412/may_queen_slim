@@ -16,10 +16,14 @@ type Slide = {
   alt: string;
 };
 
+/** Tăng số này mỗi khi thay ảnh trong public/img/hero để trình duyệt và cache Next tải ảnh mới. */
+const HERO_VERSION = 2;
+const v = (src: string) => `${src}?v=${HERO_VERSION}`;
+
 const SLIDES: Slide[] = [
   {
     chip: ["Thảo mộc · Bảo chứng B.O.T Việt Nam", "Herbal · guaranteed by B.O.T Vietnam"],
-    title: ["Sáng đốt mỡ, tối thanh lọc", "Burn by day, cleanse by night"],
+    title: ["Combo Sáng – Tối", "Day–Night Combo"],
     desc: [
       "Combo Sáng – Tối: Mayqueen Slim hỗ trợ chuyển hoá mỡ, Yodetox Extra thanh lọc dịu nhẹ. Liệu trình 30 ngày, không nhịn ăn.",
       "The Day–Night combo: Mayqueen Slim supports fat metabolism, Yodetox Extra gently detoxes. A 30-day course, no starving.",
@@ -31,7 +35,7 @@ const SLIDES: Slide[] = [
       { v: "2", l: ["Bước mỗi ngày", "Steps a day"] },
       { v: "0", l: ["Ngày nhịn đói", "Days of starving"] },
     ],
-    img: "/img/hero/slide-1-combo.jpg",
+    img: v("/img/hero/slide-1-combo.jpg"),
     alt: "Hộp quà combo Mayqueen Slim và Yodetox Extra",
   },
   {
@@ -48,7 +52,7 @@ const SLIDES: Slide[] = [
       { v: "07:00", l: ["Giờ dùng", "Best time"] },
       { v: "B.O.T", l: ["Sản xuất tại VN", "Made in Vietnam"] },
     ],
-    img: "/img/hero/slide-2-mayqueen.jpg",
+    img: v("/img/hero/slide-2-mayqueen.jpg"),
     alt: "Hộp Mayqueen Slim",
   },
   {
@@ -65,7 +69,7 @@ const SLIDES: Slide[] = [
       { v: "21:00", l: ["Giờ dùng", "Best time"] },
       { v: "B.O.T", l: ["Sản xuất tại VN", "Made in Vietnam"] },
     ],
-    img: "/img/hero/slide-3-yodetox.jpg",
+    img: v("/img/hero/slide-3-yodetox.jpg"),
     alt: "Hộp Yodetox Extra",
   },
 ];
@@ -145,7 +149,7 @@ export function Hero() {
             </div>
           </div>
           <button type="button" className="pic zoomable" aria-label={t("Xem ảnh lớn", "View large image")} tabIndex={k === i ? 0 : -1} onClick={() => openImage(s.img, s.alt)}>
-            <Image src={s.img} alt={s.alt} fill priority={k === 0} quality={90} sizes="100vw" />
+            <Image src={s.img} alt={s.alt} fill priority={k === 0} quality={90} sizes="(max-width: 760px) 1600px, 100vw" />
             <span className="zoom-hint"><Icon name="search" size={16} />{t("Phóng to", "Zoom")}</span>
           </button>
         </div>

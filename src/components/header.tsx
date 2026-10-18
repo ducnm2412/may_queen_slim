@@ -11,7 +11,6 @@ const NAV = [
   { href: "/#san-pham", vi: "Sản phẩm", en: "Products" },
   { href: "/#lieu-trinh", vi: "Liệu trình", en: "30-day plan" },
   { href: "/#song-dep", vi: "Sống đẹp", en: "Live well" },
-  { href: "/#hoi-dap", vi: "Hỏi đáp", en: "FAQs" },
   { href: "/#lien-he", vi: "Liên hệ", en: "Contact" },
 ];
 
@@ -107,6 +106,27 @@ export function Header() {
       </header>
       </div>
       <nav className={`mob${menu ? " open" : ""}`} aria-label="Menu" aria-hidden={!menu}>
+        <form
+          className="search mob-search"
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setMenu(false);
+            if (isHome) document.getElementById("san-pham")?.scrollIntoView({ behavior: "smooth" });
+            else router.push("/#san-pham");
+          }}
+        >
+          <Icon name="search" />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("Tìm combo, sản phẩm…", "Search products…")}
+            aria-label={t("Tìm sản phẩm", "Search products")}
+            tabIndex={menu ? 0 : -1}
+            enterKeyHint="search"
+          />
+        </form>
         {NAV.map((n) => (
           <Link key={n.href} href={n.href} onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t(n.vi, n.en)}</Link>
         ))}
