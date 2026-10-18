@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "hyperframes-animation": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-animation/SKILL.md",
+      "computedHash": "3d6678f0e325d69026678982b8616e181f8e92a4e7075f1f51a9b9696a265aba"
+    },
+    "hyperframes-core": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-core/SKILL.md",
+      "computedHash": "c9c7e45910fc11189097e23d804adee814e2647b1c486d959fd1acb54a3fbf04"
+    },
+    "hyperframes-registry": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-registry/SKILL.md",
+      "computedHash": "54b17fdebee3ac56d279f0e2c1cfdab78839c05344bb4c0874c6f3941621e2ff"
+    },
+    "image-to-ui": {
+      "source": "uizze/uizze",
+      "sourceType": "github",
+      "skillPath": "skills/image-to-ui/SKILL.md",
+      "computedHash": "7311fdd2f20ce477d757e768aed341c681e2eede34df2dd947adf00816d436a0"
+    }
+  }
+}
