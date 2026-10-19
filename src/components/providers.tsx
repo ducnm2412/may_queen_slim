@@ -45,6 +45,7 @@ type Store = {
 const Ctx = createContext<Store | null>(null);
 
 const CART_KEY = "mq-cart";
+const WISH_KEY = "mq-wish";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>("vi");
@@ -67,6 +68,8 @@ export function Providers({ children }: { children: ReactNode }) {
       try {
         const raw = localStorage.getItem(CART_KEY);
         if (raw) setCart(JSON.parse(raw));
+        const w = localStorage.getItem(WISH_KEY);
+        if (w) setWish(new Set(JSON.parse(w)));
       } catch {}
       hydrated.current = true;
     });
@@ -78,6 +81,13 @@ export function Providers({ children }: { children: ReactNode }) {
       localStorage.setItem(CART_KEY, JSON.stringify(cart));
     } catch {}
   }, [cart]);
+
+  useEffect(() => {
+    if (!hydrated.current) return;
+    try {
+      localStorage.setItem(WISH_KEY, JSON.stringify([...wish]));
+    } catch {}
+  }, [wish]);
 
   useEffect(() => {
     document.documentElement.lang = lang;

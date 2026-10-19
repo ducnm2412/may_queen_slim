@@ -76,10 +76,10 @@ export function ProductDetail({ id }: { id: string }) {
                 <output>{qty}</output>
                 <button type="button" aria-label={t("Tăng", "Increase")} onClick={() => setQty((q) => Math.min(20, q + 1))}>+</button>
               </div>
-              <button className="btn btn-dark" type="button" onClick={() => { flyToCart(document.querySelector(".pdp-main")); add(p.id, qty); setTimeout(openCart, 650); }}>
+              <button className="btn btn-line pdp-add" type="button" onClick={() => { flyToCart(document.querySelector(".pdp-main")); add(p.id, qty); setTimeout(openCart, 650); }}>
                 <Icon name="cart" size={18} />{t("Thêm vào giỏ", "Add to cart")}
               </button>
-              <button className="btn btn-green" type="button" onClick={() => { add(p.id, qty); router.push("/gio-hang"); }}>
+              <button className="btn btn-green pdp-now" type="button" onClick={() => { add(p.id, qty); router.push("/gio-hang"); }}>
                 {t("Mua ngay", "Buy now")}
               </button>
               <button className={`icon-btn wish${liked ? " on" : ""}`} type="button" aria-pressed={liked} aria-label={t("Yêu thích", "Wishlist")} onClick={() => toggleWish(p.id)}>

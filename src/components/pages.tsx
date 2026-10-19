@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { CONTACT, PRODUCT_BY_ID, formatVnd } from "@/lib/products";
+import { CONTACT, PRODUCTS, PRODUCT_BY_ID, formatVnd } from "@/lib/products";
+import { ProductCard } from "./product-card";
 import { POSTS, POST_BY_SLUG, type L } from "@/lib/posts";
 import { POLICIES, POLICY_BY_SLUG } from "@/lib/policies";
 import { useStore } from "./providers";
@@ -52,7 +53,9 @@ function TrustStrip() {
 
 /* ======================= Về chúng tôi ======================= */
 export function AboutPage() {
-  const { t } = useStore();
+  const { t, add, openCart } = useStore();
+  const combo = PRODUCT_BY_ID.cb30;
+  const buy = () => { add(combo.id); openCart(); };
   return (
     <main className="page">
       <PageHead
@@ -74,6 +77,11 @@ export function AboutPage() {
             <div><dt>2</dt><dd>{t("bước thảo mộc mỗi ngày", "herbal steps a day")}</dd></div>
             <div><dt>0</dt><dd>{t("ngày phải nhịn đói", "days of starving")}</dd></div>
           </dl>
+          <div className="story-cta">
+            <button type="button" className="btn btn-dark" onClick={buy}>{t("Mua Combo Sáng – Tối", "Buy the Day–Night combo")} · {formatVnd(combo.price)}</button>
+            <Link className="btn btn-line" href="/san-pham">{t("Xem tất cả sản phẩm", "View all products")}</Link>
+          </div>
+          <small className="story-cta-note">{t("Miễn phí giao hàng · Tặng thực đơn eat clean · Tư vấn Zalo 1:1", "Free shipping · Free eat-clean menu · 1:1 Zalo coaching")}</small>
         </div>
       </section>
       <Why />
@@ -86,7 +94,8 @@ export function AboutPage() {
             <p>{t("Chưa chắc chọn sản phẩm nào? Chuyên viên tư vấn miễn phí qua Zalo trong 15 phút.", "Not sure where to start? Get free advice on Zalo within 15 minutes.")}</p>
           </div>
           <div className="cta-band-btns">
-            <Link className="btn btn-white" href="/san-pham/cb30">{t("Xem Combo Sáng – Tối", "See the Day–Night combo")}</Link>
+            <button type="button" className="btn btn-white" onClick={buy}>{t("Mua ngay", "Buy now")} · {formatVnd(combo.price)}</button>
+            <Link className="btn btn-ghost" href="/san-pham/cb30">{t("Xem Combo Sáng – Tối", "See the Day–Night combo")}</Link>
             <Link className="btn btn-ghost" href="/lien-he">{t("Nhận tư vấn", "Get advice")}</Link>
           </div>
         </div>
@@ -128,17 +137,44 @@ export function BlogIndex() {
 }
 
 function PostCard({ slug, big = false }: { slug: string; big?: boolean }) {
-  const { t } = useStore();
+  const { t, add, openCart } = useStore();
   const p = POST_BY_SLUG[slug];
+  const href = `/song-dep/${p.slug}`;
+  const ph = <div className="ph"><Image src={p.img} alt="" width={900} height={900} quality={big ? 90 : 75} sizes={big ? "(max-width: 760px) 100vw, 60vw" : "(max-width: 760px) 100vw, 33vw"} /></div>;
+  if (!big) {
+    return (
+      <Link className="post-card" href={href}>
+        {ph}
+        <div className="post-card-body">
+          <span className="k">{t(...p.cat)} · {p.minutes} {t("phút đọc", "min read")}</span>
+          <h3>{t(...p.title)}</h3>
+          <p>{t(...p.excerpt)}</p>
+        </div>
+      </Link>
+    );
+  }
+  // Thẻ nổi bật chứa nút mua nên không thể bọc cả thẻ trong <Link>; dùng link phủ toàn thẻ (stretched link).
+  const combo = PRODUCT_BY_ID.cb30;
   return (
-    <Link className={`post-card${big ? " big" : ""}`} href={`/song-dep/${p.slug}`}>
-      <div className="ph"><Image src={p.img} alt="" width={900} height={900} quality={big ? 90 : 75} sizes={big ? "(max-width: 760px) 100vw, 60vw" : "(max-width: 760px) 100vw, 33vw"} /></div>
+    <div className="post-card big">
+      {ph}
       <div className="post-card-body">
         <span className="k">{t(...p.cat)} · {p.minutes} {t("phút đọc", "min read")}</span>
-        <h3>{t(...p.title)}</h3>
+        <h3><Link className="post-card-link" href={href}>{t(...p.title)}</Link></h3>
         <p>{t(...p.excerpt)}</p>
+        <div className="post-card-cta">
+          <span className="post-card-offer">
+            {t("Combo Sáng – Tối 30 ngày", "30-day Day–Night Combo")}
+            <b>{formatVnd(combo.price)}{combo.old && <s>{formatVnd(combo.old)}</s>}</b>
+          </span>
+          <div className="post-card-btns">
+            <button type="button" className="btn btn-dark" onClick={() => { add(combo.id); openCart(); }}>{t("Mua combo ngay", "Buy the combo")}</button>
+            <Link className="btn btn-line" href="/san-pham">{t("Xem sản phẩm", "View products")}</Link>
+          </div>
+          <small>{t("Tặng thực đơn eat clean · Tư vấn miễn phí qua Zalo", "Free eat-clean menu · Free Zalo consultation")}</small>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -155,12 +191,17 @@ export function BlogArticle({ slug }: { slug: string }) {
           <span aria-hidden="true">/</span>
           <Link href="/song-dep">{t("Sống đẹp", "Live well")}</Link>
         </nav>
+        <header className="article-hero">
+        <div>
         <span className="k">{t(...p.cat)} · {p.minutes} {t("phút đọc", "min read")}</span>
         <h1 className="article-title">{t(...p.title)}</h1>
         <p className="article-lead">{t(...p.excerpt)}</p>
+        </div>
         <button type="button" className="article-ph zoomable" aria-label={t("Xem ảnh lớn", "View large image")} onClick={() => openImage(p.img, t(...p.title))}>
-          <Image src={p.img} alt="" width={1200} height={1200} quality={90} priority sizes="(max-width: 860px) 100vw, 780px" />
+          <Image src={p.img} alt="" width={1200} height={1200} quality={90} priority sizes="(max-width: 860px) 100vw, 600px" />
         </button>
+        </header>
+        <div className="article-grid">
         <div className="article-body">
           {p.body.map((para) => {
             const text = t(...para);
@@ -178,6 +219,7 @@ export function BlogArticle({ slug }: { slug: string }) {
             <button type="button" className="btn btn-dark" onClick={() => { add(combo.id); openCart(); }}>{t("Thêm vào giỏ", "Add to cart")}</button>
           </div>
         </aside>
+        </div>
         <p className="article-note">{t("Bài viết mang tính tham khảo, không thay thế lời khuyên của bác sĩ. Thực phẩm bảo vệ sức khoẻ không phải là thuốc.", "For reference only; not a substitute for medical advice. Supplements are not medicines.")}</p>
       </article>
       <section className="sec" style={{ paddingBottom: 0 }}>
@@ -245,6 +287,44 @@ export function PolicyPage({ slug }: { slug: string }) {
           ))}
           <p className="sub">{t("Cần hỗ trợ thêm? Gọi", "Need more help? Call")} <a href={CONTACT.tel}>{CONTACT.phone}</a> {t("hoặc", "or")} <a href={CONTACT.zalo} target="_blank" rel="noopener">{t("chat Zalo", "chat on Zalo")}</a>.</p>
         </div>
+      </section>
+    </main>
+  );
+}
+
+/* ======================= Yêu thích ======================= */
+export function WishlistPage() {
+  const { t, wish, add, openCart } = useStore();
+  const list = PRODUCTS.filter((p) => wish.has(p.id));
+  const total = list.reduce((s, p) => s + p.price, 0);
+  const addAll = () => { list.forEach((p) => add(p.id)); openCart(); };
+  return (
+    <main className="page">
+      <PageHead
+        crumbs={[{ label: ["Yêu thích", "Wishlist"] }]}
+        title={["Sản phẩm yêu thích", "Your wishlist"]}
+        sub={list.length
+          ? [`Bạn đã lưu ${list.length} sản phẩm. Thêm vào giỏ để bắt đầu liệu trình.`, `You saved ${list.length} item(s). Add them to your cart to start.`]
+          : ["Bấm biểu tượng ♡ trên sản phẩm để lưu lại xem sau.", "Tap ♡ on any product to save it for later."]}
+      />
+      <section className="wrap">
+        {list.length ? (
+          <>
+            <div className="wish-bar">
+              <span>{t("Tổng", "Total")} <b>{formatVnd(total)}</b></span>
+              <button type="button" className="btn btn-dark" onClick={addAll}>{t("Thêm tất cả vào giỏ", "Add all to cart")}</button>
+            </div>
+            <div className="grid">{list.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+          </>
+        ) : (
+          <div className="cart-empty">
+            <p>{t("Danh sách yêu thích đang trống. Gợi ý: Combo Sáng – Tối đủ liệu trình 30 ngày, tiết kiệm nhất.", "Your wishlist is empty. Tip: the Day–Night combo covers a full 30-day course at the best value.")}</p>
+            <div className="direct">
+              <button className="btn btn-dark" type="button" onClick={() => { add("cb30"); openCart(); }}>{t("Mua Combo Sáng – Tối", "Buy Day–Night combo")}</button>
+              <Link className="btn btn-line" href="/san-pham">{t("Xem tất cả sản phẩm", "Browse products")}</Link>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );

@@ -1,15 +1,23 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { scrollToTarget } from "@/lib/scroll";
+import { PRODUCTS, formatVnd } from "@/lib/products";
+
+const DD_CATS = [
+  { id: "cb30", vi: "Combo liệu trình", en: "Course combos", sub: ["Sáng Slim + tối Yodetox", "Slim by day + Yodetox by night"] },
+  { id: "mq", vi: "Mayqueen Slim", en: "Mayqueen Slim", sub: ["Hỗ trợ chuyển hoá mỡ buổi sáng", "Morning fat-metabolism support"] },
+  { id: "yd", vi: "Yodetox Extra", en: "Yodetox Extra", sub: ["Thanh lọc dịu nhẹ buổi tối", "Gentle evening cleanse"] },
+] as const;
+const DD_PRODUCTS = PRODUCTS.slice(0, 4);
 
 const NAV = [
   { href: "/ve-chung-toi", vi: "Về chúng tôi", en: "About us" },
-  { href: "/#danh-cho-ai", vi: "Dành cho ai", en: "Who it's for" },
   { href: "/san-pham", vi: "Sản phẩm", en: "Products" },
   { href: "/#lieu-trinh", vi: "Liệu trình", en: "30-day plan" },
   { href: "/song-dep", vi: "Sống đẹp", en: "Live well" },
@@ -23,6 +31,9 @@ export function Header() {
   const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [dd, setDd] = useState(false);
+
+  useEffect(() => setDd(false), [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -44,7 +55,33 @@ export function Header() {
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
-            {NAV.map((n) => (
+            {NAV.map((n) => n.href === "/san-pham" ? (
+              <div key={n.href} className={`nav-dd${dd ? " open" : ""}`} onMouseEnter={() => setDd(true)} onMouseLeave={() => setDd(false)} onFocus={() => setDd(true)} onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setDd(false)}>
+                <Link href={n.href} aria-expanded={dd} aria-haspopup="true">{t(n.vi, n.en)} <Icon name="chev" /></Link>
+                <div className="dd-panel" onClick={() => setDd(false)}>
+                  <div className="dd-inner">
+                    <ul className="dd-cats">
+                      {DD_CATS.map((c) => (
+                        <li key={c.id}>
+                          <Link href={`/san-pham/${c.id}`}><b>{t(c.vi, c.en)}</b><small>{t(c.sub[0], c.sub[1])}</small></Link>
+                        </li>
+                      ))}
+                      <li><Link className="dd-all" href="/san-pham">{t("Xem tất cả sản phẩm →", "View all products →")}</Link></li>
+                    </ul>
+                    <div className="dd-grid">
+                      {DD_PRODUCTS.map((p) => (
+                        <Link key={p.id} className="dd-card" href={`/san-pham/${p.id}`}>
+                          <span className="dd-ph"><Image src={p.img} alt="" width={320} height={320} sizes="200px" />{p.tag && <em>{t(p.tag, p.tagEn)}</em>}</span>
+                          <b>{t(p.name, p.nameEn ?? p.name)}</b>
+                          <small>{t(p.spec, p.specEn)}</small>
+                          <span className="dd-pr">{formatVnd(p.price)}{p.old && <s>{formatVnd(p.old)}</s>}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
               <Link key={n.href} href={n.href}>{t(n.vi, n.en)}</Link>
             ))}
           </nav>
@@ -87,15 +124,10 @@ export function Header() {
               <span>{lang.toUpperCase()}</span>
             </button>
             <Link className="icon-btn acct" href="/#lien-he" aria-label={t("Tài khoản", "Account")}><Icon name="user" /></Link>
-            <button
-              className="icon-btn wishbtn"
-              type="button"
-              aria-label={t("Yêu thích", "Wishlist")}
-              onClick={() => toast(wish.size ? t(`${wish.size} sản phẩm yêu thích`, `${wish.size} in wishlist`) : t("Chưa có sản phẩm yêu thích", "Wishlist is empty"))}
-            >
+            <Link className="icon-btn wishbtn" href="/yeu-thich" aria-label={t("Yêu thích", "Wishlist")}>
               <Icon name="heart" />
               {wish.size > 0 && <span className="badge">{wish.size}</span>}
-            </button>
+            </Link>
             <button className="icon-btn" type="button" data-cart-target onClick={openCart} aria-label={t("Giỏ hàng", "Cart")}>
               <Icon name="cart" />
               <span key={bump} className={`badge${bump ? " bump" : ""}`}>{cartCount}</span>
@@ -132,6 +164,7 @@ export function Header() {
         {NAV.map((n) => (
           <Link key={n.href} href={n.href} onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t(n.vi, n.en)}</Link>
         ))}
+        <Link href="/yeu-thich" onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t("Yêu thích", "Wishlist")}{wish.size > 0 && ` (${wish.size})`}</Link>
         <Link href="/gio-hang" onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t("Giỏ hàng", "Cart")}</Link>
       </nav>
     </>
