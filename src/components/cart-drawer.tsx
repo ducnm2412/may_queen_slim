@@ -59,7 +59,7 @@ export function CartDrawer() {
   return (
     <>
       <div className="scrim" onClick={close} aria-hidden="true" />
-      <aside className="drawer" aria-label={t("Giỏ hàng", "Cart")} aria-hidden={!cartOpen}>
+      <aside data-lenis-prevent className="drawer" aria-label={t("Giỏ hàng", "Cart")} aria-hidden={!cartOpen}>
         <div className="d-head">
           <h3>{t("Giỏ hàng", "Your cart")}</h3>
           <button className="x" type="button" ref={closeBtn} onClick={close} aria-label={t("Đóng", "Close")}>×</button>

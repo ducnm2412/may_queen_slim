@@ -7,6 +7,7 @@ import { CONTACT, FREESHIP_FROM, PRODUCTS, PRODUCT_BY_ID, formatVnd } from "@/li
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { ProductCard } from "./product-card";
+import { scrollToTarget } from "@/lib/scroll";
 
 const SHIP_FEE = 30000;
 
@@ -32,7 +33,7 @@ export function CartPage() {
     const code = "MQ" + Date.now().toString().slice(-6);
     setPlaced({ code, total, pay });
     clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTarget(0);
   };
 
   if (placed) {

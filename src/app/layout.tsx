@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Icons } from "@/components/icons";
@@ -20,6 +21,7 @@ const beVietnam = localFont({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://may-queen-slim.vercel.app"),
   title: { default: "Mayqueen Slim · Sáng đốt mỡ, tối thanh lọc", template: "%s · Mayqueen Slim" },
   description:
     "Mayqueen Slim & Yodetox Extra từ B.O.T Việt Nam. Combo Sáng – Tối 30 ngày, thảo mộc lành tính, giao toàn quốc.",

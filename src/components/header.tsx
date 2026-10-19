@@ -5,14 +5,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
+import { scrollToTarget } from "@/lib/scroll";
 
 const NAV = [
-  { href: "/#ve-chung-toi", vi: "Về chúng tôi", en: "About us" },
+  { href: "/ve-chung-toi", vi: "Về chúng tôi", en: "About us" },
   { href: "/#danh-cho-ai", vi: "Dành cho ai", en: "Who it's for" },
-  { href: "/#san-pham", vi: "Sản phẩm", en: "Products" },
+  { href: "/san-pham", vi: "Sản phẩm", en: "Products" },
   { href: "/#lieu-trinh", vi: "Liệu trình", en: "30-day plan" },
-  { href: "/#song-dep", vi: "Sống đẹp", en: "Live well" },
-  { href: "/#lien-he", vi: "Liên hệ", en: "Contact" },
+  { href: "/song-dep", vi: "Sống đẹp", en: "Live well" },
+  { href: "/lien-he", vi: "Liên hệ", en: "Contact" },
 ];
 
 export function Header() {
@@ -61,7 +62,7 @@ export function Header() {
                   setQuery(e.target.value);
                   if (!isHome) router.push("/#san-pham");
                 }}
-                onKeyDown={(e) => e.key === "Enter" && (isHome ? document.getElementById("san-pham")?.scrollIntoView({ behavior: "smooth" }) : router.push("/#san-pham"))}
+                onKeyDown={(e) => e.key === "Enter" && (isHome ? scrollToTarget("san-pham") : router.push("/#san-pham"))}
                 placeholder={t("Tìm combo, sản phẩm…", "Search products…")}
                 aria-label={t("Tìm sản phẩm", "Search products")}
               />
@@ -95,7 +96,7 @@ export function Header() {
               <Icon name="heart" />
               {wish.size > 0 && <span className="badge">{wish.size}</span>}
             </button>
-            <button className="icon-btn" type="button" onClick={openCart} aria-label={t("Giỏ hàng", "Cart")}>
+            <button className="icon-btn" type="button" data-cart-target onClick={openCart} aria-label={t("Giỏ hàng", "Cart")}>
               <Icon name="cart" />
               <span key={bump} className={`badge${bump ? " bump" : ""}`}>{cartCount}</span>
             </button>
@@ -106,14 +107,14 @@ export function Header() {
         </div>
       </header>
       </div>
-      <nav className={`mob${menu ? " open" : ""}`} aria-label="Menu" aria-hidden={!menu}>
+      <nav data-lenis-prevent className={`mob${menu ? " open" : ""}`} aria-label="Menu" aria-hidden={!menu}>
         <form
           className="search mob-search"
           role="search"
           onSubmit={(e) => {
             e.preventDefault();
             setMenu(false);
-            if (isHome) document.getElementById("san-pham")?.scrollIntoView({ behavior: "smooth" });
+            if (isHome) scrollToTarget("san-pham");
             else router.push("/#san-pham");
           }}
         >

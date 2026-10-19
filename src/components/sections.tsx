@@ -2,48 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PRODUCTS, PRODUCT_BY_ID, CONTACT, normalize, formatVnd, type Category } from "@/lib/products";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { ProductCard } from "./product-card";
+import { POSTS as ARTICLES } from "@/lib/posts";
 
 export type Filter = Category | "all";
-
-/* ---------- Quick access ---------- */
-const CATS: { key: Filter; img: string; vi: string; en: string }[] = [
-  { key: "all", img: "/img/combo-open.jpg", vi: "Tất cả", en: "All products" },
-  { key: "combo", img: "/img/duo-podium.jpg", vi: "Combo", en: "Combo" },
-  { key: "mq", img: "/img/nguoi-khoe-dang-xinh.jpg", vi: "Mayqueen Slim", en: "Mayqueen Slim" },
-  { key: "yd", img: "/img/yodetox-da.jpg", vi: "Yodetox Extra", en: "Yodetox Extra" },
-];
-
-export function QuickAccess({ cat, onCat }: { cat: Filter; onCat: (c: Filter) => void }) {
-  const { t } = useStore();
-  return (
-    <nav className="cats" aria-label={t("Danh mục nhanh", "Quick access")}>
-      {CATS.map((c) => (
-        <button
-          key={c.key}
-          type="button"
-          className="cat"
-          aria-pressed={cat === c.key}
-          onClick={() => {
-            onCat(c.key);
-            document.getElementById("san-pham")?.scrollIntoView({ behavior: "smooth" });
-          }}
-        >
-          <span className="tile"><Image src={c.img} alt="" width={320} height={214} sizes="160px" /></span>
-          <span>{t(c.vi, c.en)}</span>
-        </button>
-      ))}
-      <a className="cat" href="#song-dep">
-        <span className="tile"><Image src="/img/smoothie-bowl.jpg" alt="" width={320} height={214} sizes="160px" /></span>
-        <span>{t("Sống đẹp", "Live well")}</span>
-      </a>
-    </nav>
-  );
-}
 
 /* ---------- Top products carousel ---------- */
 export function TopProducts() {
@@ -89,7 +55,9 @@ export function AllProducts({
   query,
   showAll,
   onShowAll,
+  head = true,
 }: {
+  head?: boolean;
   cat: Filter;
   onCat: (c: Filter) => void;
   query: string;
@@ -130,11 +98,12 @@ export function AllProducts({
   return (
     <section className="sec" id="san-pham">
       <div className="wrap">
-        <div className="center" style={{ marginBottom: 28 }}>
+        {head && <div className="center" style={{ marginBottom: 28 }}>
           <h2 className="h2 rv">{t("Tất cả sản phẩm", "Our products")}</h2>
           <p className="sub rv">{t("Thảo mộc lành tính, đủ hồ sơ công bố, bảo chứng bởi B.O.T Việt Nam.", "Herbal, declared safe, guaranteed by B.O.T Vietnam.")}</p>
-        </div>
+        </div>}
 
+        <div className="shop">
         <div className="filters" role="region" aria-label={t("Lọc sản phẩm", "Filter products")}>
           <div className="filter-cats" role="group" aria-label={t("Danh mục", "Category")}>
             {FILTER_CATS.map((c) => (
@@ -161,15 +130,16 @@ export function AllProducts({
           </div>
         </div>
 
-        <div className="filter-status" aria-live="polite">
-          <span>
-            {t(`${total} sản phẩm`, `${total} product${total === 1 ? "" : "s"}`)}
-            {words.length > 0 && <> {t("cho", "for")} <b>“{query.trim()}”</b></>}
-          </span>
-          {filtered && (
+        {/* Chỉ hiện khi đang lọc/tìm: số kết quả + nút xoá bộ lọc */}
+        {filtered && (
+          <div className="filter-status" aria-live="polite">
+            <span>
+              {t(`${total} sản phẩm`, `${total} product${total === 1 ? "" : "s"}`)}
+              {words.length > 0 && <> {t("cho", "for")} <b>“{query.trim()}”</b></>}
+            </span>
             <button type="button" className="freset" onClick={reset}>{t("Xoá bộ lọc", "Clear filters")}</button>
-          )}
-        </div>
+          </div>
+        )}
 
         {list.length ? (
           <div className="grid">{list.map((p) => <ProductCard key={p.id} p={p} />)}</div>
@@ -184,6 +154,7 @@ export function AllProducts({
             <button className="btn btn-line" type="button" onClick={onShowAll}>{t("Xem tất cả sản phẩm", "View all products")}</button>
           </div>
         )}
+        </div>
       </div>
     </section>
   );
@@ -292,23 +263,6 @@ export function Personas() {
 }
 
 /* ---------- Banners ---------- */
-export function BannerCombo() {
-  const { t, add, openCart } = useStore();
-  return (
-    <section className="sec" style={{ paddingBottom: 0 }}>
-      <div className="banner b1 rv">
-        <Image className="bgimg" src="/img/noi-long-vong-eo.jpg" alt="" width={900} height={900} sizes="40vw" />
-        <div className="mid">
-          <h2>{t("Combo Sáng – Tối", "Day–Night combo")}<br /><span className="accent">{t("Tiết kiệm 60K", "Save 60k")}</span></h2>
-          <p>{t("Tặng thực đơn eat clean + coach Zalo 30 ngày", "Plus a free eat-clean menu and a 30-day Zalo coach")}</p>
-          <button className="btn btn-white" type="button" onClick={() => { add("cb30"); openCart(); }}>{t("Mua ngay", "Get it now")}</button>
-        </div>
-        <div className="prod"><Image src="/img/combo-open.jpg" alt={t("Hộp quà combo", "Combo gift box")} width={600} height={600} sizes="300px" /></div>
-      </div>
-    </section>
-  );
-}
-
 export function BannerFreeship() {
   const { t } = useStore();
   return (
@@ -327,9 +281,28 @@ export function BannerFreeship() {
 
 export function BannerFeature() {
   const { t, add, openCart } = useStore();
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let visible = false;
+    const update = () => {
+      raf = 0;
+      const r = el.getBoundingClientRect();
+      // -1 khi banner vừa vào từ dưới, 1 khi sắp ra khỏi phía trên
+      const p = Math.max(-1, Math.min(1, (innerHeight / 2 - (r.top + r.height / 2)) / innerHeight));
+      el.style.setProperty("--p", p.toFixed(3));
+    };
+    const onScroll = () => { if (visible && !raf) raf = requestAnimationFrame(update); };
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) update(); });
+    io.observe(el);
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => { io.disconnect(); removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
   return (
-    <section style={{ paddingBottom: "clamp(56px,6vw,96px)" }}>
-      <div className="banner b3 rv">
+    <section className="sec" style={{ paddingBottom: 0 }}>
+      <div className="banner b3 rv" ref={ref}>
         <Image className="bgimg" src="/img/giai-doan-3.jpg" alt="" width={900} height={900} sizes="45vw" />
         <div className="center-prod">
           <div className="prod"><Image src="/img/30-ngay-cung.jpg" alt="" width={300} height={400} sizes="150px" /></div>
@@ -337,9 +310,17 @@ export function BannerFeature() {
           <div className="prod"><Image src="/img/yodetox-da.jpg" alt="" width={300} height={400} sizes="150px" /></div>
         </div>
         <div className="r">
-          <h2>{t("Combo", "Day–Night")}<br />{t("Sáng – Tối", "Combo")}</h2>
-          <p>{t("Hai bước thảo mộc mỗi ngày, cho cơ thể nhẹ từ bên trong.", "Two herbal steps a day, for a lighter body from the inside out.")}</p>
-          <button className="btn btn-white" type="button" onClick={() => { add("cb30"); openCart(); }}>{t("Mua ngay", "Save now")}</button>
+          <span className="r-chip">{t("Liệu trình 30 ngày", "30-day course")}</span>
+          <h2>{t("Combo Sáng – Tối", "Day–Night Combo")}</h2>
+          <p>{t("Sáng Mayqueen Slim hỗ trợ chuyển hoá mỡ, tối Yodetox Extra thanh lọc. Hai bước thảo mộc cho cơ thể nhẹ từ bên trong.", "Mayqueen Slim in the morning for fat metabolism, Yodetox Extra at night to cleanse. Two herbal steps for a lighter body.")}</p>
+          <div className="r-price">
+            <b>{formatVnd(PRODUCT_BY_ID.cb30.price)}</b>
+            {PRODUCT_BY_ID.cb30.old && <s>{formatVnd(PRODUCT_BY_ID.cb30.old)}</s>}
+          </div>
+          <div className="r-cta">
+            <button className="btn btn-white" type="button" onClick={() => { add("cb30"); openCart(); }}>{t("Mua combo", "Buy the combo")}</button>
+            <Link className="btn btn-ghost" href="/san-pham/cb30">{t("Xem chi tiết", "View details")}</Link>
+          </div>
         </div>
         <div className="pills">
           <div><Icon name="leaf" /><span>{t("Thảo mộc", "Herbal")}<small>{t("Thành phần lành tính", "Gentle ingredients")}</small></span></div>
@@ -438,6 +419,7 @@ export function Community() {
 /* ---------- Live well ---------- */
 export function LiveWell() {
   const { t } = useStore();
+  const list = ARTICLES.slice(0, 5);
   return (
     <section className="sec" id="song-dep">
       <div className="wrap">
@@ -446,34 +428,16 @@ export function LiveWell() {
             <h2 className="h2 rv">{t("Sống đẹp cùng Mayqueen", "Live well with Mayqueen")}</h2>
             <p className="sub rv">{t("Cẩm nang lifestyle, thực đơn eat clean và bí quyết giữ dáng.", "Lifestyle tips, eat-clean menus and ways to keep in shape.")}</p>
           </div>
-          <a className="btn btn-dark rv" href={CONTACT.facebook} target="_blank" rel="noopener">{t("Tất cả bài viết", "All articles")}</a>
+          <Link className="btn btn-dark rv" href="/song-dep">{t("Tất cả bài viết", "All articles")}</Link>
         </div>
         <div className="blog">
-          <a className="bcard big rv" href={CONTACT.facebook} target="_blank" rel="noopener">
-            <div className="ph"><Image quality={90} src="/img/lay-lai-voc-dang.jpg" alt={t("Bữa ăn cá hồi, gạo lứt", "Salmon and brown rice meal")} width={900} height={900} sizes="(max-width: 1100px) 100vw, 40vw" /></div>
-            <span className="k">{t("Thực đơn eat clean", "Eat-clean menu")}</span>
-            <h3>{t("Lấy lại vóc dáng không mệt mỏi", "Get your shape back, stress-free")}</h3>
-          </a>
-          <a className="bcard rv" href={CONTACT.facebook} target="_blank" rel="noopener">
-            <div className="ph"><Image src="/img/vua-an-xong-doi.jpg" alt="" width={900} height={900} sizes="(max-width: 760px) 100vw, 28vw" /></div>
-            <span className="k">{t("Kiến thức", "Knowledge")}</span>
-            <h3>{t("Vừa ăn xong lại thấy đói?", "Hungry right after eating?")}</h3>
-          </a>
-          <a className="bcard rv" href={CONTACT.facebook} target="_blank" rel="noopener">
-            <div className="ph"><Image src="/img/tam-biet-bua-xa.jpg" alt="" width={900} height={900} sizes="(max-width: 760px) 100vw, 28vw" /></div>
-            <span className="k">Detox</span>
-            <h3>{t("Tạm biệt bữa ăn “xả”", "Goodbye cheat meals")}</h3>
-          </a>
-          <a className="bcard rv" href={CONTACT.facebook} target="_blank" rel="noopener">
-            <div className="ph"><Image src="/img/an-qua-it.jpg" alt="" width={900} height={900} sizes="(max-width: 760px) 100vw, 28vw" /></div>
-            <span className="k">{t("Kiến thức", "Knowledge")}</span>
-            <h3>{t("Ăn quá ít có giúp giảm mỡ?", "Does eating too little burn fat?")}</h3>
-          </a>
-          <a className="bcard rv" href={CONTACT.facebook} target="_blank" rel="noopener">
-            <div className="ph"><Image src="/img/sau-tuoi-30.jpg" alt="" width={900} height={900} sizes="(max-width: 760px) 100vw, 28vw" /></div>
-            <span className="k">{t("Kiến thức", "Knowledge")}</span>
-            <h3>{t("Vì sao sau tuổi 30 cân nặng khó kiểm soát?", "Why is weight harder to control after 30?")}</h3>
-          </a>
+          {list.map((p, i) => (
+            <Link className={`bcard rv${i === 0 ? " big" : ""}`} key={p.slug} href={`/song-dep/${p.slug}`}>
+              <div className="ph"><Image quality={i === 0 ? 90 : 75} src={p.img} alt="" width={900} height={900} sizes={i === 0 ? "(max-width: 1100px) 100vw, 40vw" : "(max-width: 760px) 100vw, 28vw"} /></div>
+              <span className="k">{t(...p.cat)}</span>
+              <h3>{t(...p.title)}</h3>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

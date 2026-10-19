@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatVnd, type Product } from "@/lib/products";
 import { useStore } from "./providers";
+import { flyToCart } from "@/lib/motion";
 import { Icon } from "./icons";
 
 export function ProductCard({ p }: { p: Product }) {
@@ -35,7 +36,7 @@ export function ProductCard({ p }: { p: Product }) {
         </div>
         <span className="hot">{t("Chính hãng", "Genuine")}</span>
       </div>
-      <button type="button" className="atc" onClick={() => add(p.id)}>
+      <button type="button" className="atc" onClick={(e) => { flyToCart(e.currentTarget.closest(".card")?.querySelector(".ph")); add(p.id); }}>
         {t("Thêm vào giỏ", "Add to cart")}
         <Icon name="cart" size={16} />
       </button>

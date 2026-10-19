@@ -22,6 +22,23 @@ const v = (src: string) => `${src}?v=${HERO_VERSION}`;
 
 const SLIDES: Slide[] = [
   {
+    chip: ["Bước buổi tối", "Night step"],
+    title: ["Yodetox Extra", "Yodetox Extra"],
+    desc: [
+      "Một cốc thảo mộc ấm trước khi ngủ. Bớt đầy hơi, bụng nhẹ, da sáng khoẻ.",
+      "A warm herbal cup before bed. Less bloating, a lighter belly, brighter skin.",
+    ],
+    buy: { id: "yd", label: ["Mua · 400k", "Buy · 400k"] },
+    secondary: { href: "#san-pham", label: ["Xem sản phẩm", "See all"] },
+    stats: [
+      { v: "30", l: ["Gói / hộp", "Sachets / box"] },
+      { v: "21:00", l: ["Giờ dùng", "Best time"] },
+      { v: "B.O.T", l: ["Sản xuất tại VN", "Made in Vietnam"] },
+    ],
+    img: v("/img/hero/slide-3-yodetox.jpg"),
+    alt: "Hộp Yodetox Extra",
+  },
+  {
     chip: ["Thảo mộc · Bảo chứng B.O.T Việt Nam", "Herbal · guaranteed by B.O.T Vietnam"],
     title: ["Combo Sáng – Tối", "Day–Night Combo"],
     desc: [
@@ -54,23 +71,6 @@ const SLIDES: Slide[] = [
     ],
     img: v("/img/hero/slide-2-mayqueen.jpg"),
     alt: "Hộp Mayqueen Slim",
-  },
-  {
-    chip: ["Bước buổi tối", "Night step"],
-    title: ["Yodetox Extra", "Yodetox Extra"],
-    desc: [
-      "Một cốc thảo mộc ấm trước khi ngủ. Bớt đầy hơi, bụng nhẹ, da sáng khoẻ.",
-      "A warm herbal cup before bed. Less bloating, a lighter belly, brighter skin.",
-    ],
-    buy: { id: "yd", label: ["Mua · 400k", "Buy · 400k"] },
-    secondary: { href: "#san-pham", label: ["Xem sản phẩm", "See all"] },
-    stats: [
-      { v: "30", l: ["Gói / hộp", "Sachets / box"] },
-      { v: "21:00", l: ["Giờ dùng", "Best time"] },
-      { v: "B.O.T", l: ["Sản xuất tại VN", "Made in Vietnam"] },
-    ],
-    img: v("/img/hero/slide-3-yodetox.jpg"),
-    alt: "Hộp Yodetox Extra",
   },
 ];
 

@@ -6,6 +6,7 @@ import { Fab, Footer, Toast } from "./footer";
 import { CartDrawer } from "./cart-drawer";
 import { RevealObserver } from "./reveal";
 import { Lightbox } from "./lightbox";
+import { SmoothScroll } from "./smooth-scroll";
 
 /** Khung dùng chung cho mọi trang: header nổi, footer, giỏ hàng trượt, nút nổi, toast. */
 export function Shell({ children }: { children: ReactNode }) {
@@ -19,6 +20,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <CartDrawer />
       <Lightbox />
       <RevealObserver />
+      <SmoothScroll />
     </>
   );
 }

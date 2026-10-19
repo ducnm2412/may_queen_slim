@@ -7,6 +7,7 @@ import { useState } from "react";
 import { PRODUCTS, PRODUCT_BY_ID, formatVnd, CONTACT } from "@/lib/products";
 import { getDetail } from "@/lib/product-details";
 import { useStore } from "./providers";
+import { flyToCart } from "@/lib/motion";
 import { Icon } from "./icons";
 import { ProductCard } from "./product-card";
 
@@ -75,7 +76,7 @@ export function ProductDetail({ id }: { id: string }) {
                 <output>{qty}</output>
                 <button type="button" aria-label={t("Tăng", "Increase")} onClick={() => setQty((q) => Math.min(20, q + 1))}>+</button>
               </div>
-              <button className="btn btn-dark" type="button" onClick={() => { add(p.id, qty); openCart(); }}>
+              <button className="btn btn-dark" type="button" onClick={() => { flyToCart(document.querySelector(".pdp-main")); add(p.id, qty); setTimeout(openCart, 650); }}>
                 <Icon name="cart" size={18} />{t("Thêm vào giỏ", "Add to cart")}
               </button>
               <button className="btn btn-green" type="button" onClick={() => { add(p.id, qty); router.push("/gio-hang"); }}>
