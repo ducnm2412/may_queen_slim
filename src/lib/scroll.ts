@@ -6,21 +6,18 @@ export const setLenis = (l: Lenis | null) => {
   instance = l;
 };
 
-/** Khoảng chừa cho thanh menu cố định. */
-const headerOffset = () => {
-  const h = document.querySelector(".hdr")?.getBoundingClientRect().height ?? 80;
-  return -(h + 12);
-};
+/** Chiều cao thanh menu khi đã cuộn (thanh thông báo thu lại, chỉ còn menu). */
+const navHeight = () => document.querySelector(".nav")?.getBoundingClientRect().height ?? 78;
 
-/** Cuộn mượt tới phần tử (hoặc id), chừa chỗ cho thanh menu. */
+/** Cuộn mượt tới phần tử (hoặc id, hoặc toạ độ), chừa chỗ cho thanh menu cố định. */
 export function scrollToTarget(target: string | Element | number, opts: { immediate?: boolean } = {}) {
   const el = typeof target === "string" ? document.getElementById(target.replace(/^#/, "")) : target;
   if (el == null) return;
-  const offset = typeof el === "number" ? 0 : headerOffset();
+  // Tự tính toạ độ để không bị cộng thêm scroll-padding-top của CSS
+  const top = typeof el === "number" ? el : Math.max(0, el.getBoundingClientRect().top + scrollY - navHeight() - 12);
   if (instance) {
-    instance.scrollTo(el as Element | number, { offset, duration: 1.4, immediate: opts.immediate });
+    instance.scrollTo(top, { duration: 1.4, immediate: opts.immediate });
     return;
   }
-  const top = typeof el === "number" ? el : el.getBoundingClientRect().top + scrollY + offset;
   scrollTo({ top, behavior: opts.immediate ? "auto" : "smooth" });
 }
