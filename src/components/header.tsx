@@ -51,7 +51,7 @@ export function Header() {
   return (
     <>
       <div className={`hdr${scrolled || !isHome ? " scrolled" : ""}`}>
-      <div className="topbar">{t("Tuần lễ Combo: giảm 60K + freeship toàn quốc!", "Combo week: save 60k + free nationwide shipping!")}</div>
+      <div className="topbar"><span className="topbar-tag">{t("Tuần lễ Combo:", "Combo week:")}</span><span>{t("Giảm ", "Save ")}<b>60K</b>{t(" + freeship toàn quốc!", " + free nationwide shipping!")}</span></div>
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>

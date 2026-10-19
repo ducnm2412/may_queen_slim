@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Dancing_Script } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Providers } from "@/components/providers";
@@ -16,6 +17,21 @@ const beVietnam = localFont({
     { path: "./fonts/be-vietnam-pro-latin-500-normal.woff2", weight: "500" },
     { path: "./fonts/be-vietnam-pro-vietnamese-700-normal.woff2", weight: "700" },
     { path: "./fonts/be-vietnam-pro-latin-700-normal.woff2", weight: "700" },
+  ],
+});
+
+const script = Dancing_Script({ subsets: ["vietnamese", "latin"], weight: ["600", "700"], variable: "--font-script", display: "swap" });
+
+const bricolage = localFont({
+  variable: "--font-display",
+  display: "swap",
+  src: [
+    { path: "./fonts/bricolage-grotesque-vietnamese-600-normal.woff2", weight: "600" },
+    { path: "./fonts/bricolage-grotesque-latin-600-normal.woff2", weight: "600" },
+    { path: "./fonts/bricolage-grotesque-latin-ext-600-normal.woff2", weight: "600" },
+    { path: "./fonts/bricolage-grotesque-vietnamese-800-normal.woff2", weight: "800" },
+    { path: "./fonts/bricolage-grotesque-latin-800-normal.woff2", weight: "800" },
+    { path: "./fonts/bricolage-grotesque-latin-ext-800-normal.woff2", weight: "800" },
   ],
 });
 
@@ -39,7 +55,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="vi" className={beVietnam.variable}>
+    <html lang="vi" className={`${beVietnam.variable} ${bricolage.variable} ${script.variable}`}>
       <body>
         <Icons />
         <Providers>
