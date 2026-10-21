@@ -17,17 +17,14 @@ export function Footer() {
               <Image className="bot" src="/img/bot-logo.png" alt="B.O.T Việt Nam" width={56} height={56} />
               <b>Mayqueen<span> Slim</span></b>
             </div>
-            {/* Thông tin pháp lý: chờ sale gửi, giữ dạng [ … ] */}
             <dl className="ft2-legal">
-              <div><dt>{t("Công ty", "Company")}</dt><dd>[{t("Tên công ty", "Company name")}]</dd></div>
-              <div><dt>{t("Trụ sở", "Head office")}</dt><dd>[{t("Địa chỉ", "Address")}]</dd></div>
-              <div><dt>MST</dt><dd>[MST]</dd></div>
+              <div><dt>{t("Đơn vị", "Company")}</dt><dd>{CONTACT.company}</dd></div>
+              <div><dt>{t("Địa chỉ", "Address")}</dt><dd><a href={CONTACT.maps} target="_blank" rel="noopener">{CONTACT.address}</a></dd></div>
+              <div><dt>{t("Liên hệ", "Contact")}</dt><dd>{CONTACT.person}</dd></div>
               <div><dt>Hotline</dt><dd><a href={CONTACT.tel}>{CONTACT.phone}</a></dd></div>
-              <div><dt>Email</dt><dd>[Email]</dd></div>
             </dl>
             <div className="social">
               <a href={CONTACT.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="fb" /></a>
-              <a href="#tiktok" aria-label="TikTok"><Icon name="tt" /></a>
               <a href={CONTACT.zalo} target="_blank" rel="noopener" aria-label="Zalo" className="zl">Zalo</a>
             </div>
           </div>

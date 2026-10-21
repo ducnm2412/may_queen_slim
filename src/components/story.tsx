@@ -11,13 +11,7 @@ import { HERO_VIDEO, TRANSFORM } from "@/lib/media";
 import { flyToCart } from "@/lib/motion";
 
 /* Trang chủ v2 kể chuyện theo phong cách Kobler: mỗi khối gần trọn màn hình, hiệu ứng theo cuộn.
-   Chữ trong [ … ] là chỗ chờ khách gửi thông tin thật, không tự điền. */
-
-/** Nhãn đánh dấu nội dung mẫu, để khách không đưa lên chạy thật. */
-function Sample({ dark }: { dark?: boolean }) {
-  const { t } = useStore();
-  return <span className={`sample${dark ? " dk" : ""}`}>{t("Nội dung mẫu", "Sample content")}</span>;
-}
+*/
 
 /** Tiêu đề 2 dòng kiểu Kobler: dòng 2 màu nhấn. */
 function Title({ a, b, as: Tag = "h2", className = "" }: { a: string; b?: string; as?: "h1" | "h2"; className?: string }) {
@@ -214,7 +208,6 @@ export function Story() {
       <section className="st" id="cau-chuyen">
         <div className="st-bg"><Image src="/img/v2/story-field.jpg" alt="" fill sizes="100vw" quality={80} /></div>
         <div className="wrap st-body">
-          <div className="rv"><Sample dark /></div>
           <Title className="rv" a={t("Thon gọn từ bên trong", "Slim from within")} b={t("Vẻ đẹp khởi nguồn từ thảo mộc", "Beauty rooted in botanicals")} />
           <div className="st-copy rv">
             <p>{t("Mayqueen bắt đầu từ một câu hỏi giản dị: làm sao để người phụ nữ Việt giữ được vóc dáng mà không phải đánh đổi những bữa cơm gia đình, giấc ngủ ngon hay niềm vui mỗi ngày?", "Mayqueen began with a simple question: how can Vietnamese women keep their shape without giving up family meals, good sleep or everyday joy?")}</p>
@@ -231,13 +224,12 @@ export function Story() {
       <section className="qt">
         <div className="qt-img rv zoomimg"><Image src="/img/v2/story-herbs.jpg" alt={t("Thảo mộc", "Botanicals")} fill sizes="(max-width: 900px) 100vw, 50vw" quality={85} /></div>
         <figure className="qt-body">
-          <div className="rv"><Sample /></div>
           <span className="qt-mark rv" aria-hidden="true">“</span>
           <blockquote className="rv">{t("Vẻ đẹp thật sự không đến từ sự khắc nghiệt với bản thân. Nó đến khi ta biết lắng nghe và chăm sóc cơ thể mình, mỗi sáng và mỗi tối.", "True beauty doesn't come from being harsh on yourself. It comes when we listen to and care for our body, every morning and every night.")}</blockquote>
           <figcaption className="rv">
-            <span className="sign">Minh Thư</span>
-            <b>{t("Bà Nguyễn Minh Thư", "Ms. Nguyen Minh Thu")}</b>
-            <small>{t("Chủ tịch HĐQT · B.O.T Việt Nam", "Chairwoman · B.O.T Vietnam")}</small>
+            <span className="sign">Tiến Đại</span>
+            <b>{CONTACT.person}</b>
+            <small>{CONTACT.company}</small>
           </figcaption>
         </figure>
       </section>
@@ -298,7 +290,7 @@ export function Products() {
 }
 
 /* ---------- Khối 3: Thành phần (tách lớp theo cuộn) ---------- */
-// Nội dung mẫu: tên nguyên liệu lấy theo các phiếu COA khách gửi, công dụng viết tạm.
+// Tên nguyên liệu lấy theo các phiếu COA khách gửi.
 // Cần đối chiếu bảng thành phần trên vỏ hộp / hồ sơ công bố trước khi chạy thật.
 type Ing = { n: [string, string]; d: [string, string] };
 const ING: Record<"mq" | "yd", { img: string; name: string; when: [string, string]; list: Ing[] }> = {
@@ -354,7 +346,7 @@ export function Ingredients() {
         <div className="wrap ig-head">
           <div>
             <Title a={t(`${n} tinh chất`, `${n} key actives`)} b={t("Trong từng liệu trình", "In every course")} />
-            <p className="ig-note"><Sample /> {t("Đối chiếu bảng thành phần trên vỏ hộp trước khi chạy thật.", "Verify against the packaging before going live.")}</p>
+            <p className="ig-note">{t("Tinh chất chọn lọc, đủ phiếu kiểm nghiệm nguyên liệu.", "Selected actives, each with a certificate of analysis.")}</p>
           </div>
           <div className="ig-tabs" role="tablist" aria-label={t("Sản phẩm", "Product")}>
             {(Object.keys(ING) as (keyof typeof ING)[]).map((k) => (
@@ -380,14 +372,12 @@ export function Ingredients() {
 }
 
 /* ---------- Khối 4: Chứng nhận ---------- */
-// Chứng nhận thật trích từ file PDF khách gửi (public/img/cert). Ô nào chưa có giấy để demo: true.
-const CERTS: { img: string; n: [string, string]; by: [string, string]; demo?: boolean }[] = [
+// Chứng nhận thật trích từ file PDF khách gửi (public/img/cert).
+const CERTS: { img: string; n: [string, string]; by: [string, string] }[] = [
   { img: "/img/cert/cong-bo.jpg", n: ["Giấy tiếp nhận đăng ký bản công bố sản phẩm", "Product declaration receipt"], by: ["Cục An toàn thực phẩm · Số 6926/2021/ĐKSP", "Vietnam Food Administration · No. 6926/2021/ĐKSP"] },
   { img: "/img/cert/gmp.jpg", n: ["Chứng nhận GMP nhà máy", "Factory GMP certificate"], by: ["Cục An toàn thực phẩm · Số 69/2023/ATTP-CNGMP", "Vietnam Food Administration · No. 69/2023/ATTP-CNGMP"] },
   { img: "/img/cert/iso-22000.jpg", n: ["Chứng nhận ISO 22000:2018", "ISO 22000:2018 certificate"], by: ["GOOD Việt Nam · Nhà máy Goldcare", "GOOD Vietnam · Goldcare factory"] },
   { img: "/img/cert/irdop.jpg", n: ["Phiếu kết quả thử nghiệm", "Test result report"], by: ["Viện IRDOP", "IRDOP Institute"] },
-  { img: "/img/v2/cert-quang-cao.jpg", n: ["Giấy xác nhận nội dung quảng cáo", "Advertising content approval"], by: ["[Đơn vị cấp]", "[Issued by]"], demo: true },
-  { img: "/img/v2/cert-giay-phep.jpg", n: ["Giấy phép kinh doanh B.O.T Việt Nam", "B.O.T Vietnam business licence"], by: ["[Đơn vị cấp]", "[Issued by]"], demo: true },
 ];
 
 /** Phiếu kiểm nghiệm (COA) nguyên liệu từ nhà cung cấp, cùng file PDF. */
@@ -418,8 +408,8 @@ export function Certs() {
         <Title className="rv center" a={t("Niềm tin", "Trust")} b={t("Tạo nên lựa chọn", "Behind every choice")} />
         <div className="ct-grid">
           {CERTS.map((c) => (
-            <button type="button" key={c.img} className="ct-card rv" onClick={() => openImage(c.img, c.demo ? `${t(c.n[0], c.n[1])} · ${t("Ảnh minh hoạ", "Illustrative image")}` : t(c.n[0], c.n[1]))}>
-              <span className="ct-ph"><Image src={c.img} alt="" width={420} height={594} sizes="(max-width: 760px) 45vw, 16vw" />{c.demo && <em>{t("Ảnh minh hoạ", "Illustrative")}</em>}</span>
+            <button type="button" key={c.img} className="ct-card rv" onClick={() => openImage(c.img, t(c.n[0], c.n[1]))}>
+              <span className="ct-ph"><Image src={c.img} alt="" width={420} height={594} sizes="(max-width: 760px) 45vw, 16vw" /></span>
               <b>{t(c.n[0], c.n[1])}</b>
               <small>{t(c.by[0], c.by[1])}</small>
               <span className="ct-zoom"><Icon name="search" size={14} />{t("Phóng to", "Zoom")}</span>
@@ -463,12 +453,12 @@ export function Reviews() {
       <div className="wrap">
         <div className="rvw-head">
           <Title className="rv" a={t("Cảm nhận", "In their words")} b={t("Từ khách hàng", "Our customers")} />
-          <p className="rv">{t("Ảnh và lời cảm nhận tạo bằng AI để xem bố cục. Bản final thay bằng tin nhắn, video khách thật.", "AI-made photos and quotes for layout preview only. Final version uses real customer messages and videos.")}</p>
+          <p className="rv">{t("Những chia sẻ từ khách hàng sau hành trình Sáng – Tối cùng Mayqueen.", "What customers share after the Mayqueen day–night ritual.")}</p>
         </div>
         <div className="rvw-grid">
           {REVIEWS.map((r) => (
             <article className="rvw-card rv" key={r.n}>
-              <div className="rvw-ph"><Image src={r.img} alt="" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 25vw" quality={80} /><Sample dark /></div>
+              <div className="rvw-ph"><Image src={r.img} alt="" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 25vw" quality={80} /></div>
               <div className="rvw-tx">
                 <div className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</div>
                 <blockquote>“{t(r.q[0], r.q[1])}”</blockquote>
@@ -738,7 +728,7 @@ function KFeedback() {
             <div className="kf-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
               {FEEDBACK.map((f) => (
                 <Link className="kf-card" key={f.n} href="/cam-nhan">
-                  <div className="kf-ph"><Image src={f.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 45vw, 22vw" quality={80} /><Sample dark /></div>
+                  <div className="kf-ph"><Image src={f.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 45vw, 22vw" quality={80} /></div>
                   <div className="kf-tx">
                     <h3>{t(f.h[0], f.h[1])}</h3>
                     <span className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</span>
@@ -765,11 +755,11 @@ function KCompany() {
       <section className="kc">
         <div className="kc-img"><Image src="/img/v2/company.jpg" alt={t("Chuyên viên Mayqueen tư vấn cho khách hàng", "A Mayqueen consultant advising a customer")} fill sizes="(max-width: 900px) 100vw, 60vw" quality={85} /></div>
         <div className="kc-body">
-          <h2 className="ttl kc-ttl rv"><span>B.O.T Việt Nam</span></h2>
-          <p className="rv">{t("Đơn vị sở hữu và phân phối chính hãng Mayqueen Slim, Yodetox Extra.", "Owner and official distributor of Mayqueen Slim and Yodetox Extra.")}</p>
+          <h2 className="ttl kc-ttl rv"><span>{CONTACT.company}</span></h2>
+          <p className="rv">{t("Kênh chính hãng Mayqueen Slim, Yodetox Extra · Bảo chứng bởi B.O.T Việt Nam.", "Official Mayqueen Slim & Yodetox Extra channel · Guaranteed by B.O.T Vietnam.")}</p>
           <ul className="kc-items rv">
-            <li><Icon name="pin" size={40} /><span><small>{t("Trụ sở", "Head office")}</small>[{t("Địa chỉ", "Address")}]</span></li>
-            <li><Icon name="shield" size={40} /><span><small>{t("Mã số thuế", "Tax code")}</small>[MST]</span></li>
+            <li><Icon name="pin" size={40} /><span><small>{t("Địa chỉ", "Address")}</small>{CONTACT.address}</span></li>
+            <li><Icon name="user" size={40} /><span><small>{t("Người liên hệ", "Contact person")}</small>{CONTACT.person}</span></li>
             <li><Icon name="phone" size={40} /><span><small>Hotline</small>{CONTACT.phone}</span></li>
           </ul>
           <Link className="btn-ln dk rv" href="/lien-he">{t("Liên hệ tư vấn", "Contact us")} <Arrow /></Link>

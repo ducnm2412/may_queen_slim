@@ -792,3 +792,4 @@ body { background: var(--pearl); }
 .kl-img { align-self: stretch; aspect-ratio: auto; min-height: 360px; }
 .kl-img img { object-fit: cover; object-position: 75% center; }
 @media (max-width: 600px) { .kl-img { min-height: 0; } }
+.ct-grid { grid-template-columns: repeat(4, 1fr); } @media (max-width: 760px) { .ct-grid { grid-template-columns: 1fr 1fr; } }

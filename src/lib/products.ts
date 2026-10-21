@@ -128,6 +128,8 @@ export const PRODUCT_BY_ID: Record<string, Product> = Object.fromEntries(
 export const FREESHIP_FROM = 700000;
 
 export const CONTACT = {
+  company: "MayqueenSlim Official",
+  person: "Phan Tiến Đại",
   phone: "039 5057 364",
   tel: "tel:0395057364",
   zalo: "https://zalo.me/0395057364",
