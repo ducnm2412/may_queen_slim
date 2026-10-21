@@ -4,7 +4,7 @@
  * 2. Sửa đường dẫn bên dưới (hoặc ghi đè luôn hero-tvc.mp4) và tăng VERSION để trình duyệt tải file mới.
  * `mobile` để null nếu không có bản dọc 9:16 riêng cho điện thoại.
  */
-const VERSION = 3;
+const VERSION = 4;
 const v = (src: string) => `${src}?v=${VERSION}`;
 
 export const HERO_VIDEO = {
