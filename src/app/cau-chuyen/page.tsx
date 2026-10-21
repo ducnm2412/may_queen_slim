@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <V2Page>
-      <PageHero img="/img/mayqueen-leaf.jpg" crumb={["Câu chuyện", "Our story"]} a={["Hành trình", "The journey"]} b={["Từ thảo mộc Việt", "From Vietnamese botanicals"]} desc={["Triết lý chăm sóc chậm mà bền của B.O.T Việt Nam.", "Slow, lasting care by B.O.T Vietnam."]} />
+      <PageHero img="/img/hero/slide-2-mayqueen.jpg" crumb={["Câu chuyện", "Our story"]} a={["Hành trình", "The journey"]} b={["Từ thảo mộc Việt", "From Vietnamese botanicals"]} desc={["Triết lý chăm sóc chậm mà bền của B.O.T Việt Nam.", "Slow, lasting care by B.O.T Vietnam."]} />
       <Story />
       <LiveWellV2 />
     </V2Page>

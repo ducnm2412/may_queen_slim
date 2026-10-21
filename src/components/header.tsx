@@ -16,7 +16,7 @@ const DD_CATS = [
 const DD_PRODUCTS = PRODUCTS.slice(0, 4);
 
 /** Trang có banner tối đầu trang: header trong suốt khi chưa cuộn. */
-const OVERLAY = ["/", "/cau-chuyen", "/thanh-phan", "/chung-nhan", "/cam-nhan", "/lien-he"];
+const OVERLAY = ["/", "/san-pham", "/cau-chuyen", "/thanh-phan", "/chung-nhan", "/cam-nhan", "/lien-he"];
 
 const NAV = [
   { href: "/", vi: "Trang chủ", en: "Home" },

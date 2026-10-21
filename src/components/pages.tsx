@@ -12,21 +12,23 @@ import { Icon } from "./icons";
 import { PageHead } from "./page-head";
 import { AllProducts, BannerFeature, Journey, Personas, Why, type Filter } from "./sections";
 import { Contact } from "./contact";
+import { PageHero } from "./story";
 
 /* ======================= Sản phẩm ======================= */
 export function ShopPage() {
   const { query } = useStore();
   const [cat, setCat] = useState<Filter>("all");
   return (
-    <main className="page">
-      <PageHead
-        crumbs={[{ label: ["Sản phẩm", "Products"] }]}
-        title={["Sản phẩm Mayqueen", "Mayqueen products"]}
-        sub={["Thảo mộc lành tính, đủ hồ sơ công bố, bảo chứng bởi B.O.T Việt Nam. Freeship đơn từ 700k.", "Gentle herbs, fully declared, guaranteed by B.O.T Vietnam. Free shipping from 700k."]}
+    <main className="v2 shop2">
+      <PageHero
+        img="/img/hero/slide-1-combo.jpg"
+        crumb={["Sản phẩm", "Products"]}
+        a={["Sản phẩm", "Products"]}
+        b={["Mayqueen & Yodetox", "Mayqueen & Yodetox"]}
+        desc={["Thảo mộc lành tính, đủ hồ sơ công bố, bảo chứng bởi B.O.T Việt Nam. Freeship đơn từ 700k.", "Gentle herbs, fully declared, guaranteed by B.O.T Vietnam. Free shipping from 700k."]}
       />
       <AllProducts head={false} cat={cat} onCat={setCat} query={query} showAll onShowAll={() => {}} />
       <TrustStrip />
-      <BannerFeature />
     </main>
   );
 }

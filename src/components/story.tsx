@@ -198,14 +198,14 @@ export function Story() {
   return (
     <>
       <section className="st" id="cau-chuyen">
-        <div className="st-bg" data-px="-0.08"><Image src="/img/v2/story-field.jpg" alt="" fill sizes="100vw" quality={80} /></div>
+        <div className="st-bg"><Image src="/img/v2/story-field.jpg" alt="" fill sizes="100vw" quality={80} /></div>
         <div className="wrap st-body">
           <div className="rv"><Sample dark /></div>
           <Title className="rv" a={t("Thon gọn từ bên trong", "Slim from within")} b={t("Vẻ đẹp khởi nguồn từ thảo mộc", "Beauty rooted in botanicals")} />
           <div className="st-copy rv">
             <p>{t("Mayqueen bắt đầu từ một câu hỏi giản dị: làm sao để người phụ nữ Việt giữ được vóc dáng mà không phải đánh đổi những bữa cơm gia đình, giấc ngủ ngon hay niềm vui mỗi ngày?", "Mayqueen began with a simple question: how can Vietnamese women keep their shape without giving up family meals, good sleep or everyday joy?")}</p>
             <p>{t("Chúng tôi tìm câu trả lời trong kho tàng thảo mộc phương Đông, những lá, rễ, hạt đã gắn bó với đời sống người Việt qua nhiều thế hệ, và chắt lọc thành một nghi thức nhẹ nhàng: sáng khởi động, tối thanh lọc.", "We found the answer in Eastern botanicals, leaves, roots and seeds woven into Vietnamese life for generations, distilled into a gentle ritual: wake up by day, cleanse by night.")}</p>
-            <p>{t("Từ năm [năm thành lập], B.O.T Việt Nam theo đuổi triết lý chăm sóc chậm mà bền: lắng nghe cơ thể, tôn trọng nhịp sinh học, để vẻ đẹp đến tự nhiên và ở lại lâu hơn.", "Since [founding year], B.O.T Vietnam has pursued slow, lasting care: listen to the body, respect its rhythm, and let beauty arrive naturally and stay longer.")}</p>
+            <p>{t("Ngay từ những ngày đầu, B.O.T Việt Nam theo đuổi triết lý chăm sóc chậm mà bền: lắng nghe cơ thể, tôn trọng nhịp sinh học, để vẻ đẹp đến tự nhiên và ở lại lâu hơn.", "From day one, B.O.T Vietnam has pursued slow, lasting care: listen to the body, respect its rhythm, and let beauty arrive naturally and stay longer.")}</p>
           </div>
           <dl className="st-vals rv">
             {VALUES.map((v) => (
@@ -221,9 +221,9 @@ export function Story() {
           <span className="qt-mark rv" aria-hidden="true">“</span>
           <blockquote className="rv">{t("Vẻ đẹp thật sự không đến từ sự khắc nghiệt với bản thân. Nó đến khi ta biết lắng nghe và chăm sóc cơ thể mình, mỗi sáng và mỗi tối.", "True beauty doesn't come from being harsh on yourself. It comes when we listen to and care for our body, every morning and every night.")}</blockquote>
           <figcaption className="rv">
-            <span className="sign">[Chữ ký]</span>
-            <b>[{t("Họ và tên Chủ tịch", "Chairperson's full name")}]</b>
-            <small>{t("Chủ tịch", "Chairperson")} · [{t("Tên công ty", "Company name")}]</small>
+            <span className="sign">Minh Thư</span>
+            <b>{t("Bà Nguyễn Minh Thư", "Ms. Nguyen Minh Thu")}</b>
+            <small>{t("Chủ tịch HĐQT · B.O.T Việt Nam", "Chairwoman · B.O.T Vietnam")}</small>
           </figcaption>
         </figure>
       </section>
@@ -284,24 +284,63 @@ export function Products() {
 }
 
 /* ---------- Khối 3: Thành phần (tách lớp theo cuộn) ---------- */
-// Chữ mẫu: sale điền bảng thành phần thật từ vỏ hộp / hồ sơ công bố. Không tự bịa.
-const ING = {
-  mq: { n: 8, img: "/img/mayqueen-leaf.jpg", name: "Mayqueen Slim", when: ["Buổi sáng", "Morning"] },
-  yd: { n: 6, img: "/img/yodetox-da.jpg", name: "Yodetox Extra", when: ["Buổi tối", "Evening"] },
-} as const;
+// Nội dung mẫu: tên nguyên liệu lấy theo các phiếu COA khách gửi, công dụng viết tạm.
+// Cần đối chiếu bảng thành phần trên vỏ hộp / hồ sơ công bố trước khi chạy thật.
+type Ing = { n: [string, string]; d: [string, string] };
+const ING: Record<"mq" | "yd", { img: string; name: string; when: [string, string]; list: Ing[] }> = {
+  mq: {
+    img: "/img/mayqueen-leaf.jpg", name: "Mayqueen Slim", when: ["Buổi sáng", "Morning"],
+    list: [
+      { n: ["Chiết xuất trà xanh", "Green tea extract"], d: ["Hỗ trợ chuyển hoá năng lượng", "Supports energy metabolism"] },
+      { n: ["Chitosan", "Chitosan"], d: ["Hỗ trợ hạn chế hấp thu chất béo", "Helps limit fat absorption"] },
+      { n: ["L-Glutamine", "L-Glutamine"], d: ["Giúp giảm cảm giác thèm ngọt", "Helps ease sugar cravings"] },
+      { n: ["Chiết xuất ngưu tất", "Achyranthes extract"], d: ["Hỗ trợ lưu thông, cơ thể nhẹ nhàng", "Supports circulation and lightness"] },
+      { n: ["Chiết xuất men gạo đỏ", "Red yeast rice extract"], d: ["Hỗ trợ cân bằng mỡ máu", "Supports healthy blood lipids"] },
+      { n: ["Polypodium", "Polypodium"], d: ["Chống oxy hoá, bảo vệ làn da", "Antioxidant skin protection"] },
+      { n: ["Collagen peptide", "Collagen peptide"], d: ["Giữ da săn chắc khi vóc dáng thay đổi", "Keeps skin firm as you slim"] },
+      { n: ["Vitamin C", "Vitamin C"], d: ["Tăng sức đề kháng, sáng da", "Boosts immunity and glow"] },
+    ],
+  },
+  yd: {
+    img: "/img/yodetox-da.jpg", name: "Yodetox Extra", when: ["Buổi tối", "Evening"],
+    list: [
+      { n: ["Diếp cá", "Houttuynia"], d: ["Thanh nhiệt, mát gan", "Cooling and liver-friendly"] },
+      { n: ["Atiso", "Artichoke"], d: ["Hỗ trợ tiêu hoá chất béo", "Aids fat digestion"] },
+      { n: ["Rau má", "Gotu kola"], d: ["Giải nhiệt, dịu nóng trong", "Soothes internal heat"] },
+      { n: ["Lá sen", "Lotus leaf"], d: ["Giúp ngủ ngon, nhẹ bụng", "Calm sleep, lighter belly"] },
+      { n: ["Hoa cúc", "Chrysanthemum"], d: ["Thư giãn sau ngày dài", "Unwind after a long day"] },
+      { n: ["Cam thảo", "Licorice"], d: ["Vị ngọt dịu, điều hoà", "Gentle natural sweetness"] },
+    ],
+  },
+};
 
 export function Ingredients() {
   const { t } = useStore();
   const [tab, setTab] = useState<keyof typeof ING>("mq");
   const cur = ING[tab];
-  const items = Array.from({ length: cur.n }, (_, i) => i);
+  const n = cur.list.length;
+  const half = Math.ceil(n / 2);
+  const side = (from: number, to: number, cls: "l" | "r") => (
+    <ol className={`ig-col ${cls}`}>
+      {cur.list.slice(from, to).map((x, k) => {
+        const i = from + k;
+        return (
+          <li key={x.n[0]} style={{ ["--i" as string]: i }}>
+            <span className="ig-num">{String(i + 1).padStart(2, "0")}</span>
+            <b>{t(x.n[0], x.n[1])}</b>
+            <span className="ig-d">{t(x.d[0], x.d[1])}</span>
+          </li>
+        );
+      })}
+    </ol>
+  );
   return (
-    <section className="ig" id="thanh-phan" data-sticky style={{ ["--n" as string]: cur.n, ["--rows" as string]: Math.ceil(cur.n / 2) }}>
+    <section className="ig" id="thanh-phan" data-sticky style={{ ["--n" as string]: n }}>
       <div className="ig-pin">
         <div className="wrap ig-head">
           <div>
-            <Title a={t(`${cur.n} lớp thảo mộc`, `${cur.n} botanical layers`)} b={t("Trong từng liệu trình", "In every course")} />
-            <p className="ig-note">{t("Bảng thành phần đang chờ khách cung cấp từ vỏ hộp / hồ sơ công bố.", "Ingredient list pending from the packaging / registration dossier.")} <Sample /></p>
+            <Title a={t(`${n} tinh chất`, `${n} key actives`)} b={t("Trong từng liệu trình", "In every course")} />
+            <p className="ig-note"><Sample /> {t("Đối chiếu bảng thành phần trên vỏ hộp trước khi chạy thật.", "Verify against the packaging before going live.")}</p>
           </div>
           <div className="ig-tabs" role="tablist" aria-label={t("Sản phẩm", "Product")}>
             {(Object.keys(ING) as (keyof typeof ING)[]).map((k) => (
@@ -312,17 +351,14 @@ export function Ingredients() {
             ))}
           </div>
         </div>
-        <div className="ig-stage" key={tab}>
-          <div className="ig-core"><Image src={cur.img} alt={cur.name} fill sizes="(max-width: 900px) 70vw, 30vw" quality={85} /></div>
-          <ol className="ig-layers">
-            {items.map((i) => (
-              <li key={i} style={{ ["--i" as string]: i, ["--row" as string]: Math.floor(i / 2) }} className={i % 2 ? "r" : "l"}>
-                <span className="ig-num">{String(i + 1).padStart(2, "0")}</span>
-                <b>[{t("Thành phần", "Ingredient")} {i + 1}]</b>
-                <span>[{t("công dụng", "benefit")}]</span>
-              </li>
-            ))}
-          </ol>
+        <div className="wrap ig-stage" key={tab}>
+          {side(0, half, "l")}
+          <div className="ig-core">
+            <svg className="ig-ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" pathLength="1" /></svg>
+            <div className="ig-arch"><Image src={cur.img} alt={cur.name} fill sizes="(max-width: 900px) 70vw, 28vw" quality={85} /></div>
+            <span className="ig-badge">{t(cur.when[0], cur.when[1])}<b>{cur.name}</b></span>
+          </div>
+          {side(half, n, "r")}
         </div>
       </div>
     </section>
@@ -330,13 +366,26 @@ export function Ingredients() {
 }
 
 /* ---------- Khối 4: Chứng nhận ---------- */
-const CERTS = [
-  { img: "/img/v2/cert-cong-bo.jpg", n: ["Giấy tiếp nhận đăng ký bản công bố sản phẩm", "Product declaration receipt"] },
-  { img: "/img/v2/cert-quang-cao.jpg", n: ["Giấy xác nhận nội dung quảng cáo", "Advertising content approval"] },
-  { img: "/img/v2/cert-gmp.jpg", n: ["Chứng nhận GMP nhà máy (nếu có)", "Factory GMP certificate (if any)"] },
-  { img: "/img/v2/cert-iso.jpg", n: ["Chứng nhận ISO nhà máy (nếu có)", "Factory ISO certificate (if any)"] },
-  { img: "/img/v2/cert-giay-phep.jpg", n: ["Giấy phép kinh doanh B.O.T Việt Nam", "B.O.T Vietnam business licence"] },
-  { img: "/img/v2/cert-kiem-nghiem.jpg", n: ["[Chứng nhận khác]", "[Other certificate]"] },
+// Chứng nhận thật trích từ file PDF khách gửi (public/img/cert). Ô nào chưa có giấy để demo: true.
+const CERTS: { img: string; n: [string, string]; by: [string, string]; demo?: boolean }[] = [
+  { img: "/img/cert/cong-bo.jpg", n: ["Giấy tiếp nhận đăng ký bản công bố sản phẩm", "Product declaration receipt"], by: ["Cục An toàn thực phẩm · Số 6926/2021/ĐKSP", "Vietnam Food Administration · No. 6926/2021/ĐKSP"] },
+  { img: "/img/cert/gmp.jpg", n: ["Chứng nhận GMP nhà máy", "Factory GMP certificate"], by: ["Cục An toàn thực phẩm · Số 69/2023/ATTP-CNGMP", "Vietnam Food Administration · No. 69/2023/ATTP-CNGMP"] },
+  { img: "/img/cert/iso-22000.jpg", n: ["Chứng nhận ISO 22000:2018", "ISO 22000:2018 certificate"], by: ["GOOD Việt Nam · Nhà máy Goldcare", "GOOD Vietnam · Goldcare factory"] },
+  { img: "/img/cert/irdop.jpg", n: ["Phiếu kết quả thử nghiệm", "Test result report"], by: ["Viện IRDOP", "IRDOP Institute"] },
+  { img: "/img/v2/cert-quang-cao.jpg", n: ["Giấy xác nhận nội dung quảng cáo", "Advertising content approval"], by: ["[Đơn vị cấp]", "[Issued by]"], demo: true },
+  { img: "/img/v2/cert-giay-phep.jpg", n: ["Giấy phép kinh doanh B.O.T Việt Nam", "B.O.T Vietnam business licence"], by: ["[Đơn vị cấp]", "[Issued by]"], demo: true },
+];
+
+/** Phiếu kiểm nghiệm (COA) nguyên liệu từ nhà cung cấp, cùng file PDF. */
+const COAS: { img: string; n: [string, string] }[] = [
+  { img: "/img/cert/coa-tra-xanh.jpg", n: ["Chiết xuất trà xanh", "Green tea extract"] },
+  { img: "/img/cert/coa-chitosan.jpg", n: ["Chitosan", "Chitosan"] },
+  { img: "/img/cert/coa-nguu-tat.jpg", n: ["Chiết xuất ngưu tất", "Achyranthes extract"] },
+  { img: "/img/cert/coa-polypodium.jpg", n: ["Chiết xuất Polypodium", "Polypodium extract"] },
+  { img: "/img/cert/coa-hong-cuc.jpg", n: ["Chiết xuất men gạo đỏ", "Red yeast rice extract"] },
+  { img: "/img/cert/coa-l-glutamine.jpg", n: ["L-Glutamine", "L-Glutamine"] },
+  { img: "/img/cert/coa-collagen.jpg", n: ["Collagen peptide", "Collagen peptide"] },
+  { img: "/img/cert/coa-vitamin-c.jpg", n: ["Vitamin C", "Vitamin C"] },
 ];
 
 const STATS: { v?: number; s?: string; u: [string, string]; l: [string, string] }[] = [
@@ -350,16 +399,25 @@ export function Certs() {
   const { t, openImage } = useStore();
   return (
     <section className="ct" id="chung-nhan">
-      <div className="ct-bg" data-px="0.06" />
+      <div className="ct-bg" />
       <div className="wrap">
         <Title className="rv center" a={t("Niềm tin", "Trust")} b={t("Tạo nên lựa chọn", "Behind every choice")} />
         <div className="ct-grid">
           {CERTS.map((c) => (
-            <button type="button" key={c.img} className="ct-card rv" onClick={() => openImage(c.img, `${t(c.n[0], c.n[1])} · ${t("Ảnh minh hoạ", "Illustrative image")}`)}>
-              <span className="ct-ph"><Image src={c.img} alt="" width={420} height={594} sizes="(max-width: 760px) 45vw, 16vw" /><em>{t("Ảnh minh hoạ", "Illustrative")}</em></span>
+            <button type="button" key={c.img} className="ct-card rv" onClick={() => openImage(c.img, c.demo ? `${t(c.n[0], c.n[1])} · ${t("Ảnh minh hoạ", "Illustrative image")}` : t(c.n[0], c.n[1]))}>
+              <span className="ct-ph"><Image src={c.img} alt="" width={420} height={594} sizes="(max-width: 760px) 45vw, 16vw" />{c.demo && <em>{t("Ảnh minh hoạ", "Illustrative")}</em>}</span>
               <b>{t(c.n[0], c.n[1])}</b>
-              <small>[{t("Đơn vị cấp", "Issued by")}]</small>
+              <small>{t(c.by[0], c.by[1])}</small>
               <span className="ct-zoom"><Icon name="search" size={14} />{t("Phóng to", "Zoom")}</span>
+            </button>
+          ))}
+        </div>
+        <h3 className="ct-sub rv">{t("Phiếu kiểm nghiệm nguyên liệu (COA)", "Raw material certificates of analysis")}</h3>
+        <div className="ct-coa">
+          {COAS.map((c) => (
+            <button type="button" key={c.img} className="rv" onClick={() => openImage(c.img, `COA · ${t(c.n[0], c.n[1])}`)}>
+              <Image src={c.img} alt="" width={240} height={340} sizes="(max-width: 760px) 30vw, 10vw" />
+              <span>{t(c.n[0], c.n[1])}</span>
             </button>
           ))}
         </div>
@@ -561,10 +619,34 @@ export function V2Page({ children }: { children: ReactNode }) {
   );
 }
 
+/* ---------- Nút điều hướng nhanh ngay dưới hero ---------- */
+const QUICK = [
+  { href: "/san-pham/cb30", icon: "leaf", k: ["Combo Sáng – Tối", "Day–Night combo"] },
+  { href: "/san-pham/mq", icon: "sun", k: ["Mayqueen Slim", "Mayqueen Slim"] },
+  { href: "/san-pham/yd", icon: "moon", k: ["Yodetox Extra", "Yodetox Extra"] },
+  { href: "/song-dep", icon: "heart", k: ["Sống đẹp", "Live well"] },
+  { href: "/chung-nhan", icon: "shield", k: ["Chứng nhận", "Certificates"] },
+  { href: "/lien-he", icon: "msg", k: ["Tư vấn 1:1", "1:1 advice"] },
+] as const;
+
+function QuickNav() {
+  const { t } = useStore();
+  return (
+    <nav className="qn" aria-label={t("Truy cập nhanh", "Quick access")}>
+      <div className="wrap qn-row">
+        {QUICK.map((q) => (
+          <Link key={q.href} href={q.href}><Icon name={q.icon} size={18} />{t(q.k[0], q.k[1])}</Link>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
 export function StoryHome() {
   return (
     <main id="top" className="v2">
       <HeroVideo />
+      <QuickNav />
       <Transform />
       <Products />
       <Explore />
