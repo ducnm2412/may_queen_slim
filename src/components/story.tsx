@@ -647,7 +647,7 @@ function KLayers() {
           </div>
         </div>
         <div className="kl-foot">
-          <Link className="btn-ln dk kl-more" href="/thanh-phan">{t("Xem tất cả thành phần", "See all ingredients")} <Arrow /></Link>
+          <Link className="btn-ln dk kl-more" href="/san-pham">{t("Xem sản phẩm", "See products")} <Arrow /></Link>
           <div className="kl-arrows">
             <button type="button" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
             <button type="button" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>

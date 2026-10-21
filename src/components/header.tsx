@@ -16,13 +16,12 @@ const DD_CATS = [
 const DD_PRODUCTS = PRODUCTS.slice(0, 4);
 
 /** Trang có banner tối đầu trang: header trong suốt khi chưa cuộn. */
-const OVERLAY = ["/", "/san-pham", "/cau-chuyen", "/thanh-phan", "/chung-nhan", "/cam-nhan", "/lien-he"];
+const OVERLAY = ["/", "/san-pham", "/cau-chuyen", "/chung-nhan", "/cam-nhan", "/lien-he"];
 
 const NAV = [
   { href: "/", vi: "Trang chủ", en: "Home" },
   { href: "/san-pham", vi: "Sản phẩm", en: "Products" },
   { href: "/cau-chuyen", vi: "Câu chuyện", en: "Story" },
-  { href: "/thanh-phan", vi: "Thành phần", en: "Ingredients" },
   { href: "/chung-nhan", vi: "Chứng nhận", en: "Certificates" },
   { href: "/cam-nhan", vi: "Cảm nhận", en: "Reviews" },
   { href: "/lien-he", vi: "Liên hệ", en: "Contact" },
@@ -60,7 +59,7 @@ export function Header() {
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
-            {NAV.slice(0, 5).map((n) => n.href === "/san-pham" ? (
+            {NAV.slice(0, 4).map((n) => n.href === "/san-pham" ? (
               <div key={n.href} className={`nav-dd${dd ? " open" : ""}`} onMouseEnter={() => setDd(true)} onMouseLeave={() => setDd(false)} onFocus={() => setDd(true)} onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setDd(false)}>
                 <Link href={n.href} aria-expanded={dd} aria-haspopup="true">{t(n.vi, n.en)} <Icon name="chev" /></Link>
                 <div className="dd-panel" onClick={() => setDd(false)}>
@@ -96,7 +95,7 @@ export function Header() {
           </Link>
           <div className="nav-r">
             <nav className="nav-l nav-l2" aria-label={t("Phụ", "Secondary")}>
-              {NAV.slice(5).map((n) => (
+              {NAV.slice(4).map((n) => (
                 <Link key={n.href} href={n.href} aria-current={pathname === n.href ? "page" : undefined}>{t(n.vi, n.en)}</Link>
               ))}
             </nav>
