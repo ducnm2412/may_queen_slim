@@ -1,5 +1,5 @@
-import { Site } from "@/components/site";
+import { StoryHome } from "@/components/story";
 
 export default function Home() {
-  return <Site />;
+  return <StoryHome />;
 }

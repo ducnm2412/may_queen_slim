@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { Dancing_Script } from "next/font/google";
+import { Cormorant_Garamond, Dancing_Script } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
+import "./v2.css";
 import { Providers } from "@/components/providers";
 import { Icons } from "@/components/icons";
 import { Shell } from "@/components/shell";
@@ -21,6 +22,8 @@ const beVietnam = localFont({
 });
 
 const script = Dancing_Script({ subsets: ["vietnamese", "latin"], weight: ["600", "700"], variable: "--font-script", display: "swap" });
+
+const serif = Cormorant_Garamond({ subsets: ["vietnamese", "latin"], weight: ["500", "600", "700"], variable: "--font-serif", display: "swap" });
 
 const bricolage = localFont({
   variable: "--font-display",
@@ -50,12 +53,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0F1F15",
+  themeColor: "#1F2E22",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="vi" className={`${beVietnam.variable} ${bricolage.variable} ${script.variable}`}>
+    <html lang="vi" className={`${beVietnam.variable} ${bricolage.variable} ${script.variable} ${serif.variable}`}>
       <body>
         <Icons />
         <Providers>

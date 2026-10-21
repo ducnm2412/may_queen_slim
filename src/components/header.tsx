@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
-import { scrollToTarget } from "@/lib/scroll";
 import { PRODUCTS, formatVnd } from "@/lib/products";
 
 const DD_CATS = [
@@ -17,11 +16,12 @@ const DD_CATS = [
 const DD_PRODUCTS = PRODUCTS.slice(0, 4);
 
 const NAV = [
-  { href: "/ve-chung-toi", vi: "Về chúng tôi", en: "About us" },
   { href: "/san-pham", vi: "Sản phẩm", en: "Products" },
-  { href: "/#lieu-trinh", vi: "Liệu trình", en: "30-day plan" },
-  { href: "/song-dep", vi: "Sống đẹp", en: "Live well" },
-  { href: "/lien-he", vi: "Liên hệ", en: "Contact" },
+  { href: "/#cau-chuyen", vi: "Câu chuyện", en: "Story" },
+  { href: "/#thanh-phan", vi: "Thành phần", en: "Ingredients" },
+  { href: "/#chung-nhan", vi: "Chứng nhận", en: "Certificates" },
+  { href: "/#cam-nhan", vi: "Cảm nhận", en: "Reviews" },
+  { href: "/#lien-he", vi: "Liên hệ", en: "Contact" },
 ];
 
 export function Header() {
@@ -32,6 +32,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   const [dd, setDd] = useState(false);
+  const [mobDd, setMobDd] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => setDd(false), [pathname]);
 
@@ -51,7 +53,6 @@ export function Header() {
   return (
     <>
       <div className={`hdr${scrolled || !isHome ? " scrolled" : ""}`}>
-      <div className="topbar"><span className="topbar-tag">{t("Tuần lễ Combo:", "Combo week:")}</span><span>{t("Giảm ", "Save ")}<b>60K</b>{t(" + freeship toàn quốc!", " + free nationwide shipping!")}</span></div>
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
@@ -86,48 +87,30 @@ export function Header() {
             ))}
           </nav>
           <Link className="logo" href="/" aria-label="Mayqueen Slim">
-            <b>Mayqueen<span>Slim</span></b>
+            <b>Mayqueen<span> Slim</span></b>
             <small>B.O.T VIỆT NAM</small>
           </Link>
           <div className="nav-r">
-            <label className="search">
-              <Icon name="search" />
+            <label className={`search${searchOpen ? " open" : ""}`}>
+              <button type="button" className="search-btn" aria-label={t("Tìm kiếm", "Search")} aria-expanded={searchOpen} onClick={() => setSearchOpen((o) => !o)}><Icon name="search" /></button>
               <input
                 type="search"
                 value={query}
+                onBlur={() => !query && setSearchOpen(false)}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  if (!isHome) router.push("/#san-pham");
+                  if (pathname !== "/san-pham") router.push("/san-pham");
                 }}
-                onKeyDown={(e) => e.key === "Enter" && (isHome ? scrollToTarget("san-pham") : router.push("/#san-pham"))}
+                onKeyDown={(e) => e.key === "Enter" && router.push("/san-pham")}
                 placeholder={t("Tìm combo, sản phẩm…", "Search products…")}
                 aria-label={t("Tìm sản phẩm", "Search products")}
               />
             </label>
-            <button className="lang" type="button" onClick={toggleLang} aria-label="Đổi ngôn ngữ / Switch language">
-              <svg className="flag" viewBox="0 0 30 20" aria-hidden="true">
-                {lang === "vi" ? (
-                  <>
-                    <rect width="30" height="20" fill="#DA251D" />
-                    <path d="M15 4.2l1.4 4.3h4.5l-3.6 2.7 1.4 4.3L15 12.8l-3.7 2.7 1.4-4.3-3.6-2.7h4.5z" fill="#FFCD00" />
-                  </>
-                ) : (
-                  <>
-                    <rect width="30" height="20" fill="#012169" />
-                    <path d="M0 0l30 20M30 0L0 20" stroke="#fff" strokeWidth="4" />
-                    <path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" strokeWidth="1.6" />
-                    <path d="M15 0v20M0 10h30" stroke="#fff" strokeWidth="6" />
-                    <path d="M15 0v20M0 10h30" stroke="#C8102E" strokeWidth="3.4" />
-                  </>
-                )}
-              </svg>
-              <span>{lang.toUpperCase()}</span>
-            </button>
-            <Link className="icon-btn acct" href="/#lien-he" aria-label={t("Tài khoản", "Account")}><Icon name="user" /></Link>
-            <Link className="icon-btn wishbtn" href="/yeu-thich" aria-label={t("Yêu thích", "Wishlist")}>
-              <Icon name="heart" />
-              {wish.size > 0 && <span className="badge">{wish.size}</span>}
-            </Link>
+            <div className="lang" role="group" aria-label="Ngôn ngữ / Language">
+              <button type="button" aria-pressed={lang === "vi"} onClick={() => lang !== "vi" && toggleLang()}>VI</button>
+              <i aria-hidden="true">|</i>
+              <button type="button" aria-pressed={lang === "en"} onClick={() => lang !== "en" && toggleLang()}>EN</button>
+            </div>
             <button className="icon-btn" type="button" data-cart-target onClick={openCart} aria-label={t("Giỏ hàng", "Cart")}>
               <Icon name="cart" />
               <span key={bump} className={`badge${bump ? " bump" : ""}`}>{cartCount}</span>
@@ -146,8 +129,7 @@ export function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             setMenu(false);
-            if (isHome) scrollToTarget("san-pham");
-            else router.push("/#san-pham");
+            router.push("/san-pham");
           }}
         >
           <Icon name="search" />
@@ -161,7 +143,24 @@ export function Header() {
             enterKeyHint="search"
           />
         </form>
-        {NAV.map((n) => (
+        {NAV.map((n) => n.href === "/san-pham" ? (
+          <div key={n.href} className={`mob-dd${mobDd ? " open" : ""}`}>
+            <button type="button" className="mob-dd-btn" aria-expanded={mobDd} onClick={() => setMobDd((v) => !v)} tabIndex={menu ? 0 : -1}>
+              {t(n.vi, n.en)} <Icon name="chev" />
+            </button>
+            <div className="mob-dd-list">
+              <div>
+                {PRODUCTS.map((p) => (
+                  <Link key={p.id} className="mob-prod" href={`/san-pham/${p.id}`} onClick={() => setMenu(false)} tabIndex={menu && mobDd ? 0 : -1}>
+                    <Image src={p.img} alt="" width={96} height={96} sizes="48px" />
+                    <span><b>{t(p.name, p.nameEn ?? p.name)}</b><small>{formatVnd(p.price)}</small></span>
+                  </Link>
+                ))}
+                <Link className="mob-all" href="/san-pham" onClick={() => setMenu(false)} tabIndex={menu && mobDd ? 0 : -1}>{t("Xem tất cả sản phẩm →", "View all products →")}</Link>
+              </div>
+            </div>
+          </div>
+        ) : (
           <Link key={n.href} href={n.href} onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t(n.vi, n.en)}</Link>
         ))}
         <Link href="/yeu-thich" onClick={() => setMenu(false)} tabIndex={menu ? 0 : -1}>{t("Yêu thích", "Wishlist")}{wish.size > 0 && ` (${wish.size})`}</Link>

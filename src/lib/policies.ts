@@ -78,6 +78,20 @@ export const POLICIES: Policy[] = [
       ] },
     ],
   },
+  {
+    slug: "thanh-toan",
+    title: ["Chính sách thanh toán", "Payment policy"],
+    intro: ["Mayqueen hỗ trợ thanh toán khi nhận hàng và chuyển khoản. Nội dung mẫu, cần khách xác nhận.", "We accept cash on delivery and bank transfer. Sample content, pending client confirmation."],
+    sections: [
+      { h: ["Hình thức thanh toán", "Payment methods"], items: [
+        ["Thanh toán khi nhận hàng (COD): kiểm tra hàng rồi mới trả tiền.", "Cash on delivery (COD): inspect your order before paying."],
+        ["Chuyển khoản: [Ngân hàng] · [Số tài khoản] · [Chủ tài khoản].", "Bank transfer: [Bank] · [Account number] · [Account holder]."],
+      ] },
+      { h: ["Hoá đơn", "Invoices"], items: [
+        ["Xuất hoá đơn VAT theo yêu cầu, gửi thông tin công ty qua hotline hoặc Zalo.", "VAT invoices on request; send your company details via hotline or Zalo."],
+      ] },
+    ],
+  },
 ];
 
 export const POLICY_BY_SLUG: Record<string, Policy> = Object.fromEntries(POLICIES.map((p) => [p.slug, p]));

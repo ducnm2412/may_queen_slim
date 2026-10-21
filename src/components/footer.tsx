@@ -9,21 +9,26 @@ import { Icon } from "./icons";
 export function Footer() {
   const { t } = useStore();
   return (
-    <footer className="footer">
+    <footer className="footer ft2">
       <div className="wrap">
-        <div className="fgrid">
-          <div>
+        <div className="ft2-grid">
+          <div className="ft2-brand">
             <div className="flogo">
               <Image className="bot" src="/img/bot-logo.png" alt="B.O.T Việt Nam" width={56} height={56} />
-              <b>Mayqueen<span>Slim</span></b>
+              <b>Mayqueen<span> Slim</span></b>
             </div>
-            <p className="fd">{t("Thương hiệu wellness D2C của B.O.T Việt Nam. Giữ dáng và thanh lọc từ thảo mộc.", "A D2C wellness brand by B.O.T Vietnam. Herbal slimming and detox for a light, healthy body.")}</p>
+            {/* Thông tin pháp lý: chờ sale gửi, giữ dạng [ … ] */}
+            <dl className="ft2-legal">
+              <div><dt>{t("Công ty", "Company")}</dt><dd>[{t("Tên công ty", "Company name")}]</dd></div>
+              <div><dt>{t("Trụ sở", "Head office")}</dt><dd>[{t("Địa chỉ", "Address")}]</dd></div>
+              <div><dt>MST</dt><dd>[MST]</dd></div>
+              <div><dt>Hotline</dt><dd><a href={CONTACT.tel}>{CONTACT.phone}</a></dd></div>
+              <div><dt>Email</dt><dd>[Email]</dd></div>
+            </dl>
             <div className="social">
               <a href={CONTACT.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="fb" /></a>
               <a href="#tiktok" aria-label="TikTok"><Icon name="tt" /></a>
-              <a href={CONTACT.zalo} target="_blank" rel="noopener" aria-label="Zalo"><Icon name="msg" /></a>
-              <a href={CONTACT.tel} aria-label="Hotline"><Icon name="phone" /></a>
-              <a href={CONTACT.maps} target="_blank" rel="noopener" aria-label="Google Maps"><Icon name="pin" /></a>
+              <a href={CONTACT.zalo} target="_blank" rel="noopener" aria-label="Zalo" className="zl">Zalo</a>
             </div>
           </div>
           <div>
@@ -32,38 +37,26 @@ export function Footer() {
               <li><Link href="/san-pham/cb30">{t("Combo Sáng – Tối", "Day–Night combo")}</Link></li>
               <li><Link href="/san-pham/mq">Mayqueen Slim</Link></li>
               <li><Link href="/san-pham/yd">Yodetox Extra</Link></li>
-              <li><Link href="/san-pham">{t("Tất cả sản phẩm", "All products")}</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4>{t("Công ty", "Company")}</h4>
-            <ul>
-              <li><Link href="/ve-chung-toi">{t("Về chúng tôi", "About us")}</Link></li>
-              <li><Link href="/song-dep">{t("Sống đẹp", "Live well")}</Link></li>
-              <li><Link href="/lien-he">{t("Liên hệ", "Contact")}</Link></li>
+              <li><Link href="/san-pham">{t("Cửa hàng", "Shop")}</Link></li>
+              <li><Link href="/song-dep">{t("Sống đẹp cùng Mayqueen", "Live well")}</Link></li>
             </ul>
           </div>
           <div>
             <h4>{t("Chính sách", "Policies")}</h4>
             <ul>
-              <li><Link href="/chinh-sach/van-chuyen">{t("Vận chuyển", "Shipping")}</Link></li>
               <li><Link href="/chinh-sach/doi-tra">{t("Đổi trả", "Returns")}</Link></li>
+              <li><Link href="/chinh-sach/van-chuyen">{t("Giao hàng", "Shipping")}</Link></li>
               <li><Link href="/chinh-sach/bao-mat">{t("Bảo mật", "Privacy")}</Link></li>
-              <li><Link href="/chinh-sach/dieu-khoan">{t("Điều khoản", "Terms")}</Link></li>
+              <li><Link href="/chinh-sach/thanh-toan">{t("Thanh toán", "Payment")}</Link></li>
             </ul>
           </div>
-          <div>
-            <h4>{t("Thanh toán", "Payment")}</h4>
-            <div className="paylogos"><span>COD</span><span>{t("Chuyển khoản", "Bank transfer")}</span></div>
-            <h4 style={{ marginTop: 18 }}>{t("Vận chuyển", "Shipping")}</h4>
-            <div className="paylogos"><span>{t("Toàn quốc", "Nationwide")}</span><span>{t("Freeship 700k", "Free from 700k")}</span></div>
+          <div className="ft2-map">
+            <iframe title={t("Bản đồ trụ sở", "Head office map")} loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={CONTACT.mapEmbed} />
           </div>
         </div>
+        <p className="ft2-disc">{t("Thực phẩm này không phải là thuốc, không có tác dụng thay thế thuốc chữa bệnh.", "This product is not a medicine and does not replace medical treatment.")}</p>
         <div className="fbot">
-          <p>
-            © 2026 Mayqueen Slim · B.O.T Việt Nam · {CONTACT.address} ·{" "}
-            <strong>{t("Thực phẩm này không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.", "This product is not a medicine and does not replace medical treatment.")}</strong>
-          </p>
+          <p>© 2026 Mayqueen Slim · B.O.T Việt Nam</p>
           <nav>
             <Link href="/chinh-sach/bao-mat">{t("Chính sách bảo mật", "Privacy policy")}</Link>
             <Link href="/chinh-sach/dieu-khoan">{t("Điều khoản", "Terms")}</Link>
