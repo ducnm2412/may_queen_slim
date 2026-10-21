@@ -142,6 +142,36 @@ function HeroVideo() {
   );
 }
 
+/* ---------- Giới thiệu ngắn giữa video và đoạn biến hình (kiểu khối "Cảm hứng" của Kobler) ---------- */
+const RITUAL = [
+  { icon: "sun", k: ["07:00 · Buổi sáng", "07:00 · Morning"], h: "Mayqueen Slim", d: ["2 viên sau bữa sáng, hỗ trợ chuyển hoá mỡ thừa", "2 capsules after breakfast to support fat metabolism"] },
+  { icon: "moon", k: ["21:00 · Buổi tối", "21:00 · Evening"], h: "Yodetox Extra", d: ["Một cốc ấm trước khi ngủ, thanh lọc dịu nhẹ", "A warm cup before bed for a gentle cleanse"] },
+  { icon: "leaf", k: ["30 ngày", "30 days"], h: "Liệu trình", d: ["Không nhịn ăn, vẫn trọn vẹn bữa cơm gia đình", "No starving, keep your family meals"] },
+] as const;
+
+function Intro() {
+  const { t } = useStore();
+  return (
+    <section className="intro">
+      <div className="wrap intro-body">
+        <Title className="rv" a={t("Thon gọn từ bên trong", "Slim from within")} b={t("Nghi thức Sáng – Tối", "The day–night ritual")} />
+        <p className="rv">{t("Mayqueen Slim và Yodetox Extra là bộ đôi thảo mộc từ B.O.T Việt Nam: buổi sáng khởi động chuyển hoá, buổi tối thanh lọc nhẹ nhàng, để cơ thể nhẹ nhõm và vóc dáng gọn gàng một cách tự nhiên.", "Mayqueen Slim and Yodetox Extra are a herbal duo from B.O.T Vietnam: kick-start your metabolism by day, cleanse gently by night, for a lighter body and a naturally leaner shape.")}</p>
+        <div className="intro-cards">
+          {RITUAL.map((r) => (
+            <div className="intro-card rv" key={r.h}>
+              <Icon name={r.icon} size={30} />
+              <small>{t(r.k[0], r.k[1])}</small>
+              <b>{r.h === "Liệu trình" ? t("Liệu trình", "Course") : r.h}</b>
+              <span>{t(r.d[0], r.d[1])}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="intro-img"><Image src="/img/duo-podium.jpg" alt={t("Bộ đôi Mayqueen Slim và Yodetox Extra", "Mayqueen Slim and Yodetox Extra duo")} fill sizes="(max-width: 900px) 100vw, 55vw" quality={85} /></div>
+    </section>
+  );
+}
+
 /* ---------- Đoạn biến hình: ảnh trước → sau theo cuộn ---------- */
 export function Transform() {
   const { t } = useStore();
@@ -585,6 +615,7 @@ export function StoryHome() {
   return (
     <main id="top" className="v2">
       <HeroVideo />
+      <Intro />
       <Transform />
       <Products />
       <Explore />

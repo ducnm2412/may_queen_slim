@@ -60,7 +60,7 @@ export function Header() {
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
-            {NAV.map((n) => n.href === "/san-pham" ? (
+            {NAV.slice(0, 5).map((n) => n.href === "/san-pham" ? (
               <div key={n.href} className={`nav-dd${dd ? " open" : ""}`} onMouseEnter={() => setDd(true)} onMouseLeave={() => setDd(false)} onFocus={() => setDd(true)} onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setDd(false)}>
                 <Link href={n.href} aria-expanded={dd} aria-haspopup="true">{t(n.vi, n.en)} <Icon name="chev" /></Link>
                 <div className="dd-panel" onClick={() => setDd(false)}>
@@ -95,6 +95,11 @@ export function Header() {
             <small>B.O.T VIỆT NAM</small>
           </Link>
           <div className="nav-r">
+            <nav className="nav-l nav-l2" aria-label={t("Phụ", "Secondary")}>
+              {NAV.slice(5).map((n) => (
+                <Link key={n.href} href={n.href} aria-current={pathname === n.href ? "page" : undefined}>{t(n.vi, n.en)}</Link>
+              ))}
+            </nav>
             <label className={`search${searchOpen ? " open" : ""}`}>
               <button type="button" className="search-btn" aria-label={t("Tìm kiếm", "Search")} aria-expanded={searchOpen} onClick={() => setSearchOpen((o) => !o)}><Icon name="search" /></button>
               <input
