@@ -793,3 +793,19 @@ body { background: var(--pearl); }
 .kl-img img { object-fit: cover; object-position: 75% center; }
 @media (max-width: 600px) { .kl-img { min-height: 0; } }
 .ct-grid { grid-template-columns: repeat(4, 1fr); } @media (max-width: 760px) { .ct-grid { grid-template-columns: 1fr 1fr; } }
+/* Menu chia đều 3 – 3 hai bên logo như Kobler */
+@media (min-width: 1341px) {
+  .nav-l { gap: clamp(28px, 2.4vw, 44px); font-size: 15px; font-weight: 600; }
+  .nav-l2 { margin-right: clamp(16px, 2vw, 40px); }
+}
+@media (min-width: 1341px) {
+  .nav-l { gap: clamp(32px, 3vw, 58px); font-size: clamp(15px, 0.98vw, 18px); }
+  .nav .wrap { padding-left: clamp(24px, 3.2vw, 60px); padding-right: clamp(24px, 3.2vw, 60px); }
+}
+
+/* Đoạn biến hình: nằm dưới header (không che mặt), vòng tròn mở phủ kín hoàn toàn */
+.tf-pin { top: var(--hdr-h); height: calc(100svh - var(--hdr-h)); }
+.tf-img img { object-position: 50% 0%; }
+.tf-after { clip-path: circle(calc(var(--k) * 160%) at 62% 45%); }
+@media (max-width: 760px) { .tf-after { clip-path: circle(calc(var(--k) * 200%) at 50% 40%); } }
+@media (max-width: 760px) { .tf .hv-tag { top: auto; bottom: 42px; right: var(--gut); font-size: 10px; } .tf-txt { padding-bottom: 70px; } }
