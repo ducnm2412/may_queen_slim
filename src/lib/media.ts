@@ -11,6 +11,8 @@ export const HERO_VIDEO = {
   desktop: v("/video/hero-tvc.mp4"),
   mobile: null as string | null,
   poster: v("/video/hero-tvc-poster.jpg"),
+  /** Ảnh hiện khi video chạy hết (video không lặp lại). */
+  endImage: "/img/hero/slide-3-yodetox.jpg",
   /** Video hiện tại do khách dựng bằng AI (Gemini), chỉ để hình dung. Đổi thành false khi có TVC thật. */
   isDemo: true,
 };

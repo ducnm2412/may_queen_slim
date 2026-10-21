@@ -104,6 +104,7 @@ function HeroVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(true);
+  const [ended, setEnded] = useState(false);
 
   useEffect(() => {
     const v = ref.current;
@@ -111,7 +112,7 @@ function HeroVideo() {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.dataset.userPaused = "1"; v.pause(); return; }
     // Ra khỏi màn hình thì tạm dừng cho nhẹ máy, quay lại thì chạy tiếp
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !v.dataset.userPaused) v.play().catch(() => {});
+      if (e.isIntersecting && !v.dataset.userPaused && !v.ended) v.play().catch(() => {});
       else v.pause();
     }, { threshold: 0.15 });
     io.observe(v);
@@ -121,17 +122,19 @@ function HeroVideo() {
   const togglePlay = () => {
     const v = ref.current;
     if (!v) return;
+    if (v.ended || ended) { v.currentTime = 0; setEnded(false); }
     if (v.paused) { delete v.dataset.userPaused; v.play().catch(() => {}); }
     else { v.dataset.userPaused = "1"; v.pause(); }
   };
 
   return (
     <section className="hv" aria-label={t("Video giới thiệu", "Intro video")}>
-      <video ref={ref} className="hv-video" autoPlay muted={muted} loop playsInline preload="metadata" onPlay={() => setPaused(false)} onPause={() => setPaused(true)} poster={HERO_VIDEO.poster} aria-hidden="true">
+      <video ref={ref} className="hv-video" autoPlay muted={muted} playsInline onEnded={() => setEnded(true)} preload="metadata" onPlay={() => setPaused(false)} onPause={() => setPaused(true)} poster={HERO_VIDEO.poster} aria-hidden="true">
         {HERO_VIDEO.mobile && <source src={HERO_VIDEO.mobile} media="(max-width: 760px)" type="video/mp4" />}
         <source src={HERO_VIDEO.desktop} type="video/mp4" />
       </video>
-      {HERO_VIDEO.isDemo && <span className="hv-tag">{t("Video minh hoạ", "Illustrative video")}</span>}
+      <div className={`hv-end${ended ? " on" : ""}`} aria-hidden={!ended}><Image src={HERO_VIDEO.endImage} alt="Yodetox Extra" fill sizes="100vw" quality={90} /></div>
+      {HERO_VIDEO.isDemo && !ended && <span className="hv-tag">{t("Video minh hoạ", "Illustrative video")}</span>}
       <div className="hv-ctl">
         <button type="button" onClick={() => setMuted((m) => !m)} aria-label={muted ? t("Bật tiếng", "Unmute") : t("Tắt tiếng", "Mute")} aria-pressed={!muted}>
           <svg viewBox="0 0 24 24" className="ic"><path d="M4 9h4l5-4v14l-5-4H4z" />{muted ? <path d="m16 9 5 6M21 9l-5 6" /> : <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />}</svg>
