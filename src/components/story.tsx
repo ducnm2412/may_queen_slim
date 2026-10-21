@@ -167,7 +167,7 @@ function Intro() {
           ))}
         </div>
       </div>
-      <div className="intro-img"><Image src="/img/duo-podium.jpg" alt={t("Bộ đôi Mayqueen Slim và Yodetox Extra", "Mayqueen Slim and Yodetox Extra duo")} fill sizes="(max-width: 900px) 100vw, 55vw" quality={85} /></div>
+      <div className="intro-img"><div className="intro-frame"><Image src="/img/duo-podium.jpg" alt={t("Bộ đôi Mayqueen Slim và Yodetox Extra", "Mayqueen Slim and Yodetox Extra duo")} fill sizes="(max-width: 900px) 80vw, 34vw" quality={85} /></div></div>
     </section>
   );
 }

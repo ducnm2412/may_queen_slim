@@ -617,3 +617,16 @@ body { background: var(--pearl); }
   .intro::after { background: rgba(4, 9, 6, 0.35); }
   .intro-img::before { background: linear-gradient(0deg, #06100a 0%, rgba(6, 16, 10, 0) 45%); }
 }
+
+/* Ảnh sản phẩm nổi trong khung vòm phát sáng trên nền tinh vân liền mạch */
+.intro-img { display: grid; place-items: center; padding: clamp(40px, 5vw, 80px) var(--gut); }
+.intro-img::before { display: none; }
+.intro-frame { position: relative; width: min(100%, 440px); aspect-ratio: 4 / 5; border-radius: 999px 999px 24px 24px; overflow: hidden; border: 1px solid rgba(160, 230, 170, 0.45); box-shadow: 0 0 0 10px rgba(120, 200, 140, 0.06), 0 0 60px rgba(90, 200, 120, 0.28), 0 40px 80px rgba(0, 0, 0, 0.5); }
+.intro-frame img { object-fit: cover; }
+.intro-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 9, 6, 0) 60%, rgba(4, 9, 6, 0.35)); }
+.intro::after { background: radial-gradient(60% 80% at 25% 50%, rgba(4, 9, 6, 0.45), transparent 75%); }
+@media (max-width: 900px) {
+  .intro-img { aspect-ratio: auto; padding: 48px var(--gut) 8px; }
+  .intro-frame { width: min(78%, 320px); }
+}
+@media (min-width: 901px) { .intro-frame { width: min(100%, 380px, 52svh); } }
