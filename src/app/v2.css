@@ -843,3 +843,103 @@ body { background: var(--pearl); }
 .kf > .wrap { position: relative; }
 /* Công ty: bỏ hoạ tiết, chỉ giữ nền ấm theo màu tường ảnh */
 .kc { background: radial-gradient(50% 80% at 100% 0%, rgba(232, 220, 200, 0.9), transparent 70%), #f2ede4; }
+
+/* =====================================================================
+   Animation & hiệu ứng cuộn (tự tắt khi bật "giảm chuyển động")
+   ===================================================================== */
+.scroll-bar { position: fixed; left: 0; top: 0; z-index: 60; height: 2px; width: 100%; background: linear-gradient(90deg, var(--sage), #c8a15e); transform-origin: left; transform: scaleX(var(--sp, 0)); pointer-events: none; }
+
+/* Hiện dần: trượt lên + mờ nhoè nhẹ */
+.rv { transform: translateY(28px); filter: blur(4px); transition: opacity 0.9s var(--ease), transform 1s var(--ease), filter 0.9s var(--ease); }
+.rv.in { transform: none; filter: none; }
+
+/* Tiêu đề: từng dòng trượt lên sau mặt nạ */
+.ttl.rv { opacity: 1; transform: none; filter: none; }
+.ttl.rv > span, .ttl.rv > em { display: block; clip-path: inset(0 0 -0.15em 0); }
+.ttl.rv > span::before, .ttl.rv > em::before { content: none; }
+.ttl.rv > span, .ttl.rv > em { transform: translateY(105%); opacity: 0; transition: transform 1.1s var(--ease), opacity 0.8s var(--ease); }
+.ttl.rv > em { transition-delay: 0.14s; }
+.ttl.rv.in > span, .ttl.rv.in > em { transform: none; opacity: 1; }
+
+/* Ảnh mở dần từ trái + zoom nhẹ */
+.clipin { clip-path: inset(0 100% 0 0); transition: clip-path 1.4s var(--ease), opacity 0.6s; filter: none !important; transform: none !important; }
+.clipin.in { clip-path: inset(0 0 0 0); }
+.clipin img { transform: scale(1.12) !important; transition: transform 2.2s var(--ease) !important; }
+.clipin.in img { transform: scale(1) !important; }
+
+/* Parallax ảnh nền: phóng to sẵn để dịch không lộ mép */
+.bs-bg, .kt-bg { scale: 1.18; will-change: transform; }
+/* Ảnh nền khối câu chuyện thương hiệu zoom chậm liên tục */
+@keyframes kb { from { scale: 1.18; } to { scale: 1.26; } }
+.bs-bg { animation: kb 18s ease-in-out infinite alternate; }
+
+/* Hiện lần lượt */
+.kl-list > li:nth-child(n) { transition-delay: calc(var(--d, 0) * 1s); }
+.kl-list > li:nth-child(1) { --d: 0.05; } .kl-list > li:nth-child(2) { --d: 0.1; } .kl-list > li:nth-child(3) { --d: 0.15; } .kl-list > li:nth-child(4) { --d: 0.2; }
+.kl-list > li:nth-child(5) { --d: 0.25; } .kl-list > li:nth-child(6) { --d: 0.3; } .kl-list > li:nth-child(7) { --d: 0.35; } .kl-list > li:nth-child(8) { --d: 0.4; }
+.kl-track > .rv:nth-child(2), .kf-track > .rv:nth-child(2), .kt-grid > .rv:nth-child(2), .bs-vals div:nth-child(2) { transition-delay: 0.12s; }
+.kl-track > .rv:nth-child(3), .kf-track > .rv:nth-child(3), .kt-grid > .rv:nth-child(3) { transition-delay: 0.24s; }
+.kf-track > .rv:nth-child(4) { transition-delay: 0.36s; }
+.kl-list > li > span { transition: transform 0.5s var(--ease), background-color 0.3s; }
+.kl-list > li:hover > span { transform: scale(1.18); background: var(--sage-d); }
+
+/* Rê chuột */
+.kl-card img { transition: transform 1.2s var(--ease); }
+.kl-card:hover img { transform: scale(1.07); }
+.kl-card > div { transition: transform 0.5s var(--ease); }
+.kl-card:hover > div { transform: translateY(-6px); }
+.kf-card { transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), opacity 0.9s var(--ease), filter 0.9s var(--ease); }
+.kf-card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(28, 42, 31, 0.14); }
+.kf-card:hover .kf-ph img { transform: scale(1.06); }
+.kt-card { transition: border-color 0.4s, background-color 0.4s, transform 0.6s var(--ease), opacity 0.9s var(--ease), filter 0.9s var(--ease); }
+.kt-card.in:hover { border-color: #c8a15e; background: rgba(0, 0, 0, 0.45); transform: translateY(-6px); }
+.btn-ln .arr { transition: background-color 0.3s, transform 0.4s var(--ease); }
+
+/* Video hero: mờ dần khi bắt đầu */
+.hv-video { animation: hvfade 1.6s var(--ease) both; }
+@keyframes hvfade { from { opacity: 0; scale: 1.06; } to { opacity: 1; scale: 1; } }
+
+@media (max-width: 760px) {
+  .rv { transform: translateY(18px); filter: none; }
+  .bs-bg { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv, .ttl.rv > span, .ttl.rv > em { transform: none !important; opacity: 1 !important; filter: none !important; transition: none !important; }
+  .clipin { clip-path: none; } .clipin img { transform: none !important; }
+  .bs-bg, .hv-video { animation: none; }
+  .scroll-bar { display: none; }
+}
+/* Cắt trên ảnh con để khung vẫn được tính là trong màn hình */
+.clipin, .clipin.in { clip-path: none; opacity: 1; }
+.clipin img { clip-path: inset(0 100% 0 0); transition: clip-path 1.4s var(--ease), transform 2.2s var(--ease) !important; }
+.clipin.in img { clip-path: inset(0 0 0 0); }
+@media (prefers-reduced-motion: reduce) { .clipin img { clip-path: none; } }
+
+/* ---------- Section sản phẩm (mẫu Seagull) ---------- */
+.sc { position: relative; overflow: hidden; background: #1f2a1c url("/img/v2/moss-suede.jpg") center / cover no-repeat; color: #f3ead6; min-height: clamp(460px, 37vw, 720px); display: flex; align-items: center; }
+.sc::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 90% at 75% 50%, transparent 40%, rgba(10, 14, 9, 0.35)); pointer-events: none; }
+.sc-in { position: relative; z-index: 1; width: 100%; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 40px; }
+.sc-tx { display: grid; justify-items: center; text-align: center; gap: 0; }
+.sc-tx h2 { font-family: var(--font-serif), serif; font-weight: 500; text-transform: uppercase; line-height: 0.95; color: #f6ecd6; }
+.sc-tx h2 span { display: block; font-size: clamp(48px, 4.8vw, 92px); letter-spacing: 0.01em; }
+.sc-tx h2 em { display: block; font-style: normal; font-size: clamp(32px, 2.9vw, 56px); margin-top: 10px; letter-spacing: 0.02em; }
+.sc-tx > i { display: block; width: 180px; height: 1px; background: rgba(246, 236, 214, 0.55); margin: 30px 0 26px; }
+.sc-sub { font-family: var(--font-serif), serif; font-size: clamp(24px, 1.9vw, 36px); font-weight: 500; color: #f6ecd6; }
+.sc-note { margin-top: 10px; font-size: clamp(14px, 1vw, 18px); color: rgba(246, 236, 214, 0.78); }
+.sc-prod { justify-self: center; width: min(26vw, 440px); filter: drop-shadow(0 40px 50px rgba(0, 0, 0, 0.55)) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35)); transition: transform 0.8s var(--ease); }
+.sc-prod img { width: 100%; height: auto; transform: rotate(-4deg); }
+.sc-prod:hover { transform: translateY(-10px) rotate(1deg); }
+.sc-prod.rv { transition-delay: 0.15s; }
+@keyframes float { 50% { translate: 0 -12px; } }
+.sc-prod img { animation: float 6s ease-in-out infinite; }
+@media (max-width: 900px) {
+  .sc-in { grid-template-columns: 1fr; padding-top: 64px; padding-bottom: 64px; gap: 36px; }
+  .sc-prod { width: min(62vw, 300px); }
+}
+@media (prefers-reduced-motion: reduce) { .sc-prod img { animation: none; } }
+/* Bớt chữ: khoảng cách lại cho gọn */
+.bs-lead { margin-top: 22px; font-size: clamp(15px, 1.05vw, 19px); text-transform: uppercase; letter-spacing: 0.06em; color: #fff; }
+.kl-list b { font-size: clamp(14px, 1vw, 17px); }
+.kl-list { gap: clamp(14px, 1.8vw, 26px); }
+.kl-card > div { bottom: 28px; }
+@media (min-width: 901px) { .sc-prod { width: min(21vw, 380px); } } .kf-tx h3 { min-height: 0; }

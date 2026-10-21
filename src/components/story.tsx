@@ -42,6 +42,8 @@ function ScrollFx() {
     const update = () => {
       raf = 0;
       const vh = innerHeight;
+      const max = document.documentElement.scrollHeight - vh;
+      document.documentElement.style.setProperty("--sp", max > 0 ? (scrollY / max).toFixed(4) : "0");
       const k = innerWidth < 760 ? 0.5 : 1;
       for (const el of sticky) {
         const r = el.getBoundingClientRect();
@@ -137,29 +139,14 @@ function HeroVideo() {
 }
 
 /* ---------- Section 2: câu chuyện thương hiệu ngắn (bố cục khối "Kiến trúc Pháp" của Kobler) ---------- */
-const BRAND_VALUES = [
-  { k: ["Thảo mộc", "Botanical"], d: ["Tinh tuý từ thiên nhiên", "The essence of nature"] },
-  { k: ["Bền vững", "Lasting"], d: ["Thon gọn lâu hơn theo thời gian", "A leaner shape that lasts"] },
-  { k: ["An tâm", "Assured"], d: ["Sản xuất đạt chuẩn GMP, ISO 22000", "Made to GMP & ISO 22000 standards"] },
-  { k: ["Trải nghiệm", "Experience"], d: ["Nhẹ nhàng, không nhịn ăn", "Gentle, no starving"] },
-] as const;
-
 function Intro() {
   const { t } = useStore();
   return (
     <section className="bs">
-      <Image className="bs-bg" src="/img/v2/brand-dark.jpg" alt="" fill sizes="100vw" quality={85} />
+      <Image className="bs-bg" data-px="-0.12" src="/img/v2/brand-dark.jpg" alt="" fill sizes="100vw" quality={85} />
       <div className="wrap bs-body">
         <Title className="rv" a={t("Câu chuyện Mayqueen", "The Mayqueen story")} b={t("Từ thảo mộc phương Đông", "From Eastern botanicals")} />
-        <div className="bs-copy rv">
-          <p className="bs-lead">{t("Một nghi thức. Nhiều giá trị sống", "One ritual. Many values for life")}</p>
-          <p>{t("Lấy cảm hứng từ tinh hoa thảo mộc phương Đông, Mayqueen Slim kết hợp sự dịu lành của thiên nhiên cùng quy trình sản xuất đạt chuẩn để kiến tạo một nghi thức Sáng – Tối nhẹ nhàng, bền vững và giàu giá trị sống.", "Inspired by Eastern botanical wisdom, Mayqueen Slim pairs nature's gentleness with certified manufacturing to create a gentle, lasting day–night ritual rich in everyday value.")}</p>
-        </div>
-        <dl className="bs-vals rv">
-          {BRAND_VALUES.map((v) => (
-            <div key={v.k[0]}><dt>{t(v.k[0], v.k[1])}</dt><dd>{t(v.d[0], v.d[1])}</dd></div>
-          ))}
-        </dl>
+        <p className="bs-lead rv">{t("Một nghi thức. Nhiều giá trị sống", "One ritual. Many values for life")}</p>
         <Link className="btn-ln bs-cta rv" href="/cau-chuyen">{t("Đọc câu chuyện", "Read our story")} <Arrow /></Link>
       </div>
     </section>
@@ -183,7 +170,6 @@ export function Transform() {
           <div className="tf-b">
             <p className="kick">{t("Sau hành trình Sáng – Tối", "After the day–night ritual")}</p>
             <Title a={t("Tự tin", "Confident")} b={t("với chính mình", "in your own skin")} />
-            <p>{t("Nhẹ nhõm hơn, khoẻ khoắn hơn, và thoải mái trong từng bộ trang phục yêu thích.", "Lighter, more energetic, and at ease in the outfits you love.")}</p>
           </div>
         </div>
         <div className="tf-bar" aria-hidden="true"><i /></div>
@@ -259,7 +245,6 @@ export function Products() {
                 <div className="pr2-tx">
                   <p className="kick">{t(s.k[0], s.k[1])}</p>
                   <h3>{lang === "en" && p.nameEn ? p.nameEn : p.name}</h3>
-                  <ul>{s.pts.map((x) => <li key={x[0]}><Icon name="leaf" size={15} />{t(x[0], x[1])}</li>)}</ul>
                   <div className="pr2-pr">{formatVnd(p.price)}{p.old && <s>{formatVnd(p.old)}</s>}</div>
                   <div className="pr2-act">
                     <button type="button" className="btn-solid sm" onClick={() => { add(p.id); openCart(); }}>{t("Mua ngay", "Buy now")}</button>
@@ -275,7 +260,6 @@ export function Products() {
           <div className="pr2-combo-tx">
             <p className="kick">{t(combo.tag ?? "", combo.tagEn ?? "")}</p>
             <Title a={t("Combo Sáng – Tối", "Day–Night combo")} b={t("Liệu trình 30 ngày", "30-day course")} />
-            <p>{t(combo.spec, combo.specEn)}</p>
             <div className="pr2-pr lg">{formatVnd(combo.price)}{combo.old && <s>{formatVnd(combo.old)}</s>}</div>
             <div className="pr2-act">
               <button type="button" className="btn-solid" onClick={() => { add(combo.id); openCart(); }}>{t("Mua ngay", "Buy now")}</button>
@@ -569,6 +553,7 @@ export function V2Page({ children }: { children: ReactNode }) {
     <main className="v2">
       {children}
       <ScrollFx />
+      <div className="scroll-bar" aria-hidden="true" />
     </main>
   );
 }
@@ -626,22 +611,22 @@ function KLayers() {
       <div className="kl-left">
         <Title className="rv" a={t("8 tinh chất kiến tạo", "8 actives shaping")} b={t("Vóc dáng thon gọn", "A leaner silhouette")} />
         <div className="kl-stack">
-          <div className="kl-img rv"><Image src="/img/v2/layers.jpg" alt={t("Các lớp tinh chất thảo mộc", "Layers of botanical actives")} fill sizes="(max-width: 900px) 50vw, 18vw" quality={85} /></div>
+          <div className="kl-img clipin rv"><Image src="/img/v2/layers.jpg" alt={t("Các lớp tinh chất thảo mộc", "Layers of botanical actives")} fill sizes="(max-width: 900px) 50vw, 18vw" quality={85} /></div>
           <ol className="kl-list">
             {ING.mq.list.map((x, i) => (
-              <li key={x.n[0]} className="rv"><span>{i + 1}</span><div><b>{t(x.n[0], x.n[1])}</b><small>{t(x.d[0], x.d[1])}</small></div></li>
+              <li key={x.n[0]} className="rv"><span>{i + 1}</span><div><b>{t(x.n[0], x.n[1])}</b></div></li>
             ))}
           </ol>
         </div>
       </div>
       <div className="kl-right">
         <Title className="rv" a={t("Cơ chế", "The science")} b={t("Phía sau sự thon gọn", "Behind the shape")} />
-        <div className="kl-view" {...swipe(go)}>
+        <div className="kl-view rv" {...swipe(go)}>
           <div className="kl-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
             {BENEFITS.map((b) => (
               <article className="kl-card" key={b.h[0]}>
                 <Image src={b.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 40vw, 18vw" quality={80} />
-                <div><b>{t(b.h[0], b.h[1])}</b><span>{t(b.d[0], b.d[1])}</span></div>
+                <div><b>{t(b.h[0], b.h[1])}</b></div>
               </article>
             ))}
           </div>
@@ -663,12 +648,11 @@ function KTrust() {
   const checks: [string, string][] = [
     ["Công bố theo quy định Bộ Y tế", "Declared under Ministry of Health rules"],
     ["Nguồn gốc xuất xứ rõ ràng", "Clear origin"],
-    ["Nguyên liệu có phiếu kiểm nghiệm", "Raw materials with COA"],
     ["Bảo chứng bởi B.O.T Việt Nam", "Guaranteed by B.O.T Vietnam"],
   ];
   return (
     <section className="kt">
-      <Image className="kt-bg" src="/img/v2/silk-dark.jpg" alt="" fill sizes="100vw" quality={80} />
+      <Image className="kt-bg" data-px="-0.1" src="/img/v2/silk-dark.jpg" alt="" fill sizes="100vw" quality={80} />
       <div className="wrap kt-in">
         <h2 className="ttl kt-ttl rv"><span>{t("Niềm tin tạo nên lựa chọn", "Trust behind every choice")}</span></h2>
         <div className="kt-grid">
@@ -685,7 +669,7 @@ function KTrust() {
             <h3>{t("Chuẩn", "Certified")} <em>ISO 22000</em></h3>
             <div className="kt-body kt-iso">
               <b>ISO<br />22000</b>
-              <span>{t("Hệ thống quản lý an toàn thực phẩm · GOOD Việt Nam", "Food safety management system · GOOD Vietnam")}</span>
+              <span>GOOD Việt Nam</span>
             </div>
             <button type="button" className="btn-ln" onClick={() => openImage("/img/cert/iso-22000.jpg", "ISO 22000:2018")}>{t("Xem chứng nhận", "View certificate")} <Arrow /></button>
           </article>
@@ -721,10 +705,9 @@ function KFeedback() {
     <section className="kf">
       <div className="wrap">
         <h2 className="ttl kf-ttl rv"><span>{t("Cảm nhận khách hàng", "Customer stories")}</span></h2>
-        <p className="kf-sub rv">{t("Mayqueen đồng hành cùng những người phụ nữ muốn sống khoẻ, đẹp và tự tin hơn mỗi ngày.", "Mayqueen walks alongside women who want to live healthier, lovelier and more confident every day.")}</p>
         <div className="kf-wrap">
           <button type="button" className="kf-arr l" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
-          <div className="kf-view" {...swipe(go)}>
+          <div className="kf-view rv" {...swipe(go)}>
             <div className="kf-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
               {FEEDBACK.map((f) => (
                 <Link className="kf-card" key={f.n} href="/cam-nhan">
@@ -732,7 +715,7 @@ function KFeedback() {
                   <div className="kf-tx">
                     <h3>{t(f.h[0], f.h[1])}</h3>
                     <span className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</span>
-                    <p><span>{f.n} · {t(f.r[0], f.r[1])}</span><Icon name="right" size={16} /></p>
+                    <p><span>{f.n}</span><Icon name="right" size={16} /></p>
                   </div>
                 </Link>
               ))}
@@ -753,10 +736,9 @@ function KCompany() {
   return (
     <>
       <section className="kc">
-        <div className="kc-img"><Image src="/img/v2/company.jpg" alt={t("Chuyên viên Mayqueen tư vấn cho khách hàng", "A Mayqueen consultant advising a customer")} fill sizes="(max-width: 900px) 100vw, 60vw" quality={85} /></div>
+        <div className="kc-img clipin rv"><Image src="/img/v2/company.jpg" alt={t("Chuyên viên Mayqueen tư vấn cho khách hàng", "A Mayqueen consultant advising a customer")} fill sizes="(max-width: 900px) 100vw, 60vw" quality={85} /></div>
         <div className="kc-body">
           <h2 className="ttl kc-ttl rv"><span>{CONTACT.company}</span></h2>
-          <p className="rv">{t("Kênh chính hãng Mayqueen Slim, Yodetox Extra · Bảo chứng bởi B.O.T Việt Nam.", "Official Mayqueen Slim & Yodetox Extra channel · Guaranteed by B.O.T Vietnam.")}</p>
           <ul className="kc-items rv">
             <li><Icon name="pin" size={40} /><span><small>{t("Địa chỉ", "Address")}</small>{CONTACT.address}</span></li>
             <li><Icon name="user" size={40} /><span><small>{t("Người liên hệ", "Contact person")}</small>{CONTACT.person}</span></li>
@@ -774,6 +756,26 @@ function KCompany() {
   );
 }
 
+/** Section sản phẩm theo mẫu banner Seagull: nền vân loang, tên lớn bên trái, hộp tách nền bên phải. */
+function Showcase() {
+  const { t } = useStore();
+  return (
+    <section className="sc">
+      <div className="sc-in wrap">
+        <div className="sc-tx rv">
+          <h2><span>Mayqueen</span><em>Slim</em></h2>
+          <i aria-hidden="true" />
+          <p className="sc-sub">{t("Thảo mộc · Thon gọn", "Botanical · Slim")}</p>
+          <p className="sc-note">{t("Bảo chứng bởi B.O.T Việt Nam", "Guaranteed by B.O.T Vietnam")}</p>
+        </div>
+        <Link href="/san-pham/mq" className="sc-prod rv" aria-label="Mayqueen Slim">
+          <Image src="/img/v2/mayqueen-box.png" alt="Mayqueen Slim" width={699} height={850} sizes="(max-width: 900px) 60vw, 26vw" quality={90} />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export function StoryHome() {
   return (
     <main id="top" className="v2">
@@ -781,11 +783,13 @@ export function StoryHome() {
       <Intro />
       <KLayers />
       <Transform />
+      <Showcase />
       <KTrust />
       <Products />
       <KFeedback />
       <KCompany />
       <ScrollFx />
+      <div className="scroll-bar" aria-hidden="true" />
     </main>
   );
 }
