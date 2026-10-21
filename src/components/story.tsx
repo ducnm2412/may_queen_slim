@@ -103,7 +103,7 @@ function ScrollFx() {
 
 /* ---------- Khối 1: Video TVC ---------- */
 function HeroVideo() {
-  const { t, add, openCart } = useStore();
+  const { t } = useStore();
   const ref = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -134,17 +134,7 @@ function HeroVideo() {
         {HERO_VIDEO.mobile && <source src={HERO_VIDEO.mobile} media="(max-width: 760px)" type="video/mp4" />}
         <source src={HERO_VIDEO.desktop} type="video/mp4" />
       </video>
-      <div className="hv-shade" />
       {HERO_VIDEO.isDemo && <span className="hv-tag">{t("Video minh hoạ", "Illustrative video")}</span>}
-      <div className="wrap hv-body">
-        <p className="kick hv-in">Mayqueen Slim · Yodetox Extra</p>
-        <Title as="h1" className="hv-in" a={t("Sáng đốt mỡ", "Burn by day")} b={t("Tối thanh lọc", "Cleanse by night")} />
-        <p className="hv-sub hv-in">{t("Thon gọn từ bên trong với nghi thức thảo mộc Sáng – Tối, không nhịn ăn, nhẹ nhàng mỗi ngày.", "Slim from within with a herbal day–night ritual. No starving, gentle every day.")}</p>
-        <div className="hv-cta hv-in">
-          <button type="button" className="btn-solid" onClick={() => { add("cb30"); openCart(); }}>{t("Mua combo", "Buy combo")}</button>
-          <Link className="btn-ln" href="/lien-he">{t("Tư vấn miễn phí", "Free consultation")} <Arrow /></Link>
-        </div>
-      </div>
       <div className="hv-ctl">
         <button type="button" onClick={() => setMuted((m) => !m)} aria-label={muted ? t("Bật tiếng", "Unmute") : t("Tắt tiếng", "Mute")} aria-pressed={!muted}>
           <svg viewBox="0 0 24 24" className="ic"><path d="M4 9h4l5-4v14l-5-4H4z" />{muted ? <path d="m16 9 5 6M21 9l-5 6" /> : <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />}</svg>
@@ -444,36 +434,17 @@ const REVIEWS = [
 
 export function Reviews() {
   const { t } = useStore();
-  const track = useRef<HTMLDivElement>(null);
-  const [idx, setIdx] = useState(0);
-  const go = (i: number) => {
-    const el = track.current;
-    const card = el?.children[Math.max(0, Math.min(REVIEWS.length - 1, i))] as HTMLElement | undefined;
-    if (el && card) el.scrollTo({ left: card.offsetLeft - el.offsetLeft, behavior: "smooth" });
-  };
-  const onScroll = () => {
-    const el = track.current;
-    if (!el) return;
-    const w = (el.children[0] as HTMLElement).offsetWidth;
-    setIdx(Math.round(el.scrollLeft / w));
-  };
   return (
     <section className="rvw" id="cam-nhan">
       <div className="wrap">
         <div className="rvw-head">
-          <div>
-            <Title className="rv" a={t("Cảm nhận", "In their words")} b={t("Từ khách hàng", "Our customers")} />
-            <p className="rv">{t("Ảnh và lời cảm nhận tạo bằng AI để xem bố cục. Bản final thay bằng tin nhắn, video khách thật.", "AI-made photos and quotes for layout preview only. Final version uses real customer messages and videos.")}</p>
-          </div>
-          <div className="rvw-arrows">
-            <button type="button" aria-label={t("Trước", "Previous")} onClick={() => go(idx - 1)} disabled={idx === 0}><Icon name="left" /></button>
-            <button type="button" aria-label={t("Sau", "Next")} onClick={() => go(idx + 1)} disabled={idx >= REVIEWS.length - 1}><Icon name="right" /></button>
-          </div>
+          <Title className="rv" a={t("Cảm nhận", "In their words")} b={t("Từ khách hàng", "Our customers")} />
+          <p className="rv">{t("Ảnh và lời cảm nhận tạo bằng AI để xem bố cục. Bản final thay bằng tin nhắn, video khách thật.", "AI-made photos and quotes for layout preview only. Final version uses real customer messages and videos.")}</p>
         </div>
-        <div className="rvw-track" ref={track} onScroll={onScroll} data-lenis-prevent-wheel>
+        <div className="rvw-grid">
           {REVIEWS.map((r) => (
-            <article className="rvw-card" key={r.n}>
-              <div className="rvw-ph"><Image src={r.img} alt="" fill sizes="(max-width: 760px) 85vw, 30vw" quality={80} /><Sample dark /></div>
+            <article className="rvw-card rv" key={r.n}>
+              <div className="rvw-ph"><Image src={r.img} alt="" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 25vw" quality={80} /><Sample dark /></div>
               <div className="rvw-tx">
                 <div className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</div>
                 <blockquote>“{t(r.q[0], r.q[1])}”</blockquote>
@@ -482,9 +453,6 @@ export function Reviews() {
               </div>
             </article>
           ))}
-        </div>
-        <div className="rvw-dots">
-          {REVIEWS.map((r, i) => <button key={r.n} type="button" aria-label={`${i + 1}`} aria-current={i === idx} onClick={() => go(i)} />)}
         </div>
       </div>
     </section>
@@ -619,34 +587,10 @@ export function V2Page({ children }: { children: ReactNode }) {
   );
 }
 
-/* ---------- Nút điều hướng nhanh ngay dưới hero ---------- */
-const QUICK = [
-  { href: "/san-pham/cb30", icon: "leaf", k: ["Combo Sáng – Tối", "Day–Night combo"] },
-  { href: "/san-pham/mq", icon: "sun", k: ["Mayqueen Slim", "Mayqueen Slim"] },
-  { href: "/san-pham/yd", icon: "moon", k: ["Yodetox Extra", "Yodetox Extra"] },
-  { href: "/song-dep", icon: "heart", k: ["Sống đẹp", "Live well"] },
-  { href: "/chung-nhan", icon: "shield", k: ["Chứng nhận", "Certificates"] },
-  { href: "/lien-he", icon: "msg", k: ["Tư vấn 1:1", "1:1 advice"] },
-] as const;
-
-function QuickNav() {
-  const { t } = useStore();
-  return (
-    <nav className="qn" aria-label={t("Truy cập nhanh", "Quick access")}>
-      <div className="wrap qn-row">
-        {QUICK.map((q) => (
-          <Link key={q.href} href={q.href}><Icon name={q.icon} size={18} />{t(q.k[0], q.k[1])}</Link>
-        ))}
-      </div>
-    </nav>
-  );
-}
-
 export function StoryHome() {
   return (
     <main id="top" className="v2">
       <HeroVideo />
-      <QuickNav />
       <Transform />
       <Products />
       <Explore />

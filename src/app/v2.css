@@ -502,3 +502,47 @@ body { background: var(--pearl); }
   .ig-col.l b, .ig-col.l .ig-d { grid-column: 2; }
   .ig-col.l .ig-num { grid-column: 1; }
 }
+
+/* ---------- Không cuộn ngang: lưới thay cho slider ---------- */
+.rvw-head { display: grid; gap: 4px; }
+.rvw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.rvw-ph { aspect-ratio: 4 / 3.4; }
+.rvw-tx { padding: 18px 20px 22px; }
+.rvw-tx blockquote { font-size: 16.5px; }
+.rvw-grid > .rv:nth-child(2) { transition-delay: 0.06s; }
+.rvw-grid > .rv:nth-child(3) { transition-delay: 0.12s; }
+.rvw-grid > .rv:nth-child(4) { transition-delay: 0.18s; }
+@media (max-width: 1100px) { .rvw-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .rvw-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .lw-grid { display: grid; grid-template-columns: 1fr 1fr; overflow: visible; margin: 28px 0 0; padding: 0; gap: 10px; }
+  .lw-tile { flex: none; }
+  .lw-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  .qn-row { flex-wrap: wrap; justify-content: center; overflow: visible; }
+  .qn-row a { min-height: 40px; padding: 0 14px; font-size: 13px; }
+}
+
+/* ---------- Hero chỉ còn video: đúng tỷ lệ 16:9, không cắt, không phủ tối ---------- */
+.hv { height: auto; min-height: 0; display: block; padding-top: 0; background: #000; }
+.hv-video { position: relative; inset: auto; display: block; width: 100%; height: auto; max-height: 100svh; aspect-ratio: 16 / 9; object-fit: contain; }
+.hv-tag { top: auto; bottom: 16px; }
+.hv-ctl { bottom: 12px; }
+.hv-disc { position: static; }
+@media (max-width: 760px) {
+  .hv { padding-top: var(--hdr-h); }
+  .hv-tag { top: calc(var(--hdr-h) + 8px); bottom: auto; }
+  .hv-ctl { bottom: 52px; right: 10px; }
+  .hv-ctl button { width: 32px; height: 32px; }
+}
+@media (max-width: 900px) { .shop2 .filter-cats { flex-wrap: wrap; overflow: visible; } }
+/* Video phủ kín màn hình, không viền đen */
+.hv { height: 100svh; }
+.hv-video { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; object-fit: cover; object-position: center 30%; }
+.hv-disc { position: absolute; }
+@media (max-width: 760px) {
+  .hv { height: 78svh; padding-top: 0; }
+  .hv-ctl { bottom: 56px; }
+}
+.hv-ctl { bottom: 58px; }
+.hv .hv-tag { bottom: 62px; right: 96px; }
+@media (max-width: 760px) { .hv .hv-tag { bottom: auto; right: var(--gut); } }
