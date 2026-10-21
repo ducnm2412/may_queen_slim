@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CONTACT, FREESHIP_FROM, PRODUCT_BY_ID, formatVnd } from "@/lib/products";
 import { useStore } from "./providers";

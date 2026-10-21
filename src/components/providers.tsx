@@ -1,5 +1,7 @@
 "use client";
 
+import { isEnPath } from "@/lib/routes";
+
 import {
   createContext,
   useCallback,
@@ -72,6 +74,8 @@ export function Providers({ children }: { children: ReactNode }) {
         if (w) setWish(new Set(JSON.parse(w)));
       } catch {}
       hydrated.current = true;
+      // Mở thẳng link tiếng Anh (vd. /certificates) thì giao diện chuyển sang EN
+      if (isEnPath(location.pathname)) setLang("en");
     });
   }, []);
 

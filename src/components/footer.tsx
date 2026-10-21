@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { CONTACT } from "@/lib/products";
 import { useStore } from "./providers";
 import { Icon } from "./icons";

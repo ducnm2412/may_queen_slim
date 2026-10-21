@@ -1,7 +1,9 @@
 "use client";
 
+import { localize } from "@/lib/routes";
+
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PRODUCTS, PRODUCT_BY_ID, formatVnd, CONTACT } from "@/lib/products";
@@ -79,7 +81,7 @@ export function ProductDetail({ id }: { id: string }) {
               <button className="btn btn-line pdp-add" type="button" onClick={() => { flyToCart(document.querySelector(".pdp-main")); add(p.id, qty); setTimeout(openCart, 650); }}>
                 <Icon name="cart" size={18} />{t("Thêm vào giỏ", "Add to cart")}
               </button>
-              <button className="btn btn-green pdp-now" type="button" onClick={() => { add(p.id, qty); router.push("/gio-hang"); }}>
+              <button className="btn btn-green pdp-now" type="button" onClick={() => { add(p.id, qty); router.push(localize("/gio-hang", lang)); }}>
                 {t("Mua ngay", "Buy now")}
               </button>
               <button className={`icon-btn wish${liked ? " on" : ""}`} type="button" aria-pressed={liked} aria-label={t("Yêu thích", "Wishlist")} onClick={() => toggleWish(p.id)}>

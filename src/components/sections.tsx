@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { useEffect, useRef, useState } from "react";
 import { PRODUCTS, PRODUCT_BY_ID, CONTACT, normalize, formatVnd, type Category } from "@/lib/products";
 import { useStore } from "./providers";

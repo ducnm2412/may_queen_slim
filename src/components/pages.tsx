@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { useState } from "react";
 import { CONTACT, PRODUCTS, PRODUCT_BY_ID, formatVnd } from "@/lib/products";
 import { ProductCard } from "./product-card";

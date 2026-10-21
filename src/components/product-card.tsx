@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { formatVnd, type Product } from "@/lib/products";
 import { useStore } from "./providers";
 import { flyToCart } from "@/lib/motion";

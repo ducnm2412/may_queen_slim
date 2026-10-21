@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./llink";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { PRODUCTS, formatVnd } from "@/lib/products";
+import { canonical, localize } from "@/lib/routes";
 
 const DD_CATS = [
   { id: "cb30", vi: "Combo liệu trình", en: "Course combos", sub: ["Sáng Slim + tối Yodetox", "Slim by day + Yodetox by night"] },
@@ -29,7 +30,8 @@ const NAV = [
 
 export function Header() {
   const { t, lang, toggleLang, cartCount, openCart, wish, toast, bump, query, setQuery } = useStore();
-  const pathname = usePathname();
+  const rawPath = usePathname();
+  const pathname = canonical(rawPath);
   const router = useRouter();
   const overlay = OVERLAY.includes(pathname);
   const [scrolled, setScrolled] = useState(false);
@@ -39,6 +41,13 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => setDd(false), [pathname]);
+
+  const switchLang = (l: "vi" | "en") => {
+    if (l === lang) return;
+    toggleLang();
+    const target = localize(pathname, l);
+    if (target !== location.pathname) router.replace(target + location.search + location.hash, { scroll: false });
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -107,17 +116,17 @@ export function Header() {
                 onBlur={() => !query && setSearchOpen(false)}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  if (pathname !== "/san-pham") router.push("/san-pham");
+                  if (pathname !== "/san-pham") router.push(localize("/san-pham", lang));
                 }}
-                onKeyDown={(e) => e.key === "Enter" && router.push("/san-pham")}
+                onKeyDown={(e) => e.key === "Enter" && router.push(localize("/san-pham", lang))}
                 placeholder={t("Tìm combo, sản phẩm…", "Search products…")}
                 aria-label={t("Tìm sản phẩm", "Search products")}
               />
             </label>
             <div className="lang" role="group" aria-label="Ngôn ngữ / Language">
-              <button type="button" aria-pressed={lang === "vi"} onClick={() => lang !== "vi" && toggleLang()}>VI</button>
+              <button type="button" aria-pressed={lang === "vi"} onClick={() => switchLang("vi")}>VI</button>
               <i aria-hidden="true">|</i>
-              <button type="button" aria-pressed={lang === "en"} onClick={() => lang !== "en" && toggleLang()}>EN</button>
+              <button type="button" aria-pressed={lang === "en"} onClick={() => switchLang("en")}>EN</button>
             </div>
             <button className="icon-btn" type="button" data-cart-target onClick={openCart} aria-label={t("Giỏ hàng", "Cart")}>
               <Icon name="cart" />
@@ -137,7 +146,7 @@ export function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             setMenu(false);
-            router.push("/san-pham");
+            router.push(localize("/san-pham", lang));
           }}
         >
           <Icon name="search" />

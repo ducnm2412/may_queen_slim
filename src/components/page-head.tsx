@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "./llink";
 import type { ReactNode } from "react";
 import { useStore } from "./providers";
 
