@@ -533,11 +533,11 @@ export function Consult() {
 type L = [string, string];
 
 /** Banner đầu trang con kiểu Kobler: ảnh nền tối, breadcrumb, tiêu đề 2 dòng. */
-export function PageHero({ img, a, b, desc, crumb }: { img: string; a: L; b: L; desc: L; crumb: L }) {
+export function PageHero({ img, a, b, desc, crumb, pos }: { img: string; a: L; b: L; desc: L; crumb: L; pos?: string }) {
   const { t } = useStore();
   return (
     <section className="ph2">
-      <div className="ph2-bg"><Image src={img} alt="" fill priority sizes="100vw" quality={80} /></div>
+      <div className="ph2-bg"><Image src={img} alt="" fill priority sizes="100vw" quality={80} style={pos ? { objectPosition: pos } : undefined} /></div>
       <div className="wrap ph2-body">
         <nav className="ph2-crumb" aria-label="Breadcrumb"><Link href="/">{t("Trang chủ", "Home")}</Link><Icon name="right" size={12} /><span>{t(...crumb)}</span></nav>
         <Title as="h1" className="hv-in" a={t(...a)} b={t(...b)} />
