@@ -607,3 +607,13 @@ body { background: var(--pearl); }
 @media (max-width: 900px) {
   .intro-img::before { background: linear-gradient(0deg, #1f3024 0%, rgba(31, 48, 36, 0) 45%); }
 }
+
+/* Khối giới thiệu: nền tinh vân xanh (ảnh khách gửi), bỏ hoạ tiết lá */
+.intro { background: #040906 url("/img/v2/nebula.jpg") center / cover no-repeat; }
+.intro::after { background: linear-gradient(90deg, rgba(4, 9, 6, 0.55) 0%, rgba(4, 9, 6, 0.15) 50%, transparent 70%); }
+.intro-card { background: rgba(10, 30, 18, 0.35); border-color: rgba(120, 200, 140, 0.28); }
+.intro-img::before { background: linear-gradient(90deg, #06100a 0%, rgba(6, 16, 10, 0.6) 20%, rgba(6, 16, 10, 0) 50%); }
+@media (max-width: 900px) {
+  .intro::after { background: rgba(4, 9, 6, 0.35); }
+  .intro-img::before { background: linear-gradient(0deg, #06100a 0%, rgba(6, 16, 10, 0) 45%); }
+}
