@@ -943,3 +943,8 @@ body { background: var(--pearl); }
 .kl-list { gap: clamp(14px, 1.8vw, 26px); }
 .kl-card > div { bottom: 28px; }
 @media (min-width: 901px) { .sc-prod { width: min(21vw, 380px); } } .kf-tx h3 { min-height: 0; }
+
+/* Section sản phẩm: nền thiên nhiên nhìn từ trên cao (ảnh khách gửi) */
+.sc { background: #12301f url("/img/v2/aerial-nature.jpg") center / cover no-repeat; }
+.sc::after { background: linear-gradient(90deg, rgba(8, 22, 14, 0.72) 0%, rgba(8, 22, 14, 0.5) 35%, rgba(8, 22, 14, 0.1) 60%, rgba(8, 22, 14, 0.25) 100%); }
+@media (max-width: 900px) { .sc::after { background: rgba(8, 22, 14, 0.5); } }
