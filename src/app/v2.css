@@ -546,3 +546,7 @@ body { background: var(--pearl); }
 .hv-ctl { bottom: 58px; }
 .hv .hv-tag { bottom: 62px; right: 96px; }
 @media (max-width: 760px) { .hv .hv-tag { bottom: auto; right: var(--gut); } }
+/* Hero không còn dải cảnh báo: hạ nút điều khiển xuống đáy */
+.hv-ctl { bottom: 20px; }
+.hv .hv-tag { bottom: 26px; }
+@media (max-width: 760px) { .hv-ctl { bottom: 16px; } }

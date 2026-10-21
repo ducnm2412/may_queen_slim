@@ -13,11 +13,6 @@ import { flyToCart } from "@/lib/motion";
 /* Trang chủ v2 kể chuyện theo phong cách Kobler: mỗi khối gần trọn màn hình, hiệu ứng theo cuộn.
    Chữ trong [ … ] là chỗ chờ khách gửi thông tin thật, không tự điền. */
 
-const DISCLAIMER: [string, string] = [
-  "Thực phẩm này không phải là thuốc, không có tác dụng thay thế thuốc chữa bệnh.",
-  "This product is not a medicine and does not replace medical treatment.",
-];
-
 /** Nhãn đánh dấu nội dung mẫu, để khách không đưa lên chạy thật. */
 function Sample({ dark }: { dark?: boolean }) {
   const { t } = useStore();
@@ -143,7 +138,6 @@ function HeroVideo() {
           <svg viewBox="0 0 24 24" className="ic">{paused ? <path d="M8 5v14l11-7z" /> : <path d="M9 5v14M15 5v14" />}</svg>
         </button>
       </div>
-      <p className="hv-disc">{t(...DISCLAIMER)}</p>
     </section>
   );
 }
