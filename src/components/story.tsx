@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { CONTACT, PRODUCTS, formatVnd } from "@/lib/products";
@@ -142,7 +142,7 @@ function HeroVideo() {
         <p className="hv-sub hv-in">{t("Thon gọn từ bên trong với nghi thức thảo mộc Sáng – Tối, không nhịn ăn, nhẹ nhàng mỗi ngày.", "Slim from within with a herbal day–night ritual. No starving, gentle every day.")}</p>
         <div className="hv-cta hv-in">
           <button type="button" className="btn-solid" onClick={() => { add("cb30"); openCart(); }}>{t("Mua combo", "Buy combo")}</button>
-          <a className="btn-ln" href="#lien-he">{t("Tư vấn miễn phí", "Free consultation")} <Arrow /></a>
+          <Link className="btn-ln" href="/lien-he">{t("Tư vấn miễn phí", "Free consultation")} <Arrow /></Link>
         </div>
       </div>
       <div className="hv-ctl">
@@ -159,7 +159,7 @@ function HeroVideo() {
 }
 
 /* ---------- Đoạn biến hình: ảnh trước → sau theo cuộn ---------- */
-function Transform() {
+export function Transform() {
   const { t } = useStore();
   return (
     <section className="tf" data-sticky aria-label={t("Hành trình tự tin", "A confident journey")}>
@@ -193,7 +193,7 @@ const VALUES = [
   { k: ["Bền lâu", "Lasting care"], d: ["Chăm sóc chậm mà bền", "Slow, steady, lasting care"] },
 ];
 
-function Story() {
+export function Story() {
   const { t } = useStore();
   return (
     <>
@@ -237,7 +237,7 @@ const STEPS = [
   { id: "yd", k: ["Bước buổi tối · 21:00", "Night step · 21:00"], img: "/img/yodetox-da.jpg", pts: [["Thức uống thanh lọc, hộp 30 gói", "Detox drink, 30 sachets"], ["Một cốc ấm trước khi ngủ", "A warm cup before bed"], ["Thanh lọc dịu nhẹ", "Gentle cleanse"]] },
 ] as const;
 
-function Products() {
+export function Products() {
   const { t, lang, add, openCart } = useStore();
   const combo = PRODUCTS.find((p) => p.id === "cb30")!;
   return (
@@ -290,7 +290,7 @@ const ING = {
   yd: { n: 6, img: "/img/yodetox-da.jpg", name: "Yodetox Extra", when: ["Buổi tối", "Evening"] },
 } as const;
 
-function Ingredients() {
+export function Ingredients() {
   const { t } = useStore();
   const [tab, setTab] = useState<keyof typeof ING>("mq");
   const cur = ING[tab];
@@ -346,7 +346,7 @@ const STATS: { v?: number; s?: string; u: [string, string]; l: [string, string] 
   { s: "VN", u: ["", ""], l: ["Sản xuất tại Việt Nam", "Made in Vietnam"] },
 ];
 
-function Certs() {
+export function Certs() {
   const { t, openImage } = useStore();
   return (
     <section className="ct" id="chung-nhan">
@@ -384,7 +384,7 @@ const REVIEWS = [
   { img: "/img/v2/fb-4.jpg", n: "Diệu Linh", r: ["Kinh doanh tự do · 45 tuổi", "Business owner · 45"], q: ["Bận rộn nên mình cần thứ gì đơn giản. Hai bước mỗi ngày, không cầu kỳ, bao bì cũng sang để làm quà.", "I'm busy, so I need something simple. Two steps a day, and the packaging is elegant enough to gift."] },
 ];
 
-function Reviews() {
+export function Reviews() {
   const { t } = useStore();
   const track = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
@@ -434,7 +434,7 @@ function Reviews() {
 }
 
 /* ---------- Sống đẹp cùng Mayqueen (blog) ---------- */
-function LiveWellV2() {
+export function LiveWellV2() {
   const { t } = useStore();
   return (
     <section className="lw">
@@ -463,7 +463,7 @@ const CONCERNS = [
   ["Khác", "Other"],
 ] as const;
 
-function Consult() {
+export function Consult() {
   const { t } = useStore();
   const [sent, setSent] = useState(false);
   const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -506,18 +506,68 @@ function Consult() {
   );
 }
 
+/* ---------- Trang chủ: khối "Khám phá" dẫn sang từng trang ---------- */
+const EXPLORE = [
+  { href: "/cau-chuyen", img: "/img/v2/story-field.jpg", k: ["Câu chuyện", "Our story"] },
+  { href: "/thanh-phan", img: "/img/mayqueen-leaf.jpg", k: ["Thành phần", "Ingredients"] },
+  { href: "/chung-nhan", img: "/img/v2/cert-cong-bo.jpg", k: ["Chứng nhận", "Certificates"] },
+  { href: "/cam-nhan", img: "/img/v2/fb-1.jpg", k: ["Cảm nhận", "Reviews"] },
+  { href: "/lien-he", img: "/img/v2/tvc-4-buoi-toi.jpg", k: ["Tư vấn 1:1", "1:1 advice"] },
+] as const;
+
+function Explore() {
+  const { t } = useStore();
+  return (
+    <section className="lw">
+      <div className="wrap">
+        <Title className="rv center" a={t("Khám phá", "Discover")} b={t("Thế giới Mayqueen", "The Mayqueen world")} />
+        <div className="lw-grid">
+          {EXPLORE.map((e) => (
+            <Link key={e.href} className="lw-tile rv" href={e.href}>
+              <Image src={e.img} alt="" fill sizes="(max-width: 760px) 70vw, 20vw" quality={75} />
+              <span><small>Mayqueen</small>{t(e.k[0], e.k[1])} →</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type L = [string, string];
+
+/** Banner đầu trang con kiểu Kobler: ảnh nền tối, breadcrumb, tiêu đề 2 dòng. */
+export function PageHero({ img, a, b, desc, crumb }: { img: string; a: L; b: L; desc: L; crumb: L }) {
+  const { t } = useStore();
+  return (
+    <section className="ph2">
+      <div className="ph2-bg"><Image src={img} alt="" fill priority sizes="100vw" quality={80} /></div>
+      <div className="wrap ph2-body">
+        <nav className="ph2-crumb" aria-label="Breadcrumb"><Link href="/">{t("Trang chủ", "Home")}</Link><Icon name="right" size={12} /><span>{t(...crumb)}</span></nav>
+        <Title as="h1" className="hv-in" a={t(...a)} b={t(...b)} />
+        <p className="hv-sub hv-in">{t(...desc)}</p>
+      </div>
+    </section>
+  );
+}
+
+/** Khung chung cho trang v2: gắn hiệu ứng cuộn. */
+export function V2Page({ children }: { children: ReactNode }) {
+  return (
+    <main className="v2">
+      {children}
+      <ScrollFx />
+    </main>
+  );
+}
+
 export function StoryHome() {
   return (
     <main id="top" className="v2">
       <HeroVideo />
       <Transform />
-      <Story />
       <Products />
-      <Ingredients />
-      <Certs />
-      <Reviews />
-      <LiveWellV2 />
-      <Consult />
+      <Explore />
       <ScrollFx />
     </main>
   );

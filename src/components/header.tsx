@@ -15,20 +15,24 @@ const DD_CATS = [
 ] as const;
 const DD_PRODUCTS = PRODUCTS.slice(0, 4);
 
+/** Trang có banner tối đầu trang: header trong suốt khi chưa cuộn. */
+const OVERLAY = ["/", "/cau-chuyen", "/thanh-phan", "/chung-nhan", "/cam-nhan", "/lien-he"];
+
 const NAV = [
+  { href: "/", vi: "Trang chủ", en: "Home" },
   { href: "/san-pham", vi: "Sản phẩm", en: "Products" },
-  { href: "/#cau-chuyen", vi: "Câu chuyện", en: "Story" },
-  { href: "/#thanh-phan", vi: "Thành phần", en: "Ingredients" },
-  { href: "/#chung-nhan", vi: "Chứng nhận", en: "Certificates" },
-  { href: "/#cam-nhan", vi: "Cảm nhận", en: "Reviews" },
-  { href: "/#lien-he", vi: "Liên hệ", en: "Contact" },
+  { href: "/cau-chuyen", vi: "Câu chuyện", en: "Story" },
+  { href: "/thanh-phan", vi: "Thành phần", en: "Ingredients" },
+  { href: "/chung-nhan", vi: "Chứng nhận", en: "Certificates" },
+  { href: "/cam-nhan", vi: "Cảm nhận", en: "Reviews" },
+  { href: "/lien-he", vi: "Liên hệ", en: "Contact" },
 ];
 
 export function Header() {
   const { t, lang, toggleLang, cartCount, openCart, wish, toast, bump, query, setQuery } = useStore();
   const pathname = usePathname();
   const router = useRouter();
-  const isHome = pathname === "/";
+  const overlay = OVERLAY.includes(pathname);
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   const [dd, setDd] = useState(false);
@@ -52,7 +56,7 @@ export function Header() {
 
   return (
     <>
-      <div className={`hdr${scrolled || !isHome ? " scrolled" : ""}`}>
+      <div className={`hdr${scrolled || !overlay ? " scrolled" : ""}`}>
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
@@ -83,7 +87,7 @@ export function Header() {
                 </div>
               </div>
             ) : (
-              <Link key={n.href} href={n.href}>{t(n.vi, n.en)}</Link>
+              <Link key={n.href} href={n.href} aria-current={pathname === n.href ? "page" : undefined}>{t(n.vi, n.en)}</Link>
             ))}
           </nav>
           <Link className="logo" href="/" aria-label="Mayqueen Slim">

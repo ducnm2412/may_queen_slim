@@ -402,3 +402,15 @@ body { background: var(--pearl); }
   .hv-in { animation: none; opacity: 1; transform: none; }
   .zoomimg img { transform: none !important; transition: none; }
 }
+
+/* ---------- Banner trang con ---------- */
+.ph2 { position: relative; min-height: 62svh; display: flex; align-items: flex-end; overflow: hidden; background: var(--moss); color: #fff; }
+.ph2-bg { position: absolute; inset: 0; }
+.ph2-bg img { object-fit: cover; }
+.ph2::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14, 22, 15, 0.85) 0%, rgba(14, 22, 15, 0.4) 55%, rgba(14, 22, 15, 0.15) 100%), linear-gradient(0deg, rgba(14, 22, 15, 0.6), transparent 50%); }
+.ph2-body { position: relative; z-index: 1; width: 100%; padding-top: calc(var(--hdr-h) + 70px); padding-bottom: clamp(48px, 7vw, 90px); display: grid; gap: 16px; justify-items: start; }
+.ph2 .ttl { color: #fff; font-weight: 500; font-size: clamp(36px, 4.6vw, 70px); }
+.ph2 .ttl em { color: var(--sage-l); }
+.ph2-crumb { position: absolute; top: calc(var(--hdr-h) + 18px); left: var(--gut); display: flex; gap: 8px; align-items: center; font-size: 13px; color: rgba(255, 255, 255, 0.75); }
+.ph2-crumb a:hover { color: #fff; }
+.nav-l a[aria-current="page"]::after { transform: scaleX(1); }
