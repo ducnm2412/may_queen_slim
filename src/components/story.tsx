@@ -556,34 +556,6 @@ export function Consult() {
   );
 }
 
-/* ---------- Trang chủ: khối "Khám phá" dẫn sang từng trang ---------- */
-const EXPLORE = [
-  { href: "/cau-chuyen", img: "/img/v2/story-field.jpg", k: ["Câu chuyện", "Our story"] },
-  { href: "/thanh-phan", img: "/img/mayqueen-leaf.jpg", k: ["Thành phần", "Ingredients"] },
-  { href: "/chung-nhan", img: "/img/v2/cert-cong-bo.jpg", k: ["Chứng nhận", "Certificates"] },
-  { href: "/cam-nhan", img: "/img/v2/fb-1.jpg", k: ["Cảm nhận", "Reviews"] },
-  { href: "/lien-he", img: "/img/v2/tvc-4-buoi-toi.jpg", k: ["Tư vấn 1:1", "1:1 advice"] },
-] as const;
-
-function Explore() {
-  const { t } = useStore();
-  return (
-    <section className="lw">
-      <div className="wrap">
-        <Title className="rv center" a={t("Khám phá", "Discover")} b={t("Thế giới Mayqueen", "The Mayqueen world")} />
-        <div className="lw-grid">
-          {EXPLORE.map((e) => (
-            <Link key={e.href} className="lw-tile rv" href={e.href}>
-              <Image src={e.img} alt="" fill sizes="(max-width: 760px) 70vw, 20vw" quality={75} />
-              <span><small>Mayqueen</small>{t(e.k[0], e.k[1])} →</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 type L = [string, string];
 
 /** Banner đầu trang con kiểu Kobler: ảnh nền tối, breadcrumb, tiêu đề 2 dòng. */
@@ -611,14 +583,218 @@ export function V2Page({ children }: { children: ReactNode }) {
   );
 }
 
+/* =====================================================================
+   Trang chủ theo 4 khối mẫu Kobler: 8 lớp kiến tạo → Thành phần,
+   Niềm tin tạo nên lựa chọn → Chứng nhận, Công trình tiêu biểu → Feedback,
+   Công cụ chọn sàn → Thông tin công ty.
+   ===================================================================== */
+
+/** Trượt thẻ bằng nút mũi tên (transform), không dùng cuộn ngang để không chặn cuộn trang. */
+function useStepper(count: number) {
+  const [i, setI] = useState(0);
+  const [per, setPer] = useState(1);
+  useEffect(() => {
+    const on = () => setPer(innerWidth >= 1100 ? 0 : innerWidth >= 700 ? 1 : 2);
+    on();
+    addEventListener("resize", on);
+    return () => removeEventListener("resize", on);
+  }, []);
+  return { i, per, set: (n: number) => setI(Math.max(0, Math.min(count - 1, n))) };
+}
+
+/** Kéo bằng tay trên cảm ứng: vuốt ngang đổi thẻ, không giữ cuộn dọc. */
+function swipe(go: (d: number) => void) {
+  let x0: number | null = null;
+  return {
+    onTouchStart: (e: React.TouchEvent) => { x0 = e.touches[0].clientX; },
+    onTouchEnd: (e: React.TouchEvent) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      x0 = null;
+      if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+    },
+  };
+}
+
+const BENEFITS = [
+  { img: "/img/mayqueen-leaf.jpg", h: ["Sáng đốt mỡ", "Burn by day"], d: ["Hỗ trợ chuyển hoá mỡ thừa, khởi động ngày mới nhẹ nhàng", "Supports fat metabolism to start the day light"] },
+  { img: "/img/yodetox-da.jpg", h: ["Tối thanh lọc", "Cleanse by night"], d: ["Thanh lọc dịu nhẹ, nhẹ bụng và ngủ ngon hơn", "A gentle cleanse for a lighter belly and better sleep"] },
+  { img: "/img/v2/tvc-4-buoi-toi.jpg", h: ["Không nhịn ăn", "No starving"], d: ["Vẫn trọn vẹn những bữa cơm cùng gia đình", "Keep enjoying meals with your family"] },
+  { img: "/img/v2/story-herbs.jpg", h: ["Thảo mộc thiên nhiên", "Natural botanicals"], d: ["Trà xanh, ngưu tất và tinh chất phương Đông", "Green tea, achyranthes and Eastern extracts"] },
+  { img: "/img/duo-glass.jpg", h: ["Chuẩn GMP · ISO 22000", "GMP · ISO 22000"], d: ["Sản xuất tại nhà máy đạt chuẩn an toàn thực phẩm", "Made in a certified food-safety factory"] },
+  { img: "/img/v2/tvc-2-chay-bo.jpg", h: ["Khoẻ mỗi ngày", "Well every day"], d: ["Cơ thể nhẹ nhõm, tràn đầy năng lượng", "A lighter body, full of energy"] },
+] as const;
+
+function KLayers() {
+  const { t } = useStore();
+  const st = useStepper(BENEFITS.length);
+  const visible = 3 - st.per;
+  const max = BENEFITS.length - visible;
+  const go = (d: number) => st.set(Math.min(max, st.i + d));
+  return (
+    <section className="kl">
+      <div className="kl-left">
+        <Title className="rv" a={t("8 tinh chất kiến tạo", "8 actives shaping")} b={t("Vóc dáng thon gọn", "A leaner silhouette")} />
+        <div className="kl-stack">
+          <div className="kl-img rv"><Image src="/img/v2/layers.jpg" alt={t("Các lớp tinh chất thảo mộc", "Layers of botanical actives")} fill sizes="(max-width: 900px) 50vw, 18vw" quality={85} /></div>
+          <ol className="kl-list">
+            {ING.mq.list.map((x, i) => (
+              <li key={x.n[0]} className="rv"><span>{i + 1}</span><div><b>{t(x.n[0], x.n[1])}</b><small>{t(x.d[0], x.d[1])}</small></div></li>
+            ))}
+          </ol>
+        </div>
+      </div>
+      <div className="kl-right">
+        <Title className="rv" a={t("Cơ chế", "The science")} b={t("Phía sau sự thon gọn", "Behind the shape")} />
+        <div className="kl-view" {...swipe(go)}>
+          <div className="kl-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
+            {BENEFITS.map((b) => (
+              <article className="kl-card" key={b.h[0]}>
+                <Image src={b.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 40vw, 18vw" quality={80} />
+                <div><b>{t(b.h[0], b.h[1])}</b><span>{t(b.d[0], b.d[1])}</span></div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div className="kl-foot">
+          <Link className="btn-ln dk kl-more" href="/thanh-phan">{t("Xem tất cả thành phần", "See all ingredients")} <Arrow /></Link>
+          <div className="kl-arrows">
+            <button type="button" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
+            <button type="button" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function KTrust() {
+  const { t, openImage } = useStore();
+  const checks: [string, string][] = [
+    ["Công bố theo quy định Bộ Y tế", "Declared under Ministry of Health rules"],
+    ["Nguồn gốc xuất xứ rõ ràng", "Clear origin"],
+    ["Nguyên liệu có phiếu kiểm nghiệm", "Raw materials with COA"],
+    ["Bảo chứng bởi B.O.T Việt Nam", "Guaranteed by B.O.T Vietnam"],
+  ];
+  return (
+    <section className="kt">
+      <Image className="kt-bg" src="/img/v2/silk-dark.jpg" alt="" fill sizes="100vw" quality={80} />
+      <div className="wrap kt-in">
+        <h2 className="ttl kt-ttl rv"><span>{t("Niềm tin tạo nên lựa chọn", "Trust behind every choice")}</span></h2>
+        <div className="kt-grid">
+          <article className="kt-card rv">
+            <h3>Mayqueen <em>× GMP</em></h3>
+            <div className="kt-body kt-x">
+              <div className="kt-logo"><b>Mayqueen<i> Slim</i></b><small>B.O.T VIỆT NAM</small></div>
+              <span className="kt-times" aria-hidden="true">×</span>
+              <div className="kt-org"><Icon name="shield" size={38} /><b>{t("Cục An toàn thực phẩm", "Vietnam Food Administration")}</b><small>69/2023/ATTP-CNGMP</small></div>
+            </div>
+            <button type="button" className="btn-ln" onClick={() => openImage("/img/cert/gmp.jpg", t("Chứng nhận GMP", "GMP certificate"))}>{t("Xem chứng nhận", "View certificate")} <Arrow /></button>
+          </article>
+          <article className="kt-card rv">
+            <h3>{t("Chuẩn", "Certified")} <em>ISO 22000</em></h3>
+            <div className="kt-body kt-iso">
+              <b>ISO<br />22000</b>
+              <span>{t("Hệ thống quản lý an toàn thực phẩm · GOOD Việt Nam", "Food safety management system · GOOD Vietnam")}</span>
+            </div>
+            <button type="button" className="btn-ln" onClick={() => openImage("/img/cert/iso-22000.jpg", "ISO 22000:2018")}>{t("Xem chứng nhận", "View certificate")} <Arrow /></button>
+          </article>
+          <article className="kt-card rv">
+            <h3>{t("Công bố", "Declared")} <em>{t("sản phẩm", "product")}</em></h3>
+            <div className="kt-body kt-check">
+              <div className="kt-badge"><b>BYT</b><small>6926/2021</small></div>
+              <ul>{checks.map((c) => <li key={c[0]}><Icon name="check" size={18} />{t(c[0], c[1])}</li>)}</ul>
+            </div>
+            <Link className="btn-ln" href="/chung-nhan">{t("Tất cả chứng nhận", "All certificates")} <Arrow /></Link>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const FEEDBACK = [
+  { img: "/img/v2/fb-1.jpg", h: ["Hết thèm ngọt buổi chiều", "No more afternoon cravings"], n: "Minh Anh · 32", r: ["Nhân viên văn phòng", "Office worker"] },
+  { img: "/img/v2/fb-2.jpg", h: ["Vẫn ăn cơm cùng cả nhà", "Still eating with my family"], n: "Thu Hà · 38", r: ["Nội trợ", "Homemaker"] },
+  { img: "/img/v2/fb-3.jpg", h: ["Nhẹ nhõm, tự tin khi đi dạy", "Lighter and confident at work"], n: "Ngọc Lan · 26", r: ["Giảng viên", "Lecturer"] },
+  { img: "/img/v2/fb-4.jpg", h: ["Hai bước, không cầu kỳ", "Two steps, no fuss"], n: "Diệu Linh · 45", r: ["Kinh doanh tự do", "Business owner"] },
+  { img: "/img/v2/tvc-2-chay-bo.jpg", h: ["Chạy bộ buổi sáng nhẹ người", "Lighter on morning runs"], n: "Hải Yến · 29", r: ["Huấn luyện viên yoga", "Yoga instructor"] },
+] as const;
+
+function KFeedback() {
+  const { t } = useStore();
+  const st = useStepper(FEEDBACK.length);
+  const visible = 4 - st.per - (st.per ? 1 : 0);
+  const max = FEEDBACK.length - visible;
+  const go = (d: number) => st.set(Math.min(max, st.i + d));
+  return (
+    <section className="kf">
+      <div className="wrap">
+        <h2 className="ttl kf-ttl rv"><span>{t("Cảm nhận khách hàng", "Customer stories")}</span></h2>
+        <p className="kf-sub rv">{t("Mayqueen đồng hành cùng những người phụ nữ muốn sống khoẻ, đẹp và tự tin hơn mỗi ngày.", "Mayqueen walks alongside women who want to live healthier, lovelier and more confident every day.")}</p>
+        <div className="kf-wrap">
+          <button type="button" className="kf-arr l" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
+          <div className="kf-view" {...swipe(go)}>
+            <div className="kf-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
+              {FEEDBACK.map((f) => (
+                <Link className="kf-card" key={f.n} href="/cam-nhan">
+                  <div className="kf-ph"><Image src={f.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 45vw, 22vw" quality={80} /><Sample dark /></div>
+                  <div className="kf-tx">
+                    <h3>{t(f.h[0], f.h[1])}</h3>
+                    <span className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</span>
+                    <p><span>{f.n} · {t(f.r[0], f.r[1])}</span><Icon name="right" size={16} /></p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <button type="button" className="kf-arr r" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>
+        </div>
+        <div className="kf-dots">
+          {Array.from({ length: max + 1 }, (_, k) => <button key={k} type="button" aria-label={`${k + 1}`} aria-current={k === st.i} onClick={() => st.set(k)} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function KCompany() {
+  const { t } = useStore();
+  return (
+    <>
+      <section className="kc">
+        <div className="kc-img"><Image src="/img/v2/company.jpg" alt={t("Chuyên viên Mayqueen tư vấn cho khách hàng", "A Mayqueen consultant advising a customer")} fill sizes="(max-width: 900px) 100vw, 60vw" quality={85} /></div>
+        <div className="kc-body">
+          <h2 className="ttl kc-ttl rv"><span>B.O.T Việt Nam</span></h2>
+          <p className="rv">{t("Đơn vị sở hữu và phân phối chính hãng Mayqueen Slim, Yodetox Extra.", "Owner and official distributor of Mayqueen Slim and Yodetox Extra.")}</p>
+          <ul className="kc-items rv">
+            <li><Icon name="pin" size={40} /><span><small>{t("Trụ sở", "Head office")}</small>[{t("Địa chỉ", "Address")}]</span></li>
+            <li><Icon name="shield" size={40} /><span><small>{t("Mã số thuế", "Tax code")}</small>[MST]</span></li>
+            <li><Icon name="phone" size={40} /><span><small>Hotline</small>{CONTACT.phone}</span></li>
+          </ul>
+          <Link className="btn-ln dk rv" href="/lien-he">{t("Liên hệ tư vấn", "Contact us")} <Arrow /></Link>
+        </div>
+      </section>
+      <ul className="kc-strip">
+        <li><Icon name="msg" /><span><b>{t("Tư vấn 1:1", "1:1 advice")}</b>{t("Zalo & hotline 8:00–21:00", "Zalo & hotline 8:00–21:00")}</span></li>
+        <li><Icon name="truck" /><span><b>{t("Giao toàn quốc", "Nationwide delivery")}</b>{t("Freeship đơn từ 700k", "Free from 700k")}</span></li>
+        <li><Icon name="layers" /><span><b>{t("Chứng nhận đầy đủ", "Fully certified")}</b>{t("Công bố, GMP, ISO 22000", "Declared, GMP, ISO 22000")}</span></li>
+      </ul>
+    </>
+  );
+}
+
 export function StoryHome() {
   return (
     <main id="top" className="v2">
       <HeroVideo />
       <Intro />
+      <KLayers />
       <Transform />
+      <KTrust />
       <Products />
-      <Explore />
+      <KFeedback />
+      <KCompany />
       <ScrollFx />
     </main>
   );
