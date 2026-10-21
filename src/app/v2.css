@@ -948,3 +948,19 @@ body { background: var(--pearl); }
 .sc { background: #12301f url("/img/v2/aerial-nature.jpg") center / cover no-repeat; }
 .sc::after { background: linear-gradient(90deg, rgba(8, 22, 14, 0.72) 0%, rgba(8, 22, 14, 0.5) 35%, rgba(8, 22, 14, 0.1) 60%, rgba(8, 22, 14, 0.25) 100%); }
 @media (max-width: 900px) { .sc::after { background: rgba(8, 22, 14, 0.5); } }
+
+/* =====================================================================
+   Liền mạch chuỗi khối tối: Biến hình → Sản phẩm thiên nhiên → Niềm tin
+   Cùng một màu nền đậm, mép trên/dưới hoà dần vào màu đó.
+   ===================================================================== */
+:root { --deep: #081a10; }
+.tf { background: var(--deep); }
+.tf-pin::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(8, 26, 16, 0) 0%, rgba(8, 26, 16, 0.65) 60%, var(--deep) 100%); }
+.tf-txt, .tf-bar, .tf .hv-tag { z-index: 2; }
+.sc { background-color: var(--deep); }
+.sc::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, var(--deep) 0%, rgba(8, 26, 16, 0) 22%, rgba(8, 26, 16, 0) 72%, var(--deep) 100%); }
+.sc-in { z-index: 2; }
+.kt { background: var(--deep); }
+.kt-bg { opacity: 0.85; }
+.kt::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, var(--deep) 0%, rgba(8, 26, 16, 0) 26%), radial-gradient(60% 50% at 20% 60%, rgba(8, 26, 16, 0.55), transparent 70%); }
+.kt-in { z-index: 2; }
