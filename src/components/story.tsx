@@ -142,32 +142,32 @@ function HeroVideo() {
   );
 }
 
-/* ---------- Giới thiệu ngắn giữa video và đoạn biến hình (kiểu khối "Cảm hứng" của Kobler) ---------- */
-const RITUAL = [
-  { icon: "sun", k: ["07:00 · Buổi sáng", "07:00 · Morning"], h: "Mayqueen Slim", d: ["2 viên sau bữa sáng, hỗ trợ chuyển hoá mỡ thừa", "2 capsules after breakfast to support fat metabolism"] },
-  { icon: "moon", k: ["21:00 · Buổi tối", "21:00 · Evening"], h: "Yodetox Extra", d: ["Một cốc ấm trước khi ngủ, thanh lọc dịu nhẹ", "A warm cup before bed for a gentle cleanse"] },
-  { icon: "leaf", k: ["30 ngày", "30 days"], h: "Liệu trình", d: ["Không nhịn ăn, vẫn trọn vẹn bữa cơm gia đình", "No starving, keep your family meals"] },
+/* ---------- Section 2: câu chuyện thương hiệu ngắn (bố cục khối "Kiến trúc Pháp" của Kobler) ---------- */
+const BRAND_VALUES = [
+  { k: ["Thảo mộc", "Botanical"], d: ["Tinh tuý từ thiên nhiên", "The essence of nature"] },
+  { k: ["Bền vững", "Lasting"], d: ["Thon gọn lâu hơn theo thời gian", "A leaner shape that lasts"] },
+  { k: ["An tâm", "Assured"], d: ["Sản xuất đạt chuẩn GMP, ISO 22000", "Made to GMP & ISO 22000 standards"] },
+  { k: ["Trải nghiệm", "Experience"], d: ["Nhẹ nhàng, không nhịn ăn", "Gentle, no starving"] },
 ] as const;
 
 function Intro() {
   const { t } = useStore();
   return (
-    <section className="intro">
-      <div className="wrap intro-body">
-        <Title className="rv" a={t("Thon gọn từ bên trong", "Slim from within")} b={t("Nghi thức Sáng – Tối", "The day–night ritual")} />
-        <p className="rv">{t("Mayqueen Slim và Yodetox Extra là bộ đôi thảo mộc từ B.O.T Việt Nam: buổi sáng khởi động chuyển hoá, buổi tối thanh lọc nhẹ nhàng, để cơ thể nhẹ nhõm và vóc dáng gọn gàng một cách tự nhiên.", "Mayqueen Slim and Yodetox Extra are a herbal duo from B.O.T Vietnam: kick-start your metabolism by day, cleanse gently by night, for a lighter body and a naturally leaner shape.")}</p>
-        <div className="intro-cards">
-          {RITUAL.map((r) => (
-            <div className="intro-card rv" key={r.h}>
-              <Icon name={r.icon} size={30} />
-              <small>{t(r.k[0], r.k[1])}</small>
-              <b>{r.h === "Liệu trình" ? t("Liệu trình", "Course") : r.h}</b>
-              <span>{t(r.d[0], r.d[1])}</span>
-            </div>
-          ))}
+    <section className="bs">
+      <Image className="bs-bg" src="/img/v2/brand-dark.jpg" alt="" fill sizes="100vw" quality={85} />
+      <div className="wrap bs-body">
+        <Title className="rv" a={t("Câu chuyện Mayqueen", "The Mayqueen story")} b={t("Từ thảo mộc phương Đông", "From Eastern botanicals")} />
+        <div className="bs-copy rv">
+          <p className="bs-lead">{t("Một nghi thức. Nhiều giá trị sống", "One ritual. Many values for life")}</p>
+          <p>{t("Lấy cảm hứng từ tinh hoa thảo mộc phương Đông, Mayqueen Slim kết hợp sự dịu lành của thiên nhiên cùng quy trình sản xuất đạt chuẩn để kiến tạo một nghi thức Sáng – Tối nhẹ nhàng, bền vững và giàu giá trị sống.", "Inspired by Eastern botanical wisdom, Mayqueen Slim pairs nature's gentleness with certified manufacturing to create a gentle, lasting day–night ritual rich in everyday value.")}</p>
         </div>
+        <dl className="bs-vals rv">
+          {BRAND_VALUES.map((v) => (
+            <div key={v.k[0]}><dt>{t(v.k[0], v.k[1])}</dt><dd>{t(v.d[0], v.d[1])}</dd></div>
+          ))}
+        </dl>
+        <Link className="btn-ln bs-cta rv" href="/cau-chuyen">{t("Đọc câu chuyện", "Read our story")} <Arrow /></Link>
       </div>
-      <div className="intro-img"><div className="intro-frame"><Image src="/img/duo-podium.jpg" alt={t("Bộ đôi Mayqueen Slim và Yodetox Extra", "Mayqueen Slim and Yodetox Extra duo")} fill sizes="(max-width: 900px) 80vw, 34vw" quality={85} /></div></div>
     </section>
   );
 }
