@@ -643,94 +643,6 @@ function KLayers() {
   );
 }
 
-function KTrust() {
-  const { t, openImage } = useStore();
-  const checks: [string, string][] = [
-    ["Công bố theo quy định Bộ Y tế", "Declared under Ministry of Health rules"],
-    ["Nguồn gốc xuất xứ rõ ràng", "Clear origin"],
-    ["Bảo chứng bởi B.O.T Việt Nam", "Guaranteed by B.O.T Vietnam"],
-  ];
-  return (
-    <section className="kt">
-      <Image className="kt-bg" data-px="-0.1" src="/img/v2/silk-dark.jpg" alt="" fill sizes="100vw" quality={80} />
-      <div className="wrap kt-in">
-        <h2 className="ttl kt-ttl rv"><span>{t("Niềm tin tạo nên lựa chọn", "Trust behind every choice")}</span></h2>
-        <div className="kt-grid">
-          <article className="kt-card rv">
-            <h3>Mayqueen <em>× GMP</em></h3>
-            <div className="kt-body kt-x">
-              <div className="kt-logo"><b>Mayqueen<i> Slim</i></b><small>B.O.T VIỆT NAM</small></div>
-              <span className="kt-times" aria-hidden="true">×</span>
-              <div className="kt-org"><Icon name="shield" size={38} /><b>{t("Cục An toàn thực phẩm", "Vietnam Food Administration")}</b><small>69/2023/ATTP-CNGMP</small></div>
-            </div>
-            <button type="button" className="btn-ln" onClick={() => openImage("/img/cert/gmp.jpg", t("Chứng nhận GMP", "GMP certificate"))}>{t("Xem chứng nhận", "View certificate")} <Arrow /></button>
-          </article>
-          <article className="kt-card rv">
-            <h3>{t("Chuẩn", "Certified")} <em>ISO 22000</em></h3>
-            <div className="kt-body kt-iso">
-              <b>ISO<br />22000</b>
-              <span>GOOD Việt Nam</span>
-            </div>
-            <button type="button" className="btn-ln" onClick={() => openImage("/img/cert/iso-22000.jpg", "ISO 22000:2018")}>{t("Xem chứng nhận", "View certificate")} <Arrow /></button>
-          </article>
-          <article className="kt-card rv">
-            <h3>{t("Công bố", "Declared")} <em>{t("sản phẩm", "product")}</em></h3>
-            <div className="kt-body kt-check">
-              <div className="kt-badge"><b>BYT</b><small>6926/2021</small></div>
-              <ul>{checks.map((c) => <li key={c[0]}><Icon name="check" size={18} />{t(c[0], c[1])}</li>)}</ul>
-            </div>
-            <Link className="btn-ln" href="/chung-nhan">{t("Tất cả chứng nhận", "All certificates")} <Arrow /></Link>
-          </article>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const FEEDBACK = [
-  { img: "/img/v2/fb-1.jpg", h: ["Hết thèm ngọt buổi chiều", "No more afternoon cravings"], n: "Minh Anh · 32", r: ["Nhân viên văn phòng", "Office worker"] },
-  { img: "/img/v2/fb-2.jpg", h: ["Vẫn ăn cơm cùng cả nhà", "Still eating with my family"], n: "Thu Hà · 38", r: ["Nội trợ", "Homemaker"] },
-  { img: "/img/v2/fb-3.jpg", h: ["Nhẹ nhõm, tự tin khi đi dạy", "Lighter and confident at work"], n: "Ngọc Lan · 26", r: ["Giảng viên", "Lecturer"] },
-  { img: "/img/v2/fb-4.jpg", h: ["Hai bước, không cầu kỳ", "Two steps, no fuss"], n: "Diệu Linh · 45", r: ["Kinh doanh tự do", "Business owner"] },
-  { img: "/img/v2/tvc-2-chay-bo.jpg", h: ["Chạy bộ buổi sáng nhẹ người", "Lighter on morning runs"], n: "Hải Yến · 29", r: ["Huấn luyện viên yoga", "Yoga instructor"] },
-] as const;
-
-function KFeedback() {
-  const { t } = useStore();
-  const st = useStepper(FEEDBACK.length);
-  const visible = 4 - st.per - (st.per ? 1 : 0);
-  const max = FEEDBACK.length - visible;
-  const go = (d: number) => st.set(Math.min(max, st.i + d));
-  return (
-    <section className="kf">
-      <div className="wrap">
-        <h2 className="ttl kf-ttl rv"><span>{t("Cảm nhận khách hàng", "Customer stories")}</span></h2>
-        <div className="kf-wrap">
-          <button type="button" className="kf-arr l" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
-          <div className="kf-view rv" {...swipe(go)}>
-            <div className="kf-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
-              {FEEDBACK.map((f) => (
-                <Link className="kf-card" key={f.n} href="/cam-nhan">
-                  <div className="kf-ph"><Image src={f.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 45vw, 22vw" quality={80} /></div>
-                  <div className="kf-tx">
-                    <h3>{t(f.h[0], f.h[1])}</h3>
-                    <span className="stars" aria-label={t("5 trên 5 sao", "5 out of 5 stars")}>★★★★★</span>
-                    <p><span>{f.n}</span><Icon name="right" size={16} /></p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-          <button type="button" className="kf-arr r" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>
-        </div>
-        <div className="kf-dots">
-          {Array.from({ length: max + 1 }, (_, k) => <button key={k} type="button" aria-label={`${k + 1}`} aria-current={k === st.i} onClick={() => st.set(k)} />)}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function KCompany() {
   const { t } = useStore();
   return (
@@ -784,9 +696,7 @@ export function StoryHome() {
       <KLayers />
       <Transform />
       <Showcase />
-      <KTrust />
       <Products />
-      <KFeedback />
       <KCompany />
       <ScrollFx />
       <div className="scroll-bar" aria-hidden="true" />

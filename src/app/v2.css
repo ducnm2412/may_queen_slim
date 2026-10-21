@@ -964,3 +964,5 @@ body { background: var(--pearl); }
 .kt-bg { opacity: 0.85; }
 .kt::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, var(--deep) 0%, rgba(8, 26, 16, 0) 26%), radial-gradient(60% 50% at 20% 60%, rgba(8, 26, 16, 0.55), transparent 70%); }
 .kt-in { z-index: 2; }
+/* Section thiên nhiên giờ đứng trước khối sáng: chỉ hoà mép trên */
+.sc::before { background: linear-gradient(180deg, var(--deep) 0%, rgba(8, 26, 16, 0) 22%); }
