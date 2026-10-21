@@ -51,7 +51,6 @@ export function Footer() {
             <iframe title={t("Bản đồ trụ sở", "Head office map")} loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={CONTACT.mapEmbed} />
           </div>
         </div>
-        <p className="ft2-disc">{t("Thực phẩm này không phải là thuốc, không có tác dụng thay thế thuốc chữa bệnh.", "This product is not a medicine and does not replace medical treatment.")}</p>
         <div className="fbot">
           <p>© 2026 Mayqueen Slim · B.O.T Việt Nam</p>
           <nav>

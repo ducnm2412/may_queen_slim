@@ -809,3 +809,37 @@ body { background: var(--pearl); }
 .tf-after { clip-path: circle(calc(var(--k) * 160%) at 62% 45%); }
 @media (max-width: 760px) { .tf-after { clip-path: circle(calc(var(--k) * 200%) at 50% 40%); } }
 @media (max-width: 760px) { .tf .hv-tag { top: auto; bottom: 42px; right: var(--gut); font-size: 10px; } .tf-txt { padding-bottom: 70px; } }
+
+/* Cảm nhận: nền sage nhạt + hoạ tiết lá mảnh */
+.kf {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='none' stroke='%2356724f' stroke-opacity='0.10' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M30 120c0-40 26-66 66-66 0 40-26 66-66 66zM30 120l48-48'/%3E%3Cpath d='M150 200c0-26 17-43 43-43 0 26-17 43-43 43zM150 200l30-30'/%3E%3Cpath d='M160 40c18 0 30 12 30 30-18 0-30-12-30-30z'/%3E%3C/svg%3E") 0 0 / 220px 220px,
+    radial-gradient(60% 70% at 15% 10%, rgba(195, 212, 180, 0.55), transparent 70%),
+    radial-gradient(50% 60% at 90% 90%, rgba(195, 212, 180, 0.45), transparent 70%),
+    #eef1e8;
+}
+
+/* Công ty: ảnh trải hết chiều ngang, tường sáng của ảnh làm nền cho chữ */
+.kc { min-height: clamp(420px, 28vw, 540px); background: #ece6dc; }
+.kc-img { width: 100%; }
+.kc-img img { object-position: 30% center; }
+.kc-img::after { background: linear-gradient(90deg, rgba(246, 243, 236, 0) 35%, rgba(246, 243, 236, 0.55) 55%, rgba(246, 243, 236, 0.7) 100%); }
+@media (max-width: 900px) {
+  .kc-img::after { background: linear-gradient(0deg, #f6f3ec 0%, rgba(246, 243, 236, 0) 40%); }
+}
+.kc {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240' fill='none' stroke='%23a8763e' stroke-opacity='0.12' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M40 140c0-44 28-72 72-72 0 44-28 72-72 72zM40 140l52-52'/%3E%3Cpath d='M170 220c0-28 18-46 46-46 0 28-18 46-46 46zM170 220l32-32'/%3E%3C/svg%3E") right top / 240px 240px,
+    radial-gradient(50% 80% at 100% 0%, rgba(232, 220, 200, 0.9), transparent 70%),
+    #f2ede4;
+}
+.kc-img { width: 60%; }
+.kc-img img { object-position: left center; }
+.kc-img::after { background: linear-gradient(90deg, rgba(242, 237, 228, 0) 50%, rgba(242, 237, 228, 0.8) 78%, #f2ede4 100%); }
+
+/* Cảm nhận: ảnh nền lá xanh nhoè bokeh (bỏ hoạ tiết) */
+.kf { background: #eef1e8 url("/img/v2/bokeh.jpg") center / cover no-repeat; position: relative; }
+.kf::before { content: ""; position: absolute; inset: 0; background: rgba(246, 243, 236, 0.35); pointer-events: none; }
+.kf > .wrap { position: relative; }
+/* Công ty: bỏ hoạ tiết, chỉ giữ nền ấm theo màu tường ảnh */
+.kc { background: radial-gradient(50% 80% at 100% 0%, rgba(232, 220, 200, 0.9), transparent 70%), #f2ede4; }
