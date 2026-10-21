@@ -13,6 +13,12 @@ import { flyToCart } from "@/lib/motion";
 /* Trang chủ v2 kể chuyện theo phong cách Kobler: mỗi khối gần trọn màn hình, hiệu ứng theo cuộn.
 */
 
+/** Nút mua: thêm vào giỏ và mở giỏ hàng trượt. */
+function BuyBtn({ id, vi, en, className = "" }: { id: string; vi: string; en: string; className?: string }) {
+  const { t, add, openCart } = useStore();
+  return <button type="button" className={`btn-solid buy ${className}`} onClick={() => { add(id); openCart(); }}>{t(vi, en)}</button>;
+}
+
 /** Tiêu đề 2 dòng kiểu Kobler: dòng 2 màu nhấn. */
 function Title({ a, b, as: Tag = "h2", className = "" }: { a: string; b?: string; as?: "h1" | "h2"; className?: string }) {
   return (
@@ -147,7 +153,10 @@ function Intro() {
       <div className="wrap bs-body">
         <Title className="rv" a={t("Câu chuyện Mayqueen", "The Mayqueen story")} b={t("Từ thảo mộc phương Đông", "From Eastern botanicals")} />
         <p className="bs-lead rv">{t("Một nghi thức. Nhiều giá trị sống", "One ritual. Many values for life")}</p>
-        <Link className="btn-ln bs-cta rv" href="/cau-chuyen">{t("Đọc câu chuyện", "Read our story")} <Arrow /></Link>
+        <div className="cta-row rv">
+          <BuyBtn id="cb30" vi="Mua combo Sáng – Tối" en="Buy the day–night combo" />
+          <Link className="btn-ln bs-cta" href="/cau-chuyen">{t("Đọc câu chuyện", "Read our story")} <Arrow /></Link>
+        </div>
       </div>
     </section>
   );
@@ -159,7 +168,7 @@ export function Transform() {
   return (
     <section className="tf" data-sticky aria-label={t("Hành trình tự tin", "A confident journey")}>
       <div className="tf-pin">
-        <div className="tf-img tf-before"><Image src={TRANSFORM.before} alt="" fill sizes="100vw" quality={80} /></div>
+        <div className="tf-img tf-before"><Image src={TRANSFORM.before} alt="" fill sizes="100vw" quality={80} loading="eager" /></div>
         <div className="tf-img tf-after"><Image src={TRANSFORM.after} alt="" fill sizes="100vw" quality={85} /></div>
         <div className="tf-shade" />
         <div className="wrap tf-txt">
@@ -170,6 +179,7 @@ export function Transform() {
           <div className="tf-b">
             <p className="kick">{t("Sau hành trình Sáng – Tối", "After the day–night ritual")}</p>
             <Title a={t("Tự tin", "Confident")} b={t("với chính mình", "in your own skin")} />
+            <div className="cta-row"><BuyBtn id="cb30" vi="Bắt đầu liệu trình 30 ngày" en="Start the 30-day course" /></div>
           </div>
         </div>
         <div className="tf-bar" aria-hidden="true"><i /></div>
@@ -621,21 +631,24 @@ function KLayers() {
       </div>
       <div className="kl-right">
         <Title className="rv" a={t("Cơ chế", "The science")} b={t("Phía sau sự thon gọn", "Behind the shape")} />
-        <div className="kl-view rv" {...swipe(go)}>
-          <div className="kl-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
-            {BENEFITS.map((b) => (
-              <article className="kl-card" key={b.h[0]}>
-                <Image src={b.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 40vw, 18vw" quality={80} />
-                <div><b>{t(b.h[0], b.h[1])}</b></div>
-              </article>
-            ))}
+        <div className="kl-wrap">
+          <button type="button" className="kf-arr l" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
+          <div className="kl-view rv" {...swipe(go)}>
+            <div className="kl-track" style={{ ["--i" as string]: st.i, ["--v" as string]: visible }}>
+              {BENEFITS.map((b) => (
+                <article className="kl-card" key={b.h[0]}>
+                  <Image src={b.img} alt="" fill sizes="(max-width: 700px) 85vw, (max-width: 1100px) 40vw, 18vw" quality={80} />
+                  <div><b>{t(b.h[0], b.h[1])}</b></div>
+                </article>
+              ))}
+            </div>
           </div>
+          <button type="button" className="kf-arr r" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>
         </div>
         <div className="kl-foot">
-          <Link className="btn-ln dk kl-more" href="/san-pham">{t("Xem sản phẩm", "See products")} <Arrow /></Link>
-          <div className="kl-arrows">
-            <button type="button" aria-label={t("Trước", "Previous")} onClick={() => go(-1)} disabled={st.i === 0}><Icon name="left" /></button>
-            <button type="button" aria-label={t("Sau", "Next")} onClick={() => go(1)} disabled={st.i >= max}><Icon name="right" /></button>
+          <div className="cta-row">
+            <BuyBtn id="mq" vi="Mua Mayqueen Slim · 450k" en="Buy Mayqueen Slim · 450k" className="dark" />
+            <Link className="btn-ln dk kl-more" href="/san-pham">{t("Xem sản phẩm", "See products")} <Arrow /></Link>
           </div>
         </div>
       </div>
@@ -656,7 +669,10 @@ function KCompany() {
             <li><Icon name="user" size={40} /><span><small>{t("Người liên hệ", "Contact person")}</small>{CONTACT.person}</span></li>
             <li><Icon name="phone" size={40} /><span><small>Hotline</small>{CONTACT.phone}</span></li>
           </ul>
-          <Link className="btn-ln dk rv" href="/lien-he">{t("Liên hệ tư vấn", "Contact us")} <Arrow /></Link>
+          <div className="cta-row rv">
+            <a className="btn-solid buy dark" href={CONTACT.zalo} target="_blank" rel="noopener">{t("Đặt hàng qua Zalo", "Order on Zalo")}</a>
+            <Link className="btn-ln dk" href="/lien-he">{t("Liên hệ tư vấn", "Contact us")} <Arrow /></Link>
+          </div>
         </div>
       </section>
       <ul className="kc-strip">
@@ -679,6 +695,10 @@ function Showcase() {
           <i aria-hidden="true" />
           <p className="sc-sub">{t("Thảo mộc · Thon gọn", "Botanical · Slim")}</p>
           <p className="sc-note">{t("Bảo chứng bởi B.O.T Việt Nam", "Guaranteed by B.O.T Vietnam")}</p>
+          <div className="cta-row sc-cta">
+            <BuyBtn id="mq" vi="Mua ngay · 450.000đ" en="Buy now · 450,000đ" className="cream" />
+            <Link className="sc-more" href="/san-pham/mq">{t("Xem chi tiết", "Details")}</Link>
+          </div>
         </div>
         <Link href="/san-pham/mq" className="sc-prod rv" aria-label="Mayqueen Slim">
           <Image src="/img/v2/mayqueen-box.png" alt="Mayqueen Slim" width={699} height={850} sizes="(max-width: 900px) 60vw, 26vw" quality={90} />

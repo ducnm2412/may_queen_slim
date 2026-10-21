@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "./llink";
+import { useEffect, useState } from "react";
 import { CONTACT } from "@/lib/products";
+import { scrollToTarget } from "@/lib/scroll";
 import { useStore } from "./providers";
 import { Icon } from "./icons";
 
@@ -65,8 +67,18 @@ export function Footer() {
 
 export function Fab() {
   const { t } = useStore();
+  const [up, setUp] = useState(false);
+  useEffect(() => {
+    const on = () => setUp(scrollY > 600);
+    on();
+    addEventListener("scroll", on, { passive: true });
+    return () => removeEventListener("scroll", on);
+  }, []);
   return (
     <div className="fab">
+      <button type="button" className={`top${up ? " on" : ""}`} aria-label={t("Lên đầu trang", "Back to top")} tabIndex={up ? 0 : -1} onClick={() => scrollToTarget(0)}>
+        <svg viewBox="0 0 24 24" className="ic"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+      </button>
       <a className="z" href={CONTACT.zalo} target="_blank" rel="noopener" aria-label="Chat Zalo">Zalo</a>
       <a className="m" href={CONTACT.facebook} target="_blank" rel="noopener" aria-label="Messenger"><Icon name="msg" /></a>
       <a className="c" href={CONTACT.tel} aria-label={t("Gọi hotline", "Call hotline")}><Icon name="phone" /></a>

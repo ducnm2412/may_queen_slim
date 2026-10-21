@@ -8,6 +8,7 @@ import { useStore } from "./providers";
 import { Icon } from "./icons";
 import { PRODUCTS, formatVnd } from "@/lib/products";
 import { canonical, localize } from "@/lib/routes";
+import { scrollToTarget } from "@/lib/scroll";
 
 const DD_CATS = [
   { id: "cb30", vi: "Combo liệu trình", en: "Course combos", sub: ["Sáng Slim + tối Yodetox", "Slim by day + Yodetox by night"] },
@@ -64,7 +65,7 @@ export function Header() {
 
   return (
     <>
-      <div className={`hdr${scrolled || !overlay ? " scrolled" : ""}`}>
+      <div className={`hdr${scrolled || !overlay || menu ? " scrolled" : ""}`}>
       <header className="nav">
         <div className="wrap">
           <nav className="nav-l" aria-label={t("Chính", "Main")}>
@@ -98,7 +99,7 @@ export function Header() {
               <Link key={n.href} href={n.href} aria-current={pathname === n.href ? "page" : undefined}>{t(n.vi, n.en)}</Link>
             ))}
           </nav>
-          <Link className="logo" href="/" aria-label="Mayqueen Slim">
+          <Link className="logo" href="/" aria-label="Mayqueen Slim" onClick={(e) => { if (pathname === "/") { e.preventDefault(); scrollToTarget(0); } }}>
             <b>Mayqueen<span> Slim</span></b>
             <small>B.O.T VIỆT NAM</small>
           </Link>
@@ -132,6 +133,7 @@ export function Header() {
               <Icon name="cart" />
               <span key={bump} className={`badge${bump ? " bump" : ""}`}>{cartCount}</span>
             </button>
+            <button className="icon-btn mob-search-btn" type="button" aria-label={t("Tìm kiếm", "Search")} onClick={() => { setMenu(true); setTimeout(() => document.querySelector<HTMLInputElement>(".mob-search input")?.focus(), 80); }}><Icon name="search" /></button>
             <button className="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
               <Icon name="menu" />
             </button>
@@ -169,8 +171,8 @@ export function Header() {
               <div>
                 {PRODUCTS.map((p) => (
                   <Link key={p.id} className="mob-prod" href={`/san-pham/${p.id}`} onClick={() => setMenu(false)} tabIndex={menu && mobDd ? 0 : -1}>
-                    <Image src={p.img} alt="" width={96} height={96} sizes="48px" />
-                    <span><b>{t(p.name, p.nameEn ?? p.name)}</b><small>{formatVnd(p.price)}</small></span>
+                    <Image src={p.img} alt="" width={360} height={360} sizes="45vw" />
+                    <span><b>{t(p.name, p.nameEn ?? p.name)}</b><small>{formatVnd(p.price)}{p.old && <s>{formatVnd(p.old)}</s>}</small></span>
                   </Link>
                 ))}
                 <Link className="mob-all" href="/san-pham" onClick={() => setMenu(false)} tabIndex={menu && mobDd ? 0 : -1}>{t("Xem tất cả sản phẩm →", "View all products →")}</Link>
