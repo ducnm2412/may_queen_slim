@@ -109,7 +109,10 @@ function HeroVideo() {
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.dataset.userPaused = "1"; v.pause(); return; }
+    // React không ghi thuộc tính muted vào HTML, Safari/Chrome sẽ chặn tự chạy nếu thiếu
+    v.muted = true;
+    v.setAttribute("muted", "");
+    v.play().catch(() => {});
     // Ra khỏi màn hình thì tạm dừng cho nhẹ máy, quay lại thì chạy tiếp
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !v.dataset.userPaused && !v.ended) v.play().catch(() => {});
@@ -129,7 +132,7 @@ function HeroVideo() {
 
   return (
     <section className="hv" aria-label={t("Video giới thiệu", "Intro video")}>
-      <video ref={ref} className="hv-video" autoPlay muted={muted} playsInline onEnded={() => setEnded(true)} preload="metadata" onPlay={() => setPaused(false)} onPause={() => setPaused(true)} poster={HERO_VIDEO.poster} aria-hidden="true">
+      <video ref={ref} className="hv-video" autoPlay muted={muted} playsInline onEnded={() => setEnded(true)} preload="auto" onPlay={() => setPaused(false)} onPause={() => setPaused(true)} poster={HERO_VIDEO.poster} aria-hidden="true">
         {HERO_VIDEO.mobile && <source src={HERO_VIDEO.mobile} media="(max-width: 760px)" type="video/mp4" />}
         <source src={HERO_VIDEO.desktop} type="video/mp4" />
       </video>
